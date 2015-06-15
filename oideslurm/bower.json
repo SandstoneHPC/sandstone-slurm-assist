@@ -1,0 +1,10 @@
+{
+  "name": "OIDE - Slurm Assist App",
+  "description": "Online Integrated Development Environment Extension - Slurm Assist",
+  "homepage": "https://github.com/ResearchComputing/oide-slurm-assist.git",
+  "license": "AGPLv3",
+  "private": true,
+  "dependencies": {
+    "angular-formly": ""
+  }
+}
