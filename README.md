@@ -1,5 +1,5 @@
 # oide-slurm-assist
-Slurm scheduler assist app for the OIDE.
+Slurm scheduler assist app for the OIDE. Currently, this app is set up to handle the particular Slurm configuration employed by Research Computing. Generalization is a work-in-progress.
 
 **Installing OIDE Slurm Assist**
 

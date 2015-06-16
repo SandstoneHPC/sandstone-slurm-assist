@@ -14,5 +14,35 @@ APP_SPECIFICATION = {
     ),
     'NG_MODULE_SCRIPTS': (
         'slurm.js',
+        'bower_components/angular-formly/dist/formly.min.js',
     ),
+}
+
+FORM_CONFIG = {
+    'configs': {
+        'janus': {
+            'nodes': (1,480),
+            'time': (1,3600*24),
+        },
+        'janus-long': {
+            'nodes': (1,40),
+            'time': (1,3600*24*7),
+        },
+        'janus-debug': {
+            'nodes': (1,1),
+            'time': (1,3600),
+        },
+        'himem': {
+            'nodes': (1,1),
+            'time': (1,3600*24*14),
+        },
+        'crestone': {
+            'nodes': (1,10),
+            'time': (1,3600*24*14),
+        },
+        'gpu': {
+            'nodes': (1,1),
+            'time': (1,3600*4),
+        }
+    }
 }
