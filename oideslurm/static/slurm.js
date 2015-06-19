@@ -5,103 +5,300 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','ui.ace'])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/slurm', {
     templateUrl: '/static/slurm/slurm.html',
-    controller: 'SlurmCtrl',
-    resolve: {
-      formConfig: function (FormService) {
-        return FormService.getFormConfig();
-      }
-    }
+    controller: 'SlurmCtrl'//,
+    //resolve: {
+    //  formConfig: function (FormService) {
+    //    return FormService.getFormConfig();
+    //  }
+    //}
   });
 }])
 .factory('FormService', ['$http', function ($http) {
   var formConfig = {};
   var formFields = [
     {
-      key: 'array'
+      key: 'array',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'account'
+      key: 'account',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'begin'
+      key: 'begin',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'checkpoint'
+      key: 'checkpoint',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'checkpointDir'
+      key: 'checkpointDir',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'cpusPerTask'
+      key: 'cpusPerTask',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'workDir'
+      key: 'workDir',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'error'
+      key: 'error',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'export'
+      key: 'export',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'exportFile'
+      key: 'exportFile',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'nodefile'
+      key: 'nodefile',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'getUserEnv'
+      key: 'getUserEnv',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'immediate'
+      key: 'immediate',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'input'
+      key: 'input',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'jobName'
+      key: 'jobName',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'jobid'
+      key: 'jobid',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'noKill'
+      key: 'noKill',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'licenses'
+      key: 'licenses',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'mailType'
+      key: 'mailType',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'mailUser'
+      key: 'mailUser',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'mem'
+      key: 'mem',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'memPerCpu'
+      key: 'memPerCpu',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'nodes'
+      key: 'nodes',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'noRequeue'
+      key: 'noRequeue',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'output'
+      key: 'output',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'qos'
+      key: 'qos',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'requeue'
+      key: 'requeue',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     },
     {
-      key: 'time'
+      key: 'time',
+      type:'input',
+      templateOptions:{
+        type:'text',
+        label:'foo',
+        placeholder:'bar',
+        required:true
+      }
     }
   ];
   return {
+    formFieldsObj:{formFields:formFields},
     setFormConfig: function (fc) {
       formConfig = fc;
     },
@@ -114,6 +311,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','ui.ace'])
     }
   };
 }])
-.controller('SlurmCtrl', ['$scope', 'formConfig', 'FormService', '$log', function($scope,formConfig,FormService,$log) {
-  FormService.setFormConfig(formConfig);
+.controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
+  //FormService.setFormConfig(formConfig);
+  $scope.test = "THIS IS TEST";
+  $scope.model = {array:''};
+  $scope.formFields = FormService.formFieldsObj.formFields; // passing by reference
+
 }]);

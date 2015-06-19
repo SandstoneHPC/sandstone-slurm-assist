@@ -1,4 +1,5 @@
 <div class="row partial-fill">
+  <script src="/static/slurm/bower_components/angular-formly/dist/formly.min.js"></script>
   <div
     id="assist-col-left"
     class="col-md-6 main assist-col">
@@ -28,127 +29,44 @@
   </div>
   <div
     id="assist-col-right"
-    class="col-md-6 main assist-col">
+    class="col-md-6 main assist-col"
+    >
     <h1
       class="lead text-uppercase">
       sbatch builder
     </h1>
-        <div id="builder-form-container">
-          <accordion close-others="true">
+        <div id="builder-form-container" ng-controller="SlurmCtrl">
+          <!--<accordion close-others="true">
             <accordion-group heading="Job Identification" is-open="true">
-              <form>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">File input</label>
-                  <input type="file" id="exampleInputFile">
-                  <p class="help-block">Example block-level help text here.</p>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> Check me out
-                  </label>
-                </div>
-              </form>
-            </accordion-group>
-            <accordion-group heading="Job Resources">
-              <form>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">File input</label>
-                  <input type="file" id="exampleInputFile">
-                  <p class="help-block">Example block-level help text here.</p>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> Check me out
-                  </label>
-                </div>
-              </form>
-            </accordion-group>
-            <accordion-group heading="Job Parallelism">
-              <form>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">File input</label>
-                  <input type="file" id="exampleInputFile">
-                  <p class="help-block">Example block-level help text here.</p>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> Check me out
-                  </label>
-                </div>
-              </form>
-            </accordion-group>
-            <accordion-group heading="Job Timing">
-              <form>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">File input</label>
-                  <input type="file" id="exampleInputFile">
-                  <p class="help-block">Example block-level help text here.</p>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> Check me out
-                  </label>
-                </div>
-              </form>
-            </accordion-group>
-            <accordion-group heading="Job Reporting">
-              <form>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <label for="exampleInputFile">File input</label>
-                  <input type="file" id="exampleInputFile">
-                  <p class="help-block">Example block-level help text here.</p>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox"> Check me out
-                  </label>
-                </div>
-              </form>
+
+              <form>!-->
+                {{test}}
+                <formly-form model="model" fields="formFields">
+                </formly-form>
+                <!--</form>
+
             </accordion-group>
           </accordion>
+          !-->
         </div>
 
+  </div>ssist-button-panel"
+      class="well well-lg">
+      <div class="btn-group btn-group-justified" role="group">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-default assist-button">Save Script for Later</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-default assist-button">Load Saved Script</button>
+        </div>
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-success assist-button">Schedule Job</button>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
+
   <div class="col-md-12">
     <div
       id="assist-button-panel"
