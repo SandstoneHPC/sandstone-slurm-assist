@@ -14,6 +14,7 @@ APP_SPECIFICATION = {
     ),
     'NG_MODULE_SCRIPTS': (
         'slurm.js',
+        'bower_components/api-check/dist/api-check.min.js',
         'bower_components/angular-formly/dist/formly.min.js',
     ),
 }

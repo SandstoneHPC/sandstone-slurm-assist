@@ -11,7 +11,7 @@ class FormConfigHandler(BaseHandler):
 
     @oide.lib.decorators.authenticated
     def get(self):
-            ctx = {
-                'formConfig': app_settings.FORM_CONFIG['configs']
-                }
-            self.write(ctx)
+        ctx = {
+            'formConfig': app_settings.FORM_CONFIG['configs']
+            }
+        self.write(ctx)
