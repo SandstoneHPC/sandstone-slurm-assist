@@ -670,10 +670,17 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','ui.ace'])
 }])
 .controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
-  $scope.test = "THIS IS TEST";
+  $scope.test = "THIS IS A TEST";
   $scope.model = {};
   $scope.formFields1 = FormService.formFieldsObj.formFields;
-  $scope.formFields2 = [];
+  $scope.formFields2 = [{
+        key: 'text',
+        type: 'input',
+        templateOptions: {
+          label: 'Text',
+          placeholder: 'This is a test'
+        }
+      }];
   $scope.formFields3 = [];
   $scope.formFields4 = [];
 

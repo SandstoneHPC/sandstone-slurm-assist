@@ -1,5 +1,4 @@
 <div class="row partial-fill">
-  <script src="/static/slurm/bower_components/api-check/dist/api-check.js"></script>
   <div
     id="assist-col-left"
     class="col-md-6 main assist-col">
@@ -37,6 +36,7 @@
     </h1>
         <div id="builder-form-container" ng-controller="SlurmCtrl as ctrl">
           <form novalidate name="slurmForm">
+            {{test}}
               <accordion>
                   <accordion-group heading="Group 1">
                       <formly-form model="model" fields="formFields1" ></formly-form>
@@ -54,7 +54,7 @@
               </accordion>
           </form>
         </div>
-
+      </div>
   <div class="col-md-12">
     <div
       id="assist-button-panel"
