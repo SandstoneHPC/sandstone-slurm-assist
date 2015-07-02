@@ -685,8 +685,12 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   $scope.aceModel = '';
   $scope.directivesObj = FormService.formFieldsObj.formModel;
   $scope.$watch('directivesObj', function(newVal, oldVal){
-    if ((typeof newVal.array !== 'undefined') && (newVal.array !== '')) {
-      $scope.aceModel = '#SBATCH --array ' + newVal.array;
+    var dirString = '';
+    for (var k in newVal) {
+      if ((typeof newVal[k] !== 'undefined') && (newVal[k] !== '')) {
+        dirString += '#SBATCH --' + k + ' ' + newVal[k] + '\n';
+      }
     }
+    $scope.aceModel = dirString;
   }, true);
 }]);
