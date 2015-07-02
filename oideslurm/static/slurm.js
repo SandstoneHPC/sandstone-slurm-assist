@@ -18,6 +18,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   var formFields = [{
       key: 'array',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.array;
+      },
       templateOptions: {
           type: 'text',
           label: '--array',
@@ -52,6 +55,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'account',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.account;
+      },
       templateOptions: {
           type: 'text',
           label: '--account',
@@ -67,6 +73,13 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'begin',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          console.log("now evaluated!");
+          return !scope.$parent.check.begin;
+      },
+      //expressionProperties: {
+      //  'templateOptions.ngHide': "check.begin"
+      //},
       templateOptions: {
           type: 'text',
           label: '--begin',
@@ -118,6 +131,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'checkpoint',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.checkpoint;
+      },
       templateOptions: {
           type: 'text',
           label: '--checkpoint',
@@ -152,6 +168,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'checkpointDir',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.checkpointDir;
+      },
       defaultValue: "./",
       templateOptions: {
           type: 'text',
@@ -175,6 +194,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'cpusPerTask',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.cpusPerTask;
+      },
       defaultValue: "1",
       templateOptions: {
           type: 'text',
@@ -198,6 +220,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'workDir',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.workDir;
+      },
       templateOptions: {
           type: 'text',
           label: '--workDir',
@@ -220,6 +245,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'error',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.error;
+      },
       templateOptions: {
           type: 'text',
           label: '--error',
@@ -242,6 +270,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'export',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.export;
+      },
       templateOptions: {
           type: 'text',
           label: '--export',
@@ -267,6 +298,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'exportFile',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.exportFile;
+      },
       templateOptions: {
           type: 'text',
           label: '--exportFile',
@@ -296,6 +330,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'nodefile',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.nodefile;
+      },
       templateOptions: {
           type: 'text',
           label: '--nodefile',
@@ -322,6 +359,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'getUserEnv',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.getUserEnv;
+      },
       defaultValue: "",
       templateOptions: {
           type: 'text',
@@ -345,6 +385,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'immediate',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.immediate;
+      },
       templateOptions: {
           type: 'text',
           label: '--immediate',
@@ -354,6 +397,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'input',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.input;
+      },
       templateOptions: {
           type: 'text',
           label: '--input',
@@ -376,6 +422,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'jobName',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.jobName;
+      },
       templateOptions: {
           type: 'text',
           label: '--jobName',
@@ -398,6 +447,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'jobId',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.jobId;
+      },
       templateOptions: {
           type: 'text',
           label: '--jobId',
@@ -420,6 +472,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'noKill',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.noKill;
+      },
       templateOptions: {
           type: 'text',
           label: '--noKill',
@@ -429,6 +484,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'licenses',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.licenses;
+      },
       templateOptions: {
           type: 'text',
           label: '--licenses',
@@ -451,6 +509,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'mailType',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.mailType;
+      },
       templateOptions: {
           type: 'text',
           label: '--mailType',
@@ -474,6 +535,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'mailUser',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.mailUser;
+      },
       templateOptions: {
           type: 'text',
           label: '--mailUser',
@@ -496,6 +560,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'mem',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.mem;
+      },
       templateOptions: {
           type: 'text',
           label: '--mem',
@@ -518,6 +585,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'memPerCpu',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.memPerCpu;
+      },
       templateOptions: {
           type: 'text',
           label: '--memPerCpu',
@@ -540,6 +610,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'nodes',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.nodes;
+      },
       templateOptions: {
           type: 'text',
           label: '--nodes',
@@ -562,6 +635,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'onRequeue',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.onRequeue;
+      },
       templateOptions: {
           type: 'text',
           label: '--onRequeue',
@@ -570,6 +646,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'output',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.output;
+      },
       templateOptions: {
           type: 'text',
           label: '--output',
@@ -592,6 +671,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'qos',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.qos;
+      },
       templateOptions: {
           type: 'text',
           label: '--qos',
@@ -614,6 +696,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'requeue',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.requeue;
+      },
       templateOptions: {
           type: 'text',
           label: '--requeue',
@@ -622,6 +707,9 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
   }, {
       key: 'time',
       type: 'input',
+      hideExpression:  function($viewValue, $modelValue, scope) {
+          return !scope.$parent.check.time;
+      },
       templateOptions: {
           type: 'text',
           label: '--time',
@@ -662,6 +750,7 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
     getFormConfig: function () {
       return $http
         .get('/slurm/a/config')
+
         .success(function (data, status, headers, config) {
           return data;
         });
@@ -671,9 +760,49 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
 .controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
   $scope.model = {};
-  $scope.formFields1 = FormService.formFieldsObj.formFields;
-  $scope.formFields2 = [];
-  $scope.formFields3 = [];
-  $scope.formFields4 = [];
+
+  // $scope.check is for checking if a specific field is selected by a user
+  // Default fields have true at the beginning
+  $scope.check = {
+    array:true,
+    account:true,
+    begin:false,
+    checkpoint:false,
+    checkpointDir:false,
+    cpusPerTask:false,
+    workDir:false,
+    error:false,
+    export:false,
+    exportFile:false,
+    nodefile:false,
+    getUserEnv:false,
+    immediate:false,
+    input:false,
+    jobName:false,
+    jobId:false,
+    noKill:false,
+    licenses:false,
+    mailType:false,
+    mailUser:false,
+    mem:false,
+    memPerCpu:false,
+    nodes:false,
+    noRequeue:false,
+    output:false,
+    qos:false,
+    requeue:false,
+    time:false
+  };
+  $scope.formFields = FormService.formFieldsObj.formFields;
+  $scope.options = Object.keys($scope.check);
+  $scope.onEnter = function($event) {
+    if ($event.which===13){
+      $scope.check[$scope.selected] = true; // if not exist, this creates new property
+      $scope.selected = "";
+    }
+  };
+  $scope.onSubmit = function() {
+    alert(JSON.stringify($scope.model),null,2);
+  };
 
 }]);
