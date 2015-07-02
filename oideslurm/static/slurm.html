@@ -2,15 +2,19 @@
   <div
     id="assist-col-left"
     class="col-md-6 main assist-col">
-    <div id="directive-section" class="col-md-12">
+    <div
+      id="directive-section"
+      class="col-md-12"
+      ng-controller="DirectivesCtrl">
       <h1
         class="lead text-uppercase">
         sbatch directives
       </h1>
       <div
-      id="ace-directives"
+        id="ace-directives"
         class="ace-schedule"
-        ui-ace
+        ui-ace="aceOptions"
+        ng-model="aceModel"
         readonly>
       </div>
     </div>
@@ -36,10 +40,10 @@
     </h1>
         <div id="builder-form-container" ng-controller="SlurmCtrl as ctrl">
           <form novalidate name="slurmForm">
-            
+
               <accordion>
                   <accordion-group heading="Group 1">
-                      <formly-form model="model" fields="formFields1" ></formly-form>
+                      <formly-form model="formModel" fields="formFields1" ></formly-form>
                   </accordion-group>
                   <accordion-group heading="Group 2">
                       <formly-form model="model" fields="formFields2" ></formly-form>

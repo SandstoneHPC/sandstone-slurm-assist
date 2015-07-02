@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formlyBootstrap'])
+angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap','ui.ace'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/slurm', {
@@ -15,6 +15,7 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
 }])
 .factory('FormService', ['$http', function ($http) {
   var formConfig = {};
+  var formModel = {};
   var formFields = [{
       key: 'array',
       type: 'input',
@@ -655,7 +656,10 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
       }
   }];
   return {
-    formFieldsObj:{formFields:formFields},
+    formFieldsObj:{
+      formFields:formFields,
+      formModel:formModel
+    },
     setFormConfig: function (fc) {
       formConfig = fc;
     },
@@ -670,10 +674,19 @@ angular.module('oide.slurm', ['formly','ngRoute','ui.bootstrap','ui.ace','formly
 }])
 .controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
-  $scope.model = {};
+  $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.formFields1 = FormService.formFieldsObj.formFields;
   $scope.formFields2 = [];
   $scope.formFields3 = [];
   $scope.formFields4 = [];
 
+}])
+.controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
+  $scope.aceModel = '';
+  $scope.directivesObj = FormService.formFieldsObj.formModel;
+  $scope.$watch('directivesObj', function(newVal, oldVal){
+    if ((typeof newVal.array !== 'undefined') && (newVal.array !== '')) {
+      $scope.aceModel = '#SBATCH --array ' + newVal.array;
+    }
+  }, true);
 }]);
