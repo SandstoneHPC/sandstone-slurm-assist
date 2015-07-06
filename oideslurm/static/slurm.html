@@ -2,15 +2,19 @@
   <div
     id="assist-col-left"
     class="col-md-6 main assist-col">
-    <div id="directive-section" class="col-md-12">
+    <div
+      id="directive-section"
+      class="col-md-12"
+      ng-controller="DirectivesCtrl">
       <h1
         class="lead text-uppercase">
         sbatch directives
       </h1>
       <div
-      id="ace-directives"
+        id="ace-directives"
         class="ace-schedule"
-        ui-ace
+        ui-ace="aceOptions"
+        ng-model="aceModel"
         readonly>
       </div>
     </div>
@@ -37,7 +41,7 @@
         <div id="builder-form-container" ng-controller="SlurmCtrl as ctrl">
           <input type="text" ng-model="selected" ng-keypress="onEnter($event)" typeahead="option for option in options | filter:$viewValue">
           <form ng-submit="onSubmit()" novalidate name="slurmForm">
-            <formly-form model="model" fields="formFields" >
+            <formly-form model="formModel" fields="formFields" >
               <button type="submit">See model</button>
             </formly-form>
           </form>
