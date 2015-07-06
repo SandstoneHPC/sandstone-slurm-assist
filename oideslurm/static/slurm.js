@@ -468,8 +468,9 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'immediate',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.check.immediate;
+          return !scope.$parent.formModel.immediate;
       },
+      defaultValue: "true",
       templateOptions: {
           type: 'text',
           label: '--immediate',
@@ -576,7 +577,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'noKill',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.check.noKill;
+          return !scope.$parent.formModel.noKill;
       },
       templateOptions: {
           type: 'text',
@@ -781,7 +782,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'onRequeue',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.check.onRequeue;
+          return !scope.$parent.formModel.onRequeue;
       },
       templateOptions: {
           type: 'text',
@@ -856,7 +857,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'requeue',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.check.requeue;
+          return !scope.$parent.formModel.requeue;
       },
       templateOptions: {
           type: 'text',
@@ -929,9 +930,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 .controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
 
-  $scope.formModel = FormService.formFieldsObj.formModel;
-  $scope.formFields1 = FormService.formFieldsObj.formFields;
-
   // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
@@ -964,14 +962,23 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     requeue:false,
     time:false
   };
+
+  $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.formModel.check = check;
+
   $scope.formFields = FormService.formFieldsObj.formFields;
   $scope.options = Object.keys(check);
 
   $scope.onEnter = function($event) {
     if ($event.which===13){
-      $scope.formModel.check[$scope.selected] = true; // if not exist, this creates new property
-      $scope.selected = "";
+      if (['immediate','noKill','onRequeue','requeue'].indexOf($scope.selected) < 0){
+        $scope.formModel.check[$scope.selected] = true; // if not exist, this creates new property
+        $scope.selected = "";
+      }
+      else {
+        $scope.formModel[$scope.selected] = true; // if not exist, this creates new property
+        $scope.selected = "";
+      }
     }
   };
 
