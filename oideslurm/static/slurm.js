@@ -26,6 +26,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--array',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.array = false;
+              delete scope.$parent.model.array;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -63,6 +70,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--account',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.account = false;
+              delete scope.$parent.model.account;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -77,13 +91,18 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression: function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.begin;
       },
-      //expressionProperties: {
-      //  'templateOptions.ngHide': "check.begin"
-      //},
+
       templateOptions: {
           type: 'text',
           label: '--begin',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.begin = false;
+              delete scope.$parent.model.begin;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -138,6 +157,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--checkpoint',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.checkpoint = false;
+              delete scope.$parent.model.checkpoint;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -176,6 +202,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--checkpointDir',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.checkpointDir = false;
+              delete scope.$parent.model.checkpointDir;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -202,6 +235,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--cpusPerTask',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.cpusPerTask = false;
+              delete scope.$parent.model.cpusPerTask;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -227,6 +267,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--workDir',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.workDir = false;
+              delete scope.$parent.model.workDir;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -252,6 +299,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--error',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.error = false;
+              delete scope.$parent.model.error;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -277,6 +331,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--export',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.export = false;
+              delete scope.$parent.model.export;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -305,6 +366,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--exportFile',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.exportFile = false;
+              delete scope.$parent.model.exportFile;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -337,6 +405,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--nodefile',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.nodefile = false;
+              delete scope.$parent.model.nodefile;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -367,6 +442,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--getUserEnv',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.getUserEnv = false;
+              delete scope.$parent.model.getUserEnv;
+            }
+          },
           required: false,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -404,6 +486,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--input',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.input = false;
+              delete scope.$parent.model.input;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -429,6 +518,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--jobName',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.jobName = false;
+              delete scope.$parent.model.jobName;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -454,6 +550,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--jobId',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.jobId = false;
+              delete scope.$parent.model.jobId;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -491,6 +594,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--licenses',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.licenses = false;
+              delete scope.$parent.model.licenses;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -516,6 +626,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--mailType',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.mailType = false;
+              delete scope.$parent.model.mailType;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -542,6 +659,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--mailUser',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.mailUser = false;
+              delete scope.$parent.model.mailUser;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -567,6 +691,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--mem',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.mem = false;
+              delete scope.$parent.model.mem;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -592,6 +723,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--memPerCpu',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.memPerCpu = false;
+              delete scope.$parent.model.memPerCpu;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -617,6 +755,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--nodes',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.nodes = false;
+              delete scope.$parent.model.nodes;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -653,6 +798,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--output',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.output = false;
+              delete scope.$parent.model.output;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -678,6 +830,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--qos',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.qos = false;
+              delete scope.$parent.model.qos;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -714,6 +873,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           type: 'text',
           label: '--time',
           placeholder: 'bar',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.time = false;
+              delete scope.$parent.model.time;
+            }
+          },
           required: true,
           onBlur: function($viewValue, $formModelValue) {
               $formModelValue.validation.show = null;
@@ -766,7 +932,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.formFields1 = FormService.formFieldsObj.formFields;
 
-  // $scope.check is for checking if a specific field is selected by a user
+  // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
     array:true,
@@ -792,7 +958,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     mem:false,
     memPerCpu:false,
     nodes:false,
-    noRequeue:false,
+    onRequeue:false,
     output:false,
     qos:false,
     requeue:false,
@@ -808,9 +974,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       $scope.selected = "";
     }
   };
-  $scope.onSubmit = function() {
-    alert(JSON.stringify($scope.formModel),null,2);
-  };
+
 }])
 .controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
   $scope.aceModel = '';

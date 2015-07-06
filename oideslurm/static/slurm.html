@@ -39,10 +39,12 @@
       sbatch builder
     </h1>
         <div id="builder-form-container" ng-controller="SlurmCtrl as ctrl">
-          <input type="text" ng-model="selected" ng-keypress="onEnter($event)" typeahead="option for option in options | filter:$viewValue">
-          <form ng-submit="onSubmit()" novalidate name="slurmForm">
+          <input type="text" ng-model="selected"
+                 ng-keypress="onEnter($event)"
+                 typeahead="option for option in options | filter:$viewValue">
+          add new field
+          <form novalidate name="slurmForm">
             <formly-form model="formModel" fields="formFields" >
-              <button type="submit">See model</button>
             </formly-form>
           </form>
         </div>
