@@ -45,7 +45,9 @@
                      class="form-control"
                      class="form-inline"
                      ng-keypress="onEnter($event)"
-                     typeahead="option for option in options | filter:$viewValue">
+                     ng-focus="onFocus($event)"
+                     typeahead="option for option in options | filter:$viewValue:emptyOrMatch"
+                     typeahead-focus>
             </div>
             <div class="form-group"><b>add new field</b></div>
           </div>

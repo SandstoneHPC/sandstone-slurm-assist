@@ -927,6 +927,38 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     }
   };
 }])
+// a directive below is kind of a hacky solution to
+// the issue of typeahead   
+.directive('typeaheadFocus', function (){
+  return {
+    require: 'ngModel',
+    link: function (scope,element,attr,ngModel){
+      element.bind('click', function () {
+        var viewValue = ngModel.$viewValue;
+
+        if (ngModel.$viewValue == ' '){
+          ngModel.$setViewValue(null);
+        }
+        ngModel.$setViewValue(' ');
+        ngModel.$setViewValue(viewValue || ' ');
+      });
+
+      element.bind('keyup', function(event){
+        if (event.which === 8){ // when backspace is pressed
+          if (ngModel.$viewValue.length <= 1 ){
+            ngModel.$setViewValue(' ');
+          }
+        }
+      });
+
+      scope.emptyOrMatch = function (actual,expected){
+        if (expected == ' ') return true;
+        return actual.indexOf(expected) > -1;
+      };
+    }
+
+  };
+})
 .controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
 
@@ -980,6 +1012,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
         $scope.selected = "";
       }
     }
+  };
+
+  $scope.onFocus = function($event){
+
   };
 
 }])
