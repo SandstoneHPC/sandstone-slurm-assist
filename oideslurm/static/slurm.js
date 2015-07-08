@@ -19,20 +19,26 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   var formFields = [{
       key: 'array',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.array;
+      },
+      defaultValue: "1,2,3-4:5%6",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--array',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.array = false;
+              delete scope.$parent.model.array;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          arrayValidate: function($viewValue, $modelValue, scope) {
+          arrayValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   // example; 23,34-46,54
                   var flag = true;
@@ -53,35 +59,46 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'account',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.account;
+      },
+      defaultValue: "account",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--account',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.account = false;
+              delete scope.$parent.model.account;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       }
   }, {
       key: 'begin',
       type: 'input',
+      hideExpression: function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.begin;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--begin',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.begin = false;
+              delete scope.$parent.model.begin;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          beginValidate: function($viewValue, $modelValue, scope) {
+          beginValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   var YY = "(1[5-9]|[2-9][0-9])"; // Year > 15
                   var MO = "(0[1-9]|1[0-2])"; // MO stands for MOnth
@@ -119,20 +136,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'checkpoint',
       type: 'input',
+      hideExpression: function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.checkpoint;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--checkpoint',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.checkpoint = false;
+              delete scope.$parent.model.checkpoint;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          checkpointValidate: function($viewValue, $modelValue, scope) {
+          checkpointValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   var minutes = "([0-5][0-9])";
                   var seconds = "(:[0-5][0-9])";
@@ -153,21 +175,26 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'checkpointDir',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.checkpointDir;
+      },
       defaultValue: "./",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--checkpointDir',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.checkpointDir = false;
+              delete scope.$parent.model.checkpointDir;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          checkpointDirValidate: function($viewValue, $modelValue, scope) {
+          checkpointDirValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^([.a-zA-Z0-9_-]*)\/(([a-zA-Z0-9_-]+\/?)*)$/.test($viewValue);
               }
@@ -176,21 +203,26 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'cpusPerTask',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.cpusPerTask;
+      },
       defaultValue: "1",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--cpusPerTask',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.cpusPerTask = false;
+              delete scope.$parent.model.cpusPerTask;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          cpusPerTaskValidate: function($viewValue, $modelValue, scope) {
+          cpusPerTaskValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^\d+$/.test($viewValue);
               }
@@ -199,20 +231,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'workDir',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.workDir;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--workDir',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.workDir = false;
+              delete scope.$parent.model.workDir;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          workDirValidate: function($viewValue, $modelValue, scope) {
+          workDirValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^([.a-zA-Z0-9_-]*)\/(([a-zA-Z0-9_-]+\/?)*)$/.test($viewValue);
               }
@@ -221,20 +258,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'error',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.error;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--error',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.error = false;
+              delete scope.$parent.model.error;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          errorValidate: function($viewValue, $modelValue, scope) {
+          errorValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^([a-zA-Z0-9_-]|%[AajNu])+\.[a-zA-Z]+$/.test($viewValue);
               }
@@ -243,20 +285,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'export',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.export;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--export',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.export = false;
+              delete scope.$parent.model.export;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          exportValidate: function($viewValue, $modelValue, scope) {
+          exportValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   if (/^(|ALL|NONE)$/.test($viewValue)) return true;
                   /* below is for one env variable*/
@@ -268,20 +315,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'exportFile',
       type: 'input',
+      hideExpression: function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.exportFile;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--exportFile',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.exportFile = false;
+              delete scope.$parent.model.exportFile;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          exportFileValidate: function($viewValue, $modelValue, scope) {
+          exportFileValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   /* when file descriptor (it's just an integer and is >= 3) is specified */
                   if (/^([3-9]|[1-9][0-9][0-9]*)$/.test($viewValue)) return true;
@@ -297,20 +349,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'nodefile',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.nodefile;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--nodefile',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.nodefile = false;
+              delete scope.$parent.model.nodefile;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          nodefileValidate: function($viewValue, $modelValue, scope) {
+          nodefileValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   /* relative or absolute file path  */
                   if (/^([.a-zA-Z0-9_-]*)\/(([a-zA-Z0-9_-]+\/?)*)[.a-zA-Z0-9_-]+$/.test($viewValue)) return true;
@@ -323,21 +380,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'getUserEnv',
       type: 'input',
-      defaultValue: "",
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.getUserEnv;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--getUserEnv',
           placeholder: 'bar',
-          required: false,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.getUserEnv = false;
+              delete scope.$parent.model.getUserEnv;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: false
       },
       validators: {
-          getUserEnvValidate: function($viewValue, $modelValue, scope) {
+          getUserEnvValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^\d*[SL]?$/.test($viewValue);
               }
@@ -346,6 +407,11 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'immediate',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.immediate;
+      },
+      defaultValue: "true",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--immediate',
@@ -355,20 +421,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'input',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.input;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--input',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.input = false;
+              delete scope.$parent.model.input;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          inputValidate: function($viewValue, $modelValue, scope) {
+          inputValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^([a-zA-Z0-9_-]|%[AajNu])+\.[a-zA-Z]+$/.test($viewValue);
               }
@@ -377,20 +448,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'jobName',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.jobName;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--jobName',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.jobName = false;
+              delete scope.$parent.model.jobName;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          jobNameValidate: function($viewValue, $modelValue, scope) {
+          jobNameValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[.a-zA-Z0-9_-]+$/.test($viewValue);
               }
@@ -399,20 +475,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'jobId',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.jobId;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--jobId',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.jobId = false;
+              delete scope.$parent.model.jobId;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          jobIdValidate: function($viewValue, $modelValue, scope) {
+          jobIdValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[0-9]+$/.test($viewValue);
               }
@@ -421,6 +502,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'noKill',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.noKill;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--noKill',
@@ -430,20 +515,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'licenses',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.licenses;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--licenses',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.licenses = false;
+              delete scope.$parent.model.licenses;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          licensesValidate: function($viewValue, $modelValue, scope) {
+          licensesValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[0-9a-zA-Z]+(@[.a-zA-Z0-9]+)?(:[0-9]+)?(,[0-9a-zA-Z]+(@[.a-zA-Z0-9]+)?(:[0-9]+)?)*$/.test($viewValue);
               }
@@ -452,20 +542,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'mailType',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.mailType;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--mailType',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.mailType = false;
+              delete scope.$parent.model.mailType;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          mailTypeValidate: function($viewValue, $modelValue, scope) {
+          mailTypeValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   var reg = "(BEGIN|END|FAIL|REQUEUE|TIME_LIMIT(_[589]0)*)"
                   return RegExp("^" + reg + "(," + reg + ")*" + "$").test($viewValue);
@@ -475,20 +570,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'mailUser',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.mailUser;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--mailUser',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.mailUser = false;
+              delete scope.$parent.model.mailUser;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          mailUserValidate: function($viewValue, $modelValue, scope) {
+          mailUserValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return true;
               }
@@ -497,20 +597,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'mem',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.mem;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--mem',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.mem = false;
+              delete scope.$parent.model.mem;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          memValidate: function($viewValue, $modelValue, scope) {
+          memValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[1-9]\d*$/.test($viewValue);
               }
@@ -519,20 +624,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'memPerCpu',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.memPerCpu;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--memPerCpu',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.memPerCpu = false;
+              delete scope.$parent.model.memPerCpu;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          memPerCpuValidate: function($viewValue, $modelValue, scope) {
+          memPerCpuValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[1-9]\d*$/.test($viewValue);
               }
@@ -541,20 +651,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'nodes',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.nodes;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--nodes',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.nodes = false;
+              delete scope.$parent.model.nodes;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          nodesValidate: function($viewValue, $modelValue, scope) {
+          nodesValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[1-9]\d*(-[1-9]\d*)?$/.test($viewValue);
               }
@@ -563,6 +678,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'onRequeue',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.onRequeue;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--onRequeue',
@@ -571,20 +690,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'output',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.output;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--output',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.output = false;
+              delete scope.$parent.model.output;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          outputValidate: function($viewValue, $modelValue, scope) {
+          outputValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^([a-zA-Z0-9_-]|%[AajNu])+\.[a-zA-Z]+$/.test($viewValue);
               }
@@ -593,20 +717,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'qos',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.qos;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--qos',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.qos = false;
+              delete scope.$parent.model.qos;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          qosValidate: function($viewValue, $modelValue, scope) {
+          qosValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^(express|normal|long)$/.test($viewValue);
               }
@@ -615,6 +744,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'requeue',
       type: 'checkbox',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.requeue;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--requeue',
@@ -623,20 +756,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   }, {
       key: 'time',
       type: 'input',
+      hideExpression:  function($viewValue, $formModelValue, scope) {
+          return !scope.$parent.formModel.check.time;
+      },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--time',
           placeholder: 'bar',
-          required: true,
-          onBlur: function($viewValue, $modelValue) {
-              $modelValue.validation.show = null;
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.time = false;
+              delete scope.$parent.model.time;
+            }
           },
-          onFocus: function($viewValue, $modelValue) {
-              $modelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
-          timeValidate: function($viewValue, $modelValue, scope) {
+          timeValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   var minutes = "([0-5][0-9])";
                   var seconds = "(:[0-5][0-9])";
@@ -666,19 +804,100 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     getFormConfig: function () {
       return $http
         .get('/slurm/a/config')
+
         .success(function (data, status, headers, config) {
           return data;
         });
     }
   };
 }])
+// a directive below is kind of a hacky solution to
+// the issue of typeahead
+.directive('typeaheadFocus', function (){
+  return {
+    require: 'ngModel',
+    link: function (scope,element,attr,ngModel){
+      element.bind('click', function () {
+        var viewValue = ngModel.$viewValue;
+
+        if (ngModel.$viewValue == ' '){
+          ngModel.$setViewValue(null);
+        }
+        ngModel.$setViewValue(' ');
+        ngModel.$setViewValue(viewValue || ' ');
+      });
+
+      element.bind('keyup', function(event){
+        if (event.which === 8){ // when backspace is released
+          if (ngModel.$viewValue.length < 1 && ngModel.$viewValue === ''){
+            ngModel.$setViewValue(' ');
+          }
+        }
+      });
+
+      scope.emptyOrMatch = function (actual,expected){
+        if (expected == ' ') return true;
+        return actual.indexOf(expected) > -1;
+      };
+    }
+
+  };
+})
 .controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
+
+  // check is for checking if a specific field is selected by a user
+  // Default fields have true at the beginning
+  var check = {
+    array:true,
+    account:true,
+    begin:false,
+    checkpoint:false,
+    checkpointDir:false,
+    cpusPerTask:false,
+    workDir:false,
+    error:false,
+    export:false,
+    exportFile:false,
+    nodefile:false,
+    getUserEnv:false,
+    immediate:false,
+    input:false,
+    jobName:false,
+    jobId:false,
+    noKill:false,
+    licenses:false,
+    mailType:false,
+    mailUser:false,
+    mem:false,
+    memPerCpu:false,
+    nodes:false,
+    onRequeue:false,
+    output:false,
+    qos:false,
+    requeue:false,
+    time:false
+  };
+
   $scope.formModel = FormService.formFieldsObj.formModel;
-  $scope.formFields1 = FormService.formFieldsObj.formFields;
-  $scope.formFields2 = [];
-  $scope.formFields3 = [];
-  $scope.formFields4 = [];
+  $scope.formModel.check = check;
+
+  $scope.formFields = FormService.formFieldsObj.formFields;
+  $scope.options = Object.keys(check);
+
+
+  $scope.onEnter = function($event) {
+    if ($event.which===13){
+      if (['immediate','noKill','onRequeue','requeue'].indexOf($scope.selected) < 0){
+        $scope.formModel.check[$scope.selected] = true; // if not exist, this creates new property
+        $scope.selected = "";
+      }
+      else {
+        $scope.formModel[$scope.selected] = true; // if not exist, this creates new property
+        $scope.selected = "";
+      }
+    }
+  };
 
 }])
 .controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
