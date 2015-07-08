@@ -928,7 +928,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   };
 }])
 // a directive below is kind of a hacky solution to
-// the issue of typeahead   
+// the issue of typeahead
 .directive('typeaheadFocus', function (){
   return {
     require: 'ngModel',
@@ -944,8 +944,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       });
 
       element.bind('keyup', function(event){
-        if (event.which === 8){ // when backspace is pressed
-          if (ngModel.$viewValue.length <= 1 ){
+        if (event.which === 8){ // when backspace is released
+          if (ngModel.$viewValue.length < 1 && ngModel.$viewValue === ''){
             ngModel.$setViewValue(' ');
           }
         }
