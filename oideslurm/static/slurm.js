@@ -22,6 +22,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.array;
       },
+      defaultValue: "1,2,3-4:5%6",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--array',
@@ -33,13 +35,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.array;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           arrayValidate: function($viewValue, $formModelValue, scope) {
@@ -66,6 +62,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.account;
       },
+      defaultValue: "account",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--account',
@@ -77,13 +75,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.account;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       }
   }, {
       key: 'begin',
@@ -91,7 +83,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression: function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.begin;
       },
-
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--begin',
@@ -103,13 +95,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.begin;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           beginValidate: function($viewValue, $formModelValue, scope) {
@@ -153,6 +139,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression: function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.checkpoint;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--checkpoint',
@@ -164,13 +151,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.checkpoint;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           checkpointValidate: function($viewValue, $formModelValue, scope) {
@@ -198,6 +179,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.check.checkpointDir;
       },
       defaultValue: "./",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--checkpointDir',
@@ -209,13 +191,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.checkpointDir;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           checkpointDirValidate: function($viewValue, $formModelValue, scope) {
@@ -231,6 +207,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.check.cpusPerTask;
       },
       defaultValue: "1",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--cpusPerTask',
@@ -242,13 +219,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.cpusPerTask;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           cpusPerTaskValidate: function($viewValue, $formModelValue, scope) {
@@ -263,6 +234,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.workDir;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--workDir',
@@ -274,13 +246,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.workDir;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           workDirValidate: function($viewValue, $formModelValue, scope) {
@@ -295,6 +261,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.error;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--error',
@@ -306,13 +273,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.error;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           errorValidate: function($viewValue, $formModelValue, scope) {
@@ -327,6 +288,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.export;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--export',
@@ -338,13 +300,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.export;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           exportValidate: function($viewValue, $formModelValue, scope) {
@@ -362,6 +318,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression: function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.exportFile;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--exportFile',
@@ -373,13 +330,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.exportFile;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           exportFileValidate: function($viewValue, $formModelValue, scope) {
@@ -401,6 +352,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.nodefile;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--nodefile',
@@ -412,13 +364,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.nodefile;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           nodefileValidate: function($viewValue, $formModelValue, scope) {
@@ -437,7 +383,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.getUserEnv;
       },
-      defaultValue: "",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--getUserEnv',
@@ -449,13 +395,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.getUserEnv;
             }
           },
-          required: false,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: false
       },
       validators: {
           getUserEnvValidate: function($viewValue, $formModelValue, scope) {
@@ -471,6 +411,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.immediate;
       },
       defaultValue: "true",
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--immediate',
@@ -483,6 +424,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.input;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--input',
@@ -494,13 +436,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.input;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           inputValidate: function($viewValue, $formModelValue, scope) {
@@ -515,6 +451,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.jobName;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--jobName',
@@ -526,13 +463,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.jobName;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           jobNameValidate: function($viewValue, $formModelValue, scope) {
@@ -547,6 +478,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.jobId;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--jobId',
@@ -558,13 +490,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.jobId;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           jobIdValidate: function($viewValue, $formModelValue, scope) {
@@ -579,6 +505,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.noKill;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--noKill',
@@ -591,6 +518,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.licenses;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--licenses',
@@ -602,13 +530,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.licenses;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           licensesValidate: function($viewValue, $formModelValue, scope) {
@@ -623,6 +545,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.mailType;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--mailType',
@@ -634,13 +557,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.mailType;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           mailTypeValidate: function($viewValue, $formModelValue, scope) {
@@ -656,6 +573,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.mailUser;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--mailUser',
@@ -667,13 +585,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.mailUser;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           mailUserValidate: function($viewValue, $formModelValue, scope) {
@@ -688,6 +600,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.mem;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--mem',
@@ -699,13 +612,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.mem;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           memValidate: function($viewValue, $formModelValue, scope) {
@@ -720,6 +627,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.memPerCpu;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--memPerCpu',
@@ -731,13 +639,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.memPerCpu;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           memPerCpuValidate: function($viewValue, $formModelValue, scope) {
@@ -752,6 +654,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.nodes;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--nodes',
@@ -763,13 +666,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.nodes;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           nodesValidate: function($viewValue, $formModelValue, scope) {
@@ -784,6 +681,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.onRequeue;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--onRequeue',
@@ -795,6 +693,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.output;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--output',
@@ -806,13 +705,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.output;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           outputValidate: function($viewValue, $formModelValue, scope) {
@@ -827,6 +720,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.qos;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--qos',
@@ -838,13 +732,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.qos;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           qosValidate: function($viewValue, $formModelValue, scope) {
@@ -859,6 +747,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.requeue;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--requeue',
@@ -870,6 +759,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.time;
       },
+      validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--time',
@@ -881,13 +771,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.time;
             }
           },
-          required: true,
-          onBlur: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = null;
-          },
-          onFocus: function($viewValue, $formModelValue) {
-              $formModelValue.validation.show = false;
-          }
+          required: true
       },
       validators: {
           timeValidate: function($viewValue, $formModelValue, scope) {
@@ -1001,6 +885,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   $scope.formFields = FormService.formFieldsObj.formFields;
   $scope.options = Object.keys(check);
 
+
   $scope.onEnter = function($event) {
     if ($event.which===13){
       if (['immediate','noKill','onRequeue','requeue'].indexOf($scope.selected) < 0){
@@ -1012,10 +897,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
         $scope.selected = "";
       }
     }
-  };
-
-  $scope.onFocus = function($event){
-
   };
 
 }])
