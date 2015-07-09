@@ -12,7 +12,35 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     //  }
     //}
   });
+
 }])
+.run(function(formlyConfig){
+  var input = formlyConfig.getType('input').template;
+  var checkbox = formlyConfig.getType('checkbox').template;
+
+  formlyConfig.setType([
+    {
+      name:'input',
+      template:['<input class="form-control" ng-model="model[options.key]">',
+                '<span class="input-group-addon ng-scope" popover="{{to.popover}}" style="cursor:pointer;">?</span>'].join(''),
+      wrapper:["bootstrapLabel", "bootstrapHasError"]
+    },
+    {
+      name:'checkbox',
+      template:['<div class="checkbox">',
+	              '<label>',
+		            '<input type="checkbox"',
+                'class="formly-field-checkbox"',
+		            'ng-model="model[options.key]">',
+		            '{{to.label}}',
+		            "{{to.required ? '*' : ''}}",
+	              '</label>',
+                '</div>',
+                '<span class="input-group-addon ng-scope" popover="{{to.popover}}" style="cursor:pointer;">?</span>'].join(''),
+      wrapper:["bootstrapLabel", "bootstrapHasError"]
+    }
+  ]);
+})
 .factory('FormService', ['$http', function ($http) {
   var formConfig = {};
   var formModel = {};
@@ -35,6 +63,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.array;
             }
           },
+          popover:"array",
           required: true
       },
       validators: {
@@ -75,6 +104,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.account;
             }
           },
+          popover:"account",
           required: true
       }
   }, {
@@ -408,13 +438,20 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'immediate',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.immediate;
+          return !scope.$parent.formModel.check.immediate;
       },
-      defaultValue: "true",
+      defaultValue: 'false',
       validation:{show: true},
       templateOptions: {
           type: 'text',
           label: '--immediate',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.immediate = false;
+              delete scope.$parent.model.immediate;
+            }
+          },
           required: true
       }
 
@@ -503,12 +540,20 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'noKill',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.noKill;
+          return !scope.$parent.formModel.check.noKill;
       },
       validation:{show: true},
+      defaultValue: 'false',
       templateOptions: {
           type: 'text',
           label: '--noKill',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.noKill = false;
+              delete scope.$parent.model.noKill;
+            }
+          },
           required: true
       }
 
@@ -679,12 +724,20 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'onRequeue',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.onRequeue;
+          return !scope.$parent.formModel.check.onRequeue;
       },
       validation:{show: true},
+      defaultValue: 'false',
       templateOptions: {
           type: 'text',
           label: '--onRequeue',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.onRequeue = false;
+              delete scope.$parent.model.onRequeue;
+            }
+          },
           required: true
       }
   }, {
@@ -745,12 +798,20 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       key: 'requeue',
       type: 'checkbox',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.requeue;
+          return !scope.$parent.formModel.check.requeue;
       },
       validation:{show: true},
+      defaultValue: 'false',
       templateOptions: {
           type: 'text',
           label: '--requeue',
+          addonRight:{
+            class:'glyphicon glyphicon-minus',
+            onClick: function(options, scope) {
+              scope.$parent.model.check.requeue = false;
+              delete scope.$parent.model.requeue;
+            }
+          },
           required: true
       }
   }, {
@@ -888,14 +949,14 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
   $scope.onEnter = function($event) {
     if ($event.which===13){
-      if (['immediate','noKill','onRequeue','requeue'].indexOf($scope.selected) < 0){
+      //if (['immediate','noKill','onRequeue','requeue'].indexOf($scope.selected) < 0){
         $scope.formModel.check[$scope.selected] = true; // if not exist, this creates new property
         $scope.selected = "";
-      }
-      else {
-        $scope.formModel[$scope.selected] = true; // if not exist, this creates new property
-        $scope.selected = "";
-      }
+      //}
+      //else {
+      //  $scope.formModel[$scope.selected] = true; // if not exist, this creates new property
+      //  $scope.selected = "";
+      //}
     }
   };
 
