@@ -15,28 +15,29 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 }])
 .run(function(formlyConfig){
-  var input = formlyConfig.getType('input').template;
-  var checkbox = formlyConfig.getType('checkbox').template;
 
+  // define custom templates
   formlyConfig.setType([
     {
       name:'input',
       template:['<input class="form-control" ng-model="model[options.key]">',
-                '<span class="input-group-addon ng-scope" popover="{{to.popover}}" style="cursor:pointer;">?</span>'].join(''),
+                '<span class="input-group-addon ng-scope"',
+                      'popover="{{to.popover}}"',
+                      'style="cursor:pointer;">?</span>'].join(''),
       wrapper:["bootstrapLabel", "bootstrapHasError"]
     },
     {
       name:'checkbox',
       template:['<div class="checkbox">',
-	              '<label>',
-		            '<input type="checkbox"',
-                'class="formly-field-checkbox"',
-		            'ng-model="model[options.key]">',
-		            '{{to.label}}',
-		            "{{to.required ? '*' : ''}}",
-	              '</label>',
+	                '<label>',
+		                '<input type="checkbox"',
+                           'class="formly-field-checkbox"',
+		                       'ng-model="model[options.key]">',
+	                '</label>',
                 '</div>',
-                '<span class="input-group-addon ng-scope" popover="{{to.popover}}" style="cursor:pointer;">?</span>'].join(''),
+                '<span class="input-group-addon ng-scope"',
+                      'popover="{{to.popover}}"',
+                      'style="cursor:pointer;">?</span>'].join(''),
       wrapper:["bootstrapLabel", "bootstrapHasError"]
     }
   ]);
@@ -949,14 +950,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
   $scope.onEnter = function($event) {
     if ($event.which===13){
-      //if (['immediate','noKill','onRequeue','requeue'].indexOf($scope.selected) < 0){
-        $scope.formModel.check[$scope.selected] = true; // if not exist, this creates new property
+        $scope.formModel.check[$scope.selected] = true;
         $scope.selected = "";
-      //}
-      //else {
-      //  $scope.formModel[$scope.selected] = true; // if not exist, this creates new property
-      //  $scope.selected = "";
-      //}
     }
   };
 
