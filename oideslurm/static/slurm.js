@@ -24,7 +24,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
                 '<span class="input-group-addon ng-scope"',
                       'popover="{{to.popover}}"',
                       'style="cursor:pointer;">?</span>'].join(''),
-      wrapper:["bootstrapLabel", "bootstrapHasError"]
+      wrapper:["bootstrapLabel", "bootstrapHasError"],
+      overwriteOk: true
     },
     {
       name:'checkbox',
@@ -38,7 +39,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
                 '<span class="input-group-addon ng-scope"',
                       'popover="{{to.popover}}"',
                       'style="cursor:pointer;">?</span>'].join(''),
-      wrapper:["bootstrapLabel", "bootstrapHasError"]
+      wrapper:["bootstrapLabel", "bootstrapHasError"],
+      overwriteOk: true
     }
   ]);
 })
