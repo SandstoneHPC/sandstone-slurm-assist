@@ -254,28 +254,28 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           }
       }
   }, {
-      key: 'workDir',
+      key: 'workdir',
       type: 'input',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.check.workDir;
+          return !scope.$parent.formModel.check.workdir;
       },
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--workDir',
+          label: '--workdir',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
             onClick: function(options, scope) {
-              scope.$parent.model.check.workDir = false;
-              delete scope.$parent.model.workDir;
+              scope.$parent.model.check.workdir = false;
+              delete scope.$parent.model.workdir;
             }
           },
           popover:'Set the working directory of the batch script to directory before it is executed. The path can be specified as full path or relative path to the directory where the command is executed.',
           required: true
       },
       validators: {
-          workDirValidate: function($viewValue, $formModelValue, scope) {
+          workdirValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^([.a-zA-Z0-9_-]*)\/(([a-zA-Z0-9_-]+\/?)*)$/.test($viewValue);
               }
@@ -414,6 +414,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.check.getUserEnv;
       },
       validation:{show: true},
+      defaultValue:'no option',
       templateOptions: {
           type: 'text',
           label: '--getUserEnv',
@@ -425,13 +426,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.getUserEnv;
             }
           },
-          popover:'This option will tell sbatch to retrieve the login environment variables for the user specified in the --uid option. The environment variables are retrieved by running something of this sort "su - <username> -c /usr/bin/env" and parsing the output. Be aware that any environment variables already set in sbatch\'s environment will take precedence over any environment variables in the user\'s login environment. Clear any environment variables before calling sbatch that you do not want propagated to the spawned program. The optional timeout value is in seconds. Default value is 8 seconds. The optional mode value control the "su" options. With a mode value of "S", "su" is executed without the "-" option. With a mode value of "L", "su" is executed with the "-" option, replicating the login environment. If mode not specified, the mode established at SLURM build time is used. Example of use include "--get-user-env", "--get-user-env=10" "--get-user-env=10L", and "--get-user-env=S". This option was originally created for use by Moab.',
+          popover:'This option will tell sbatch to retrieve the login environment variables for the user specified in the --uid option. The environment variables are retrieved by running something of this sort "su - <username> -c /usr/bin/env" and parsing the output. Be aware that any environment variables already set in sbatch\'s environment will take precedence over any environment variables in the user\'s login environment. Clear any environment variables before calling sbatch that you do not want propagated to the spawned program. The optional timeout value is in seconds. Default value is 8 seconds. The optional mode value control the "su" options. With a mode value of "S", "su" is executed without the "-" option. With a mode value of "L", "su" is executed with the "-" option, replicating the login environment. If mode not specified, the mode established at SLURM build time is used. Example of use include "--get-user-env"(in this case, write "no option" to the input field), "--get-user-env=10" "--get-user-env=10L", and "--get-user-env=S". This option was originally created for use by Moab.',
           required: false
       },
       validators: {
           getUserEnvValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
-                  return /^\d*[SL]?$/.test($viewValue);
+                  return /^(\d*[SL]?)$|^([nN]o[\s\-][oO]ptions?)$/.test($viewValue);
               }
           }
       }
@@ -441,7 +442,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.immediate;
       },
-      defaultValue: 'false',
+
       validation:{show: true},
       templateOptions: {
           type: 'text',
@@ -548,7 +549,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.check.noKill;
       },
       validation:{show: true},
-      defaultValue: 'false',
       templateOptions: {
           type: 'text',
           label: '--noKill',
@@ -739,7 +739,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.check.noRequeue;
       },
       validation:{show: true},
-      defaultValue: 'false',
       templateOptions: {
           type: 'text',
           label: '--noRequeue',
@@ -816,7 +815,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           return !scope.$parent.formModel.check.requeue;
       },
       validation:{show: true},
-      defaultValue: 'false',
       templateOptions: {
           type: 'text',
           label: '--requeue',
@@ -933,7 +931,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     checkpoint:false,
     checkpointDir:false,
     cpusPerTask:false,
-    workDir:false,
+    workdir:false,
     error:false,
     export:false,
     exportFile:false,
@@ -973,15 +971,21 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 }])
 .controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
+
+  // This function distinguishes boolean values and "no option" string from other options
+  var noBoolean = function (s){ return ((typeof s === 'boolean')||(/^([nN]o[\s\-][oO]ptions?)$/.test(s)))?  '' : '=' + s; };
   $scope.aceModel = '';
   $scope.directivesObj = FormService.formFieldsObj.formModel;
   $scope.$watch('directivesObj', function(newVal, oldVal){
-    var dirString = '';
+  var dirString = '';
+
     for (var k in newVal) {
-      if ((typeof newVal[k] !== 'undefined') && (newVal[k] !== '')) {
-        dirString += '#SBATCH --' + k + ' ' + newVal[k] + '\n';
+      if ((typeof newVal[k] !== 'undefined') && (newVal[k] !== '') && (k !== 'check')) {
+        console.log(newVal[k]);
+        dirString += '#SBATCH --' + k.replace(/([A-Z])/g,function(whole,s1){return '-'+s1.toLowerCase();}) + noBoolean(newVal[k]) + '\n';
       }
     }
     $scope.aceModel = dirString;
   }, true);
+  
 }]);
