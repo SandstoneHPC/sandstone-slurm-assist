@@ -20,25 +20,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   formlyConfig.setType([
     {
       name:'input',
-      template:['<input class="form-control" ng-model="model[options.key]">',
-                '<span class="input-group-addon ng-scope"',
-                      'popover="{{to.popover}}"',
-                      'style="cursor:pointer;">?</span>'].join(''),
+      templateUrl:'/static/slurm/custom_input.html',
       wrapper:["bootstrapLabel", "bootstrapHasError"],
       overwriteOk: true
     },
     {
       name:'checkbox',
-      template:['<div class="checkbox">',
-	                '<label>',
-		                '<input type="checkbox"',
-                           'class="formly-field-checkbox"',
-		                       'ng-model="model[options.key]">',
-	                '</label>',
-                '</div>',
-                '<span class="input-group-addon ng-scope"',
-                      'popover="{{to.popover}}"',
-                      'style="cursor:pointer;">?</span>'].join(''),
+      templateUrl:'/static/slurm/custom_checkbox.html',
       wrapper:["bootstrapLabel", "bootstrapHasError"],
       overwriteOk: true
     }
@@ -66,7 +54,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.array;
             }
           },
-          popover:"array",
+          popover:'Submit a job array, multiple jobs to be executed with identical parameters. The indexes specification identifies what array index values should be used. Multiple values may be specified using a comma separated list and/or a range of values with a "-" separator. For example, "--array=0-15" or "--array=0,6,16-32". A step function can also be specified with a suffix containing a colon and number. For example, "--array=0-15:4" is equivalent to "--array=0,4,8,12". A maximum number of simultaneously running tasks from the job array may be specified using a "%" separator. For example "--array=0-15%4" will limit the number of simultaneously running tasks from this job array to 4. The minimum index value is 0. the maximum value is one less than the configuration parameter MaxArraySize.',
           required: true
       },
       validators: {

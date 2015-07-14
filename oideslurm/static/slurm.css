@@ -9,6 +9,14 @@
 .assist-col {
   height: 90%
 }
+.popover {
+  max-height: 20vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  margin-top: 1%;
+}
+
 #assist-button-panel {
   margin-left: 25px;
   margin-right: 25px;
