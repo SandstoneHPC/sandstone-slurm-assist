@@ -16,6 +16,9 @@
   width: 100%;
   margin-top: 1%;
 }
+.control-label {
+  font-weight: normal !important;
+}
 
 #assist-button-panel {
   margin-left: 25px;

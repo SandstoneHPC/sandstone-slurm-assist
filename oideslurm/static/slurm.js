@@ -16,18 +16,24 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 }])
 .run(function(formlyConfig){
 
-  // define custom templates
+  // Set custom wrapper templates
+  formlyConfig.setWrapper({
+    name:'customLabel',
+    templateUrl:'/static/slurm/templates/custom_label_wrapper.html'
+  })
+
+  // Set custom templates
   formlyConfig.setType([
     {
       name:'input',
-      templateUrl:'/static/slurm/custom_input.html',
-      wrapper:["bootstrapLabel", "bootstrapHasError"],
+      templateUrl:'/static/slurm/templates/custom_input.html',
+      wrapper:["customLabel", "bootstrapHasError"],
       overwriteOk: true
     },
     {
       name:'checkbox',
-      templateUrl:'/static/slurm/custom_checkbox.html',
-      wrapper:["bootstrapLabel", "bootstrapHasError"],
+      templateUrl:'/static/slurm/templates/custom_checkbox.html',
+      wrapper:["customLabel", "bootstrapHasError"],
       overwriteOk: true
     }
   ]);
@@ -46,6 +52,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--array',
+          args: '=<indices>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -87,6 +94,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--account',
+          args: '=<account>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -108,6 +116,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--begin',
+          args: '=<time>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -116,7 +125,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
               delete scope.$parent.model.begin;
             }
           },
-          popover:'Submit the batch script to the SLURM controller immediately, like normal, but tell the controller to defer the allocation of the job until the specified time. Time may be of the form HH:MM:SS to run a job at a specific time of day (seconds are optional). (If that time is already past, the next day is assumed.) You may also specify midnight, noon, fika (3 PM) or teatime (4 PM) and you can have a time-of-day suffixed with AM or PM for running in the morning or the evening. You can also say what day the job will be run, by specifying a date of the form MMDDYY or MM/DD/YY YYYY-MM-DD. Combine date and time using the following format YYYY-MM-DD[THH:MM[:SS]]. You can also give times like now + count time-units, where the time-units can be seconds (default), minutes, hours, days, or weeks and you can tell SLURM to run the job today with the keyword today and to run the job tomorrow with the keyword tomorrow. The value may be changed after job submission using the scontrol command.',
+          popover:'Submit the batch script to the SLURM controller immediately, like normal, but tell the controller to defer the allocation of the job until the specified time. Time may be of the form HH:MM:SS to run a job at a specific time of day (seconds are optional). (If that time is already past, the next day is assumed.) You may also specify midnight, noon, fika (3 PM) or teatime (4 PM) and you can have a time-of-day suffixed with AM or PM for running in the morning or the evening. You can also say what day the job will be run, by specifying a date of the form MMDDYY or MM/DD/YY YYYY-MM-DD. Combine date and time using the following format YYYY-MM-DD[THH:MM[:SS]]. You can also give times like now + count time-units, where the time-units can be seconds (default), minutes, hours, days, or weeks and you can tell SLURM to run the job today with the keyword today and to run the job tomorrow with the keyword tomorrow. The value may be changed after job submission using the scontrol command. For example: --begin=16:00 , --begin=now+1hour, --begin=now+60 (seconds by default), --begin=2016-01-20T12:34:00, Notes on date/time specifications: - Although the \'seconds\' field of the HH:MM:SS time specification is allowed by the code, note that the poll time of the SLURM scheduler is not precise enough to guarantee dispatch of the job on the exact second. The job will be eligible to start on the next poll following the specified time. The exact poll interval depends on the SLURM scheduler (e.g., 60 seconds with the default sched/builtin).- If no time (HH:MM:SS) is specified, the default is (00:00:00). - If a date is specified without a year (e.g., MM/DD) then the current year is assumed, unless the combination of MM/DD and HH:MM:SS has already passed for that year, in which case the next year is used.',
           required: true
       },
       validators: {
@@ -165,6 +174,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--checkpoint',
+          args: '=<time>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -206,6 +216,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--checkpointDir',
+          args: '=<directory>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -235,6 +246,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--cpusPerTask',
+          args: '=<ncpus>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -263,6 +275,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--workdir',
+          args: '=<directory>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -291,6 +304,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--error',
+          args: '=<filename pattern>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -319,6 +333,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--export',
+          args: '=<environment variables | ALL | NONE>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -350,6 +365,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--exportFile',
+          args: '=<filename | td>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -385,6 +401,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--nodefile',
+          args: '=<node file>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -418,6 +435,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--getUserEnv',
+          args: '[=timeout][mode]',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -447,6 +465,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--immediate',
+          args: '',
           addonRight:{
             class:'glyphicon glyphicon-minus',
             onClick: function(options, scope) {
@@ -468,6 +487,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--input',
+          args: '=<filename pattern>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -496,6 +516,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--jobName',
+          args: '=<jobname>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -524,6 +545,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--jobId',
+          args: '=<jobid>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -552,6 +574,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--noKill',
+          args: '',
           addonRight:{
             class:'glyphicon glyphicon-minus',
             onClick: function(options, scope) {
@@ -573,6 +596,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--licenses',
+          args: '=<license>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -601,6 +625,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--mailType',
+          args: '=<type>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -630,6 +655,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--mailUser',
+          args: '=<user>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -658,6 +684,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--mem',
+          args: '=<MB>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -686,6 +713,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--memPerCpu',
+          args: '=<MB>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -714,6 +742,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--nodes',
+          args: '=<minnodes[-maxnodes]>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -742,6 +771,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--noRequeue',
+          args: '',
           addonRight:{
             class:'glyphicon glyphicon-minus',
             onClick: function(options, scope) {
@@ -762,6 +792,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--output',
+          args: '=<filename pattern>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -790,6 +821,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--qos',
+          args: '=<qos>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -818,6 +850,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--requeue',
+          args: '',
           addonRight:{
             class:'glyphicon glyphicon-minus',
             onClick: function(options, scope) {
@@ -838,6 +871,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       templateOptions: {
           type: 'text',
           label: '--time',
+          args: '=<time>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -987,5 +1021,5 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     }
     $scope.aceModel = dirString;
   }, true);
-  
+
 }]);
