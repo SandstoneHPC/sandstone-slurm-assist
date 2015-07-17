@@ -5,7 +5,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/slurm', {
     templateUrl: '/static/slurm/slurm.html',
-    controller: 'SlurmCtrl'//,
+    controller: 'SbatchCtrl'//,
     //resolve: {
     //  formConfig: function (FormService) {
     //    return FormService.getFormConfig();
@@ -40,7 +40,40 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 })
 .factory('FormService', ['$http', function ($http) {
   var formConfig = {};
-  var formModel = {};
+
+  // check is for checking if a specific field is selected by a user
+  // Default fields have true at the beginning
+  var check = {
+    array:true,
+    account:true,
+    begin:false,
+    checkpoint:false,
+    checkpointDir:false,
+    cpusPerTask:false,
+    workdir:false,
+    error:false,
+    export:false,
+    exportFile:false,
+    nodefile:false,
+    getUserEnv:false,
+    immediate:false,
+    input:false,
+    jobName:false,
+    jobId:false,
+    noKill:false,
+    licenses:false,
+    mailType:false,
+    mailUser:false,
+    mem:false,
+    memPerCpu:false,
+    nodes:false,
+    noRequeue:false,
+    output:false,
+    qos:false,
+    requeue:false,
+    time:false
+  };
+  var formModel = {check:check};
   var formFields = [{
       key: 'array',
       type: 'input',
@@ -903,6 +936,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           }
       }
   }];
+
   return {
     formFieldsObj:{
       formFields:formFields,
@@ -953,47 +987,13 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
   };
 })
-.controller('SlurmCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
+.controller('SbatchCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
   //FormService.setFormConfig(formConfig);
 
-  // check is for checking if a specific field is selected by a user
-  // Default fields have true at the beginning
-  var check = {
-    array:true,
-    account:true,
-    begin:false,
-    checkpoint:false,
-    checkpointDir:false,
-    cpusPerTask:false,
-    workdir:false,
-    error:false,
-    export:false,
-    exportFile:false,
-    nodefile:false,
-    getUserEnv:false,
-    immediate:false,
-    input:false,
-    jobName:false,
-    jobId:false,
-    noKill:false,
-    licenses:false,
-    mailType:false,
-    mailUser:false,
-    mem:false,
-    memPerCpu:false,
-    nodes:false,
-    noRequeue:false,
-    output:false,
-    qos:false,
-    requeue:false,
-    time:false
-  };
-
   $scope.formModel = FormService.formFieldsObj.formModel;
-  $scope.formModel.check = check;
-
+  console.log($scope.formModel);
   $scope.formFields = FormService.formFieldsObj.formFields;
-  $scope.options = Object.keys(check);
+  $scope.options = Object.keys($scope.formModel.check);
 
 
   $scope.onEnter = function($event) {
@@ -1005,7 +1005,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 }])
 .controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
-
   // This function distinguishes boolean values and "no option" string from other options
   var noBoolean = function (s){ return ((typeof s === 'boolean')||(/^([nN]o[\s\-][oO]ptions?)$/.test(s)))?  '' : '=' + s; };
   $scope.aceModel = '';
@@ -1022,4 +1021,88 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     $scope.aceModel = dirString;
   }, true);
 
-}]);
+}])
+
+.controller('ScriptCtrl',['$scope','$modal','FormService','$log',function($scope,$modal,FormService,$log){
+  $scope.formModel = FormService.formFieldsObj.formModel;
+
+  $scope.loadScript = function(){
+    var loadScriptModal = $modal.open({
+      templateUrl: '/static/slurm/templates/load_script_modal.html',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      controller:'LoadScriptCtrl'
+    });
+
+    };
+}])
+
+.controller('LoadScriptCtrl',function($scope,$modalInstance,$http){
+  $scope.treeData = {};
+  var initialContents = $http
+   .get('/filebrowser/filetree/a/dir')
+   .success(function(data, status, headers, config) {
+     for (var i=0;i<data.length;i++) {
+       data[i].children = [];
+     }
+     $scope.treeData.filetreeContents = data;
+   }).
+   error(function(data, status, headers, config) {
+     $log.error('Failed to initialize filetree.');
+   });
+   $scope.getDirContents = function (node,expanded) {
+     $http
+       .get('/filebrowser/filetree/a/dir', {
+         params: {
+           dirpath: node.filepath
+         }
+       }).
+       success(function(data, status, headers, config) {
+         for (var i=0;i<data.length;i++) {
+           if (!data[i].hasOwnProperty('children')) {
+             data[i].children = [];
+           }
+         }
+         node.children = data;
+       }).
+       error(function(data, status, headers, config) {
+         $log.error('Failed to grab dir contents from ',node.filepath);
+       });
+ };
+ $scope.loadFile = {};
+ $scope.invalidFilepath = false;
+
+ $scope.updateSaveName = function (node, selected) {
+   $scope.invalidFilepath = false;
+   if (node.type === 'dir') {
+     $scope.loadFile.filepath = node.filepath;
+   } else {
+     var index = node.filepath.lastIndexOf('/')+1;
+     var filepath = node.filepath.substring(0,index);
+     var filename = node.filepath.substring(index,node.filepath.length);
+     $scope.loadFile.filepath = filepath;
+     $scope.loadFile.filename = filename;
+   }
+ };
+ $scope.treeOptions = {
+   multiSelection: false,
+   isLeaf: function(node) {
+     return node.type !== 'dir';
+   },
+   injectClasses: {
+     iExpanded: "filetree-icon fa fa-folder-open",
+     iCollapsed: "filetree-icon fa fa-folder",
+     iLeaf: "filetree-icon fa fa-file",
+   }
+ };
+
+ $scope.load = function () {
+   $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
+   $modalInstance.close($scope.loadFile);
+ };
+
+ $scope.cancel = function () {
+   $modalInstance.dismiss('cancel');
+ };
+});
