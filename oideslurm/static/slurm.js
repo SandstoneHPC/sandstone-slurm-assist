@@ -1100,6 +1100,12 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
  $scope.load = function () {
    $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
    $modalInstance.close($scope.loadFile);
+   $http
+     .get('/filebrowser/localfiles' + $scope.loadFile.filepath)
+     .success(function (data,status,headers,config){
+       console.log(data);
+     })
+   console.log('closed!!');
  };
 
  $scope.cancel = function () {
