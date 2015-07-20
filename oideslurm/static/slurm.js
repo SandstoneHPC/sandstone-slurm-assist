@@ -40,8 +40,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 })
 .factory('FormService', ['$http', function ($http) {
   var formConfig = {};
-  // script is used from SBATCH SCRIPT
-  var SbatchScript = {script:''};
   // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
@@ -941,8 +939,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   return {
     formFieldsObj:{
       formFields:formFields,
-      formModel:formModel,
-      SbatchScript:SbatchScript
+      formModel:formModel
     },
     setFormConfig: function (fc) {
       formConfig = fc;
@@ -957,6 +954,16 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     }
   };
 }])
+
+.factory('ScriptService',function(){
+  // script is used from SBATCH SCRIPT
+  var SbatchScript = {script:''};
+  var SbatchDirectives = {script:''};
+  return {
+    SbatchScript:SbatchScript,
+    SbatchDirectives:SbatchDirectives
+  };
+})
 // a directive below is kind of a hacky solution to
 // the issue of typeahead
 .directive('typeaheadFocus', function (){
@@ -1006,10 +1013,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   };
 
 }])
-.controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
+.controller('DirectivesCtrl', ['$scope','FormService','ScriptService','$log',function($scope,FormService,ScriptService,$log) {
   // This function distinguishes boolean values and "no option" string from other options
   var noBoolean = function (s){ return ((typeof s === 'boolean')||(/^([nN]o[\s\-][oO]ptions?)$/.test(s)))?  '' : '=' + s; };
-  $scope.aceModelDirectives = '';
+  $scope.aceModelDirectives = ScriptService.SbatchDirectives;
   $scope.directivesObj = FormService.formFieldsObj.formModel;
   $scope.$watch('directivesObj', function(newVal, oldVal){
   var dirString = '';
@@ -1019,21 +1026,18 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
         dirString += '#SBATCH --' + k.replace(/([A-Z])/g,function(whole,s1){return '-'+s1.toLowerCase();}) + noBoolean(newVal[k]) + '\n';
       }
     }
-    $scope.aceModelDirectives = dirString;
+    $scope.aceModelDirectives.script = dirString;
   }, true);
 
 }])
 
-.controller('ScriptCtrl',['$scope','FormService','$log',function($scope,FormService,$log){
-  $scope.aceModelScript = ''
-  $scope.scriptObj = FormService.formFieldsObj.SbatchScript;
-  $scope.$watch('scriptObj', function (newVal,oldVal){
-    console.log('inside $watch');
-    $scope.aceModelScript = newVal.script;
-  },true);
+.controller('ScriptCtrl',['$scope','ScriptService','$log',function($scope,ScriptService,$log){
+  // Two way biding by object reference. $scope.aceModelScript.script is the actual string
+  $scope.aceModelScript = ScriptService.SbatchScript
 }])
 
-.controller('controlBar',['$scope','$modal','FormService','$log',function($scope,$modal,FormService,$log){
+
+.controller('controlBar',['$scope','$modal','FormService','ScriptService','$log',function($scope,$modal,FormService,ScriptService,$log){
 
   $scope.loadScript = function(){
     var loadScriptModal = $modal.open({
@@ -1043,13 +1047,17 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       size: 'lg',
       controller:'LoadScriptCtrl'
     });
+    };
 
+    $scope.click = function(){
+      console.log(ScriptService.SbatchDirectives);
+      console.log(ScriptService.SbatchScript);
     };
 }])
 
-.controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,$http){
+.controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http){
   $scope.formModel = FormService.formFieldsObj.formModel;
-  $scope.SbatchScript = FormService.formFieldsObj.SbatchScript;
+  $scope.SbatchScript = ScriptService.SbatchScript;
   $scope.treeData = {};
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
