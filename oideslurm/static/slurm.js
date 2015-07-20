@@ -1014,7 +1014,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
     for (var k in newVal) {
       if ((typeof newVal[k] !== 'undefined') && (newVal[k] !== '') && (k !== 'check')) {
-        console.log(newVal[k]);
         dirString += '#SBATCH --' + k.replace(/([A-Z])/g,function(whole,s1){return '-'+s1.toLowerCase();}) + noBoolean(newVal[k]) + '\n';
       }
     }
@@ -1024,7 +1023,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 }])
 
 .controller('ScriptCtrl',['$scope','$modal','FormService','$log',function($scope,$modal,FormService,$log){
-  $scope.formModel = FormService.formFieldsObj.formModel;
 
   $scope.loadScript = function(){
     var loadScriptModal = $modal.open({
@@ -1038,7 +1036,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     };
 }])
 
-.controller('LoadScriptCtrl',function($scope,$modalInstance,$http){
+.controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,$http){
+  $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.treeData = {};
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
@@ -1103,9 +1102,33 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
    $http
      .get('/filebrowser/localfiles' + $scope.loadFile.filepath)
      .success(function (data,status,headers,config){
-       console.log(data);
+       var script = data.content.split("\n")
+       for (var i = 0; i < script.length; i++) {
+
+         // if a string starts with #SBATCH
+         if (/^#SBATCH/.test(script[i])){
+
+           // and if a command takes some optional parameters (e.g. --begin=12:00)
+           if (/--[a-z/-]+=/.test(script[i])){
+             var command = script[i].split('--')[1].split("=")[0];
+             var args = script[i].split('--')[1].split("=")[1];
+             //camelize the command
+             command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             $scope.formModel.check[command] = true;
+             $scope.formModel[command] = args;
+           }
+
+           // else, namely the command does not take any options (e.g. --immediate, --requeue)
+           else {
+             //camelize the command
+             var command = script[i].split('--')[1].replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             $scope.formModel.check[command] = true;
+             if (command === "getUserEnv") $scope.formModel[command] = "no option";
+             else $scope.formModel[command] = true;
+           }
+         }
+       }
      })
-   console.log('closed!!');
  };
 
  $scope.cancel = function () {
