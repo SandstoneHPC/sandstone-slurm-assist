@@ -40,7 +40,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 })
 .factory('FormService', ['$http', function ($http) {
   var formConfig = {};
-
+  // script is used from SBATCH SCRIPT
+  var SbatchScript = {script:''};
   // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
@@ -940,7 +941,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   return {
     formFieldsObj:{
       formFields:formFields,
-      formModel:formModel
+      formModel:formModel,
+      SbatchScript:SbatchScript
     },
     setFormConfig: function (fc) {
       formConfig = fc;
@@ -1007,7 +1009,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 .controller('DirectivesCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
   // This function distinguishes boolean values and "no option" string from other options
   var noBoolean = function (s){ return ((typeof s === 'boolean')||(/^([nN]o[\s\-][oO]ptions?)$/.test(s)))?  '' : '=' + s; };
-  $scope.aceModel = '';
+  $scope.aceModelDirectives = '';
   $scope.directivesObj = FormService.formFieldsObj.formModel;
   $scope.$watch('directivesObj', function(newVal, oldVal){
   var dirString = '';
@@ -1017,12 +1019,21 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
         dirString += '#SBATCH --' + k.replace(/([A-Z])/g,function(whole,s1){return '-'+s1.toLowerCase();}) + noBoolean(newVal[k]) + '\n';
       }
     }
-    $scope.aceModel = dirString;
+    $scope.aceModelDirectives = dirString;
   }, true);
 
 }])
 
-.controller('ScriptCtrl',['$scope','$modal','FormService','$log',function($scope,$modal,FormService,$log){
+.controller('ScriptCtrl',['$scope','FormService','$log',function($scope,FormService,$log){
+  $scope.aceModelScript = ''
+  $scope.scriptObj = FormService.formFieldsObj.SbatchScript;
+  $scope.$watch('scriptObj', function (newVal,oldVal){
+    console.log('inside $watch');
+    $scope.aceModelScript = newVal.script;
+  },true);
+}])
+
+.controller('controlBar',['$scope','$modal','FormService','$log',function($scope,$modal,FormService,$log){
 
   $scope.loadScript = function(){
     var loadScriptModal = $modal.open({
@@ -1038,6 +1049,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 .controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,$http){
   $scope.formModel = FormService.formFieldsObj.formModel;
+  $scope.SbatchScript = FormService.formFieldsObj.SbatchScript;
   $scope.treeData = {};
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
@@ -1097,6 +1109,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
  };
 
  $scope.load = function () {
+    // initialize the script string
+   $scope.SbatchScript.script = ''
    $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
    $modalInstance.close($scope.loadFile);
    $http
@@ -1104,10 +1118,9 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
      .success(function (data,status,headers,config){
        var script = data.content.split("\n")
        for (var i = 0; i < script.length; i++) {
-
+        //-------------------------SBATCH BUILDER------------------------------------
          // if a string starts with #SBATCH
          if (/^#SBATCH/.test(script[i])){
-
            // and if a command takes some optional parameters (e.g. --begin=12:00)
            if (/--[a-z/-]+=/.test(script[i])){
              var command = script[i].split('--')[1].split("=")[0];
@@ -1126,6 +1139,11 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
              if (command === "getUserEnv") $scope.formModel[command] = "no option";
              else $scope.formModel[command] = true;
            }
+         }
+         //------------------------- SBATCH SCRIPT------------------------------------
+         else {
+           $scope.SbatchScript.script += script[i] + '\n';
+           console.log($scope.SbatchScript.script);
          }
        }
      })

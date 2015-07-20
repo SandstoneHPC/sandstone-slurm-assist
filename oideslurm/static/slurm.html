@@ -14,11 +14,13 @@
         id="ace-directives"
         class="ace-schedule"
         ui-ace="aceOptions"
-        ng-model="aceModel"
+        ng-model="aceModelDirectives"
         readonly>
       </div>
     </div>
-    <div id="script-section" class="col-md-12">
+    <div id="script-section"
+         class="col-md-12"
+         ng-controller="ScriptCtrl">
       <h1
         class="lead text-uppercase">
         sbatch script
@@ -26,6 +28,7 @@
       <div
         id="ace-script"
         class="ace-schedule"
+        ng-model="aceModelScript"
         ui-ace>
       </div>
     </div>
@@ -57,7 +60,7 @@
           </form>
         </div>
       </div>
-  <div class="col-md-12" ng-controller="ScriptCtrl">
+  <div class="col-md-12" ng-controller="controlBar">
     <div
       id="assist-button-panel"
       class="well well-lg">
