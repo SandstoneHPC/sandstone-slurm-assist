@@ -1049,10 +1049,16 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     });
     };
 
-    $scope.click = function(){
-      console.log(ScriptService.SbatchDirectives);
-      console.log(ScriptService.SbatchScript);
-    };
+  $scope.saveScript = function(){
+    var saveScriptModal = $modal.open({
+      templateUrl: '/static/slurm/templates/save_script_modal.html',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      controller:'SaveScriptCtrl'
+    });
+  };
+
 }])
 
 .controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http){
@@ -1156,6 +1162,126 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
        }
      })
  };
+
+ $scope.cancel = function () {
+   $modalInstance.dismiss('cancel');
+ };
+})
+
+.controller('SaveScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+  $scope.SbatchDirectives = ScriptService.SbatchDirectives;
+  $scope.SbatchScript = ScriptService.SbatchScript;
+  $scope.treeData = {};
+  var initialContents = $http
+   .get('/filebrowser/filetree/a/dir')
+   .success(function(data, status, headers, config) {
+     for (var i=0;i<data.length;i++) {
+       data[i].children = [];
+     }
+     $scope.treeData.filetreeContents = data;
+   }).
+   error(function(data, status, headers, config) {
+     $log.error('Failed to initialize filetree.');
+   });
+   $scope.getDirContents = function (node,expanded) {
+     $http
+       .get('/filebrowser/filetree/a/dir', {
+         params: {
+           dirpath: node.filepath
+         }
+       }).
+       success(function(data, status, headers, config) {
+         for (var i=0;i<data.length;i++) {
+           if (!data[i].hasOwnProperty('children')) {
+             data[i].children = [];
+           }
+         }
+         node.children = data;
+       }).
+       error(function(data, status, headers, config) {
+         $log.error('Failed to grab dir contents from ',node.filepath);
+       });
+ };
+ $scope.newFile = {};
+ $scope.invalidFilepath = false;
+
+ $scope.updateSaveName = function (node, selected) {
+   $scope.invalidFilepath = false;
+   if (node.type === 'dir') {
+     $scope.newFile.filepath = node.filepath;
+   } else {
+     var index = node.filepath.lastIndexOf('/')+1;
+     var filepath = node.filepath.substring(0,index);
+     var filename = node.filepath.substring(index,node.filepath.length);
+     $scope.newFile.filepath = filepath;
+     $scope.newFile.filename = filename;
+   }
+ };
+ $scope.treeOptions = {
+   multiSelection: false,
+   isLeaf: function(node) {
+     return node.type !== 'dir';
+   },
+   injectClasses: {
+     iExpanded: "filetree-icon fa fa-folder-open",
+     iCollapsed: "filetree-icon fa fa-folder",
+     iLeaf: "filetree-icon fa fa-file",
+   }
+ };
+
+ $scope.saveAs = function () {
+      var content = '#!/bin/bash\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/bash/,"");
+      var file_abs_path = $scope.newFile.filepath + $scope.newFile.filename;
+
+      $http
+        .get(
+          '/filebrowser/a/fileutil',
+          {
+            params: {
+              operation: 'CHECK_EXISTS',
+              filepath: file_abs_path
+            }
+          }
+        )
+        .success(function (data, status, headers, config) {
+          if (data.result) {
+            $http({
+              url: '/filebrowser/localfiles'+file_abs_path,
+              method: 'PUT',
+              params: {
+                _xsrf: getCookie('_xsrf')
+              },
+              data: {'content': content}
+            })
+            .success(function (data,status, headers, config) {
+              $log.debug('Saved file: ', file_abs_path);
+            });
+          } else {
+            $http({
+              url: '/filebrowser/localfiles'+file_abs_path,
+              method: 'POST',
+              params: {
+                _xsrf: getCookie('_xsrf')
+              }
+            })
+            .success(function (data,status, headers, config) {
+              $http({
+                url: '/filebrowser/localfiles'+file_abs_path,
+                method: 'PUT',
+                params: {
+                  _xsrf: getCookie('_xsrf')
+                },
+                data: {'content': content}
+              })
+              .success(function (data,status, headers, config) {
+                $log.debug('Saved file: ', file_abs_path);
+              });
+            });
+          }
+          });
+
+        $modalInstance.dismiss('cancel');
+        };
 
  $scope.cancel = function () {
    $modalInstance.dismiss('cancel');
