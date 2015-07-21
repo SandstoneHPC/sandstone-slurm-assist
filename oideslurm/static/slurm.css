@@ -20,6 +20,14 @@
   font-weight: normal !important;
 }
 
+.tabset, .tab-content, .tab-pane, .tabbable {
+  height: 90vh;
+}
+
+.spacer {
+  height: 15px;
+}
+
 #assist-button-panel {
   margin-left: 25px;
   margin-right: 25px;

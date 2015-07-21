@@ -1155,7 +1155,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
              $scope.formModel.check[command] = true;
              $scope.formModel[command] = args;
            }
-
            // else, namely the command does not take any options (e.g. --immediate, --requeue)
            else {
              //camelize the command
@@ -1168,7 +1167,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
          //------------------------- SBATCH SCRIPT------------------------------------
          else {
            $scope.SbatchScript.script += script[i] + '\n';
-           console.log($scope.SbatchScript.script);
          }
        }
      })
