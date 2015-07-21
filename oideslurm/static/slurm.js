@@ -1125,6 +1125,17 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
  $scope.load = function () {
     // initialize the script string
    $scope.SbatchScript.script = ''
+   // initialize the form model
+   for (var k in $scope.formModel) {
+     if (k === 'check') {
+       for (var kk in $scope.formModel.check) {
+         // hide all of the present input fileds
+         $scope.formModel.check[kk] = false;
+       }
+     }
+     else delete $scope.formModel[k];
+   }
+
    $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
    $modalInstance.close($scope.loadFile);
    $http
