@@ -58,7 +58,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     immediate:false,
     input:false,
     jobName:false,
-    jobId:false,
+    jobid:false,
     noKill:false,
     licenses:false,
     mailType:false,
@@ -247,7 +247,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--checkpointDir',
+          label: '--checkpoint-dir',
           args: '=<directory>',
           placeholder: 'bar',
           addonRight:{
@@ -277,7 +277,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--cpusPerTask',
+          label: '--cpus-per-task',
           args: '=<ncpus>',
           placeholder: 'bar',
           addonRight:{
@@ -396,7 +396,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--exportFile',
+          label: '--export-file',
           args: '=<filename | td>',
           placeholder: 'bar',
           addonRight:{
@@ -466,7 +466,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       defaultValue:'no option',
       templateOptions: {
           type: 'text',
-          label: '--getUserEnv',
+          label: '--get-user-env',
           args: '[=timeout][mode]',
           placeholder: 'bar',
           addonRight:{
@@ -547,7 +547,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--jobName',
+          label: '--job-name',
           args: '=<jobname>',
           placeholder: 'bar',
           addonRight:{
@@ -568,29 +568,29 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           }
       }
   }, {
-      key: 'jobId',
+      key: 'jobid',
       type: 'input',
       hideExpression:  function($viewValue, $formModelValue, scope) {
-          return !scope.$parent.formModel.check.jobId;
+          return !scope.$parent.formModel.check.jobid;
       },
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--jobId',
+          label: '--jobid',
           args: '=<jobid>',
           placeholder: 'bar',
           addonRight:{
             class:'glyphicon glyphicon-minus',
             onClick: function(options, scope) {
-              scope.$parent.model.check.jobId = false;
-              delete scope.$parent.model.jobId;
+              scope.$parent.model.check.jobid = false;
+              delete scope.$parent.model.jobid;
             }
           },
           popover:'Allocate resources as the specified job id. NOTE: Only valid for user root.',
           required: true
       },
       validators: {
-          jobIdValidate: function($viewValue, $formModelValue, scope) {
+          jobidValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
                   return /^[0-9]+$/.test($viewValue);
               }
@@ -605,7 +605,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--noKill',
+          label: '--no-kill',
           args: '',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -656,7 +656,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--mailType',
+          label: '--mail-type',
           args: '=<type>',
           placeholder: 'bar',
           addonRight:{
@@ -686,7 +686,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--mailUser',
+          label: '--mail-user',
           args: '=<user>',
           placeholder: 'bar',
           addonRight:{
@@ -744,7 +744,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--memPerCpu',
+          label: '--mem-per-cpu',
           args: '=<MB>',
           placeholder: 'bar',
           addonRight:{
@@ -802,7 +802,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validation:{show: true},
       templateOptions: {
           type: 'text',
-          label: '--noRequeue',
+          label: '--no-requeue',
           args: '',
           addonRight:{
             class:'glyphicon glyphicon-minus',
@@ -1061,7 +1061,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 }])
 
-.controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http){
+.controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.SbatchScript = ScriptService.SbatchScript;
   $scope.treeData = {};
