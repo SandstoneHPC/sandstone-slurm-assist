@@ -1033,7 +1033,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 .controller('ScriptCtrl',['$scope','ScriptService','$log',function($scope,ScriptService,$log){
   // Two way biding by object reference. $scope.aceModelScript.script is the actual string
-  $scope.aceModelScript = ScriptService.SbatchScript
+  $scope.aceModelScript = ScriptService.SbatchScript;
 }])
 
 
@@ -1239,7 +1239,12 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
  };
 
  $scope.saveAs = function () {
-      var content = '#!/bin/bash\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/bash/,"");
+      var matched = $scope.SbatchScript.script.match(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/);
+      // if matched is not null (or undefined)
+      var shellType = 'bash';
+      if (matched) shellType = matched[1];
+      console.log(shellType);
+      var content = '#!/bin/'+shellType+'\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
       var file_abs_path = $scope.newFile.filepath + $scope.newFile.filename;
 
       $http
