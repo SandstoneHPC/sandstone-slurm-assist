@@ -17,6 +17,7 @@ APP_SPECIFICATION = {
         'bower_components/api-check/dist/api-check.min.js',
         'bower_components/angular-formly/dist/formly.min.js',
         'bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+        'bower_components/angular-smart-table/dist/smart-table.min.js',
     ),
 }
 

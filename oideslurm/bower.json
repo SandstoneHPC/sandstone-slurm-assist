@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "angular-formly": "",
-    "angular-formly-templates-bootstrap":""
+    "angular-formly-templates-bootstrap":"",
+    "angular-smart-table":""
   }
 }
