@@ -23,6 +23,10 @@
 .tabset, .tab-content, .tab-pane, .tabbable {
   height: 90vh;
 }
+.tab-content {
+  padding-left: 30px;
+  padding-right: 30px;
+}
 
 .spacer {
   height: 15px;
