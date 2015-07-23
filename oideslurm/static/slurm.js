@@ -19,20 +19,20 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   // Set custom wrapper templates
   formlyConfig.setWrapper({
     name:'customLabel',
-    templateUrl:'/static/slurm/templates/custom_label_wrapper.html'
+    templateUrl:'/static/slurm/templates/custom_elements/custom_label_wrapper.html'
   })
 
   // Set custom templates
   formlyConfig.setType([
     {
       name:'input',
-      templateUrl:'/static/slurm/templates/custom_input.html',
+      templateUrl:'/static/slurm/templates/custom_elements/custom_input.html',
       wrapper:["customLabel", "bootstrapHasError"],
       overwriteOk: true
     },
     {
       name:'checkbox',
-      templateUrl:'/static/slurm/templates/custom_checkbox.html',
+      templateUrl:'/static/slurm/templates/custom_elements/custom_checkbox.html',
       wrapper:["customLabel", "bootstrapHasError"],
       overwriteOk: true
     }
@@ -1041,7 +1041,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
   $scope.loadScript = function(){
     var loadScriptModal = $modal.open({
-      templateUrl: '/static/slurm/templates/load_script_modal.html',
+      templateUrl: '/static/slurm/templates/modals/load_script_modal.html',
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
@@ -1051,7 +1051,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
   $scope.saveScript = function(){
     var saveScriptModal = $modal.open({
-      templateUrl: '/static/slurm/templates/save_script_modal.html',
+      templateUrl: '/static/slurm/templates//modals/save_script_modal.html',
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
