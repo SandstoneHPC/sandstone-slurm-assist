@@ -2,9 +2,9 @@
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
-      <th st-sort="Job Name">Job Name</th>
-      <th st-sort="Start Time">Start Time</th>
-      <th st-sort="End Time">End Time</th>
+      <th st-sort="jobname">Job Name</th>
+      <th st-sort="start">Start Time</th>
+      <th st-sort="end">End Time</th>
     </tr>
     </thead>
     <h3>Queued</h3>
@@ -25,9 +25,9 @@
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
       <tr>
-        <th st-sort="Job Name">Job Name</th>
-        <th st-sort="Start Time">Start Time</th>
-        <th st-sort="End Time">End Time</th>
+        <th st-sort="jobname">Job Name</th>
+        <th st-sort="start">Start Time</th>
+        <th st-sort="end">End Time</th>
       </tr>
       </thead>
       <h3>Running</h3>
@@ -48,13 +48,13 @@
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
       <tr>
-        <th st-sort="Job Name">Job Name</th>
-        <th st-sort="Start Time">Start Time</th>
-        <th st-sort="End Time">End Time</th>
+        <th st-sort="jobname">Job Name</th>
+        <th st-sort="start">Start Time</th>
+        <th st-sort="end">End Time</th>
       </tr>
-      </thead>
+    </thead>
       <h3>Completed</h3>
-      <tbody>
+    <tbody>
       <tr ng-repeat="row in displayedCollection">
         <td>{{row.jobname}}</td>
         <td>{{row.start}}</td>
