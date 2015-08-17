@@ -87,7 +87,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<indices>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.array = false;
               delete scope.$parent.model.array;
@@ -129,7 +129,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<account>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.account = false;
               delete scope.$parent.model.account;
@@ -151,7 +151,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<time>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.begin = false;
               delete scope.$parent.model.begin;
@@ -209,7 +209,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<time>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.checkpoint = false;
               delete scope.$parent.model.checkpoint;
@@ -251,7 +251,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<directory>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.checkpointDir = false;
               delete scope.$parent.model.checkpointDir;
@@ -281,7 +281,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<ncpus>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.cpusPerTask = false;
               delete scope.$parent.model.cpusPerTask;
@@ -310,7 +310,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<directory>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.workdir = false;
               delete scope.$parent.model.workdir;
@@ -339,7 +339,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<filename pattern>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.error = false;
               delete scope.$parent.model.error;
@@ -368,7 +368,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<environment variables | ALL | NONE>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.export = false;
               delete scope.$parent.model.export;
@@ -400,7 +400,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<filename | td>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.exportFile = false;
               delete scope.$parent.model.exportFile;
@@ -436,7 +436,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<node file>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.nodefile = false;
               delete scope.$parent.model.nodefile;
@@ -470,7 +470,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '[=timeout][mode]',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.getUserEnv = false;
               delete scope.$parent.model.getUserEnv;
@@ -499,7 +499,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           label: '--immediate',
           args: '',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.immediate = false;
               delete scope.$parent.model.immediate;
@@ -522,7 +522,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<filename pattern>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.input = false;
               delete scope.$parent.model.input;
@@ -551,7 +551,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<jobname>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.jobName = false;
               delete scope.$parent.model.jobName;
@@ -580,7 +580,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<jobid>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.jobid = false;
               delete scope.$parent.model.jobid;
@@ -608,7 +608,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           label: '--no-kill',
           args: '',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.noKill = false;
               delete scope.$parent.model.noKill;
@@ -631,7 +631,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<license>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.licenses = false;
               delete scope.$parent.model.licenses;
@@ -660,7 +660,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<type>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.mailType = false;
               delete scope.$parent.model.mailType;
@@ -690,7 +690,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<user>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.mailUser = false;
               delete scope.$parent.model.mailUser;
@@ -719,7 +719,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<MB>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.mem = false;
               delete scope.$parent.model.mem;
@@ -748,7 +748,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<MB>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.memPerCpu = false;
               delete scope.$parent.model.memPerCpu;
@@ -777,7 +777,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<minnodes[-maxnodes]>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.nodes = false;
               delete scope.$parent.model.nodes;
@@ -805,7 +805,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           label: '--no-requeue',
           args: '',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.noRequeue = false;
               delete scope.$parent.model.noRequeue;
@@ -827,7 +827,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<filename pattern>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.output = false;
               delete scope.$parent.model.output;
@@ -856,7 +856,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<qos>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.qos = false;
               delete scope.$parent.model.qos;
@@ -884,7 +884,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           label: '--requeue',
           args: '',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.requeue = false;
               delete scope.$parent.model.requeue;
@@ -906,7 +906,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           args: '=<time>',
           placeholder: 'bar',
           addonRight:{
-            class:'glyphicon glyphicon-minus',
+            class:'fa fa-times',
             onClick: function(options, scope) {
               scope.$parent.model.check.time = false;
               delete scope.$parent.model.time;
@@ -1000,7 +1000,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   //FormService.setFormConfig(formConfig);
 
   $scope.formModel = FormService.formFieldsObj.formModel;
-  console.log($scope.formModel);
   $scope.formFields = FormService.formFieldsObj.formFields;
   $scope.options = Object.keys($scope.formModel.check);
 
@@ -1243,7 +1242,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       // if matched is not null (or undefined)
       var shellType = 'bash';
       if (matched) shellType = matched[1];
-      console.log(shellType);
       var content = '#!/bin/'+shellType+'\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
       var file_abs_path = $scope.newFile.filepath + $scope.newFile.filename;
 
