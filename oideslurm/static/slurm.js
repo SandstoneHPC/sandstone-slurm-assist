@@ -1300,8 +1300,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
  };
 })
 .controller('AjaxCall', ['$scope','$http', function ($scope,$http) {
-  var self = this;
-  self.getRequest = function(){
+
+  $scope.getRequest = function(){
     return $http.get('/slurm/a/jobs').then(
       function(response){
         console.log(response);
