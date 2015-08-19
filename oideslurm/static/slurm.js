@@ -1299,6 +1299,18 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
    $modalInstance.dismiss('cancel');
  };
 })
+.controller('AjaxCall', ['$scope','$http', function ($scope,$http) {
+  var self = this;
+  self.getRequest = function(){
+    return $http.get('/slurm/a/jobs').then(
+      function(response){
+        console.log(response);
+      }, function(errResponse){
+        console.error("Error while fetching items");
+      });
+  };
+}])
+
 .controller('QueuedCtrl', ['$scope', function ($scope) {
 
     var jobNames = ['job 1','job 2','job 3','job 4'];

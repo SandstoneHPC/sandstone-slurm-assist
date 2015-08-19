@@ -5,7 +5,7 @@ import oide.lib.decorators
 import oideslurm.settings as app_settings
 from oideslurm.mixins.slurm_mixin import SlurmCmdMixin
 from oide.lib.handlers.base import BaseHandler
-
+import json
 
 
 class FormConfigHandler(BaseHandler):
@@ -23,15 +23,7 @@ class JobListHandler(BaseHandler,SlurmCmdMixin):
     def get(self):
         # This method should return all sacct data for
         # the running user.
-        pass
-
-class JobHandler(BaseHandler,SlurmCmdMixin):
-
-    @oide.lib.decorators.authenticated
-    def get(self,jobid):
-        # This method should retrieve sacct data
-        # for the job specified by jobid
-        pass
+        self.write(json.dumps(self.run_sacct()))
 
     @oide.lib.decorators.authenticated
     def post(self):
@@ -40,6 +32,15 @@ class JobHandler(BaseHandler,SlurmCmdMixin):
         # a job with the indicated file using sbatch.
         # The jobid of the scheduled job should be returned.
         pass
+
+
+class JobHandler(BaseHandler,SlurmCmdMixin):
+
+    @oide.lib.decorators.authenticated
+    def get(self,jobid):
+        # This method should retrieve sacct data
+        # for the job specified by jobid
+        self.write(json.dumps(self.run_sacct(jobid=jobid)))
 
     @oide.lib.decorators.authenticated
     def delete(self,jobid):
