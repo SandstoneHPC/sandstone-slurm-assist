@@ -1306,6 +1306,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       function(response){
         console.log(response);
       }, function(errResponse){
+        console.log(errResponse);
+        console.log(errResponse.data);
         console.error("Error while fetching items");
       });
   };

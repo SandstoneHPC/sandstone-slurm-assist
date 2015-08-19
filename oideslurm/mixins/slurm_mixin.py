@@ -16,7 +16,7 @@ class SlurmCmdMixin(tornado.web.RequestHandler):
         if kwargs.get('jobid'):
             options = ['-P','--format=JobId,Start,End','-j '+str(kwargs['jobid'])]
         else:
-            options = ['-P','--format=JobId,Start,End']
+            options = ['-P','--format=JobId,Start,End','-u bracken'] # '-u bracken' is for testing (assuming I am the user)
 
         cmd = ['sacct'] + options
         cmd_out = subprocess.check_output(cmd).split('\n')[:-1] # [:-1] because the last element of the list is ""
