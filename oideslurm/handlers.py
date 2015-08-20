@@ -5,7 +5,7 @@ import oide.lib.decorators
 import oideslurm.settings as app_settings
 from oideslurm.mixins.slurm_mixin import SlurmCmdMixin
 from oide.lib.handlers.base import BaseHandler
-
+import json
 
 
 class FormConfigHandler(BaseHandler):
@@ -23,7 +23,10 @@ class JobListHandler(BaseHandler,SlurmCmdMixin):
     def get(self):
         # This method should return all sacct data for
         # the running user.
-        self.write(self.run_sacct())
+        sacct_out = self.run_sacct()
+        json_obj = json.dumps(sacct_out)
+        self.write(json_obj)
+
 
     @oide.lib.decorators.authenticated
     def post(self):
