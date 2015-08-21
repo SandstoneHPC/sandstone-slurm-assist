@@ -964,6 +964,51 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     SbatchDirectives:SbatchDirectives
   };
 })
+
+.factory('AjaxCallService',['$http','$q',function($http,$q){
+  return {
+  getJobList: function(){
+    
+    var defer = $q.defer();
+    $http
+      .get('/slurm/a/jobs')
+      .success(function (response){
+        defer.resolve(response);
+     }
+   );
+   
+   return defer.promise;
+  },
+  
+  getJob: function(jobid){
+
+    var defer = $q.defer();
+    $http
+      .get('/slurm/a/jobs/id'.replace('id',jobid))
+      .success(function (response){
+        defer.resolve(response);
+      }
+  );
+
+  return defer.promise;
+  },
+  
+ JobObjects:{
+    PENDING:    {
+      Jobs: []
+      },
+    RUNNING:   {
+      Jobs: []
+      },
+    COMPLETED: {
+      Jobs: []
+      }
+ }
+
+};
+}
+])
+
 // a directive below is kind of a hacky solution to
 // the issue of typeahead
 .directive('typeaheadFocus', function (){
@@ -1299,70 +1344,61 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
    $modalInstance.dismiss('cancel');
  };
 })
-.controller('AjaxCall', ['$scope','$http', function ($scope,$http) {
+.controller('AjaxCall', ['$scope','AjaxCallService', function ($scope,AjaxCallService){
+  
+  var jobStackManipulator = function (job,jobState,jobStacks){
+    var keys = Object.keys(jobStacks);
+    for (var i=0; i<keys.length; i++){
 
-  $scope.getRequest = function(){
-    return $http.get('/slurm/a/jobs').then(
-      function(response){
-        console.log(response);
-      }, function(errResponse){
-        console.log(errResponse);
-        console.log(errResponse.data);
-        console.error("Error while fetching items");
-      });
+      var targetJobID = job.JobID;
+      var foundFlag = false;
+
+      for(var j=0; j<jobStacks[keys[i]].Jobs.length; j++){
+        if (jobStacks[keys[i]].Jobs[j].JobID === targetJobID){
+          foundFlag = true;
+          if (jobState !== keys[i]) jobStacks[keys[i]].Jobs.splice(j,1);
+        }
+      }
+
+      if (!foundFlag && (jobState === keys[i])) jobStacks[keys[i]].Jobs.push({JobID:job.JobID, Start:job.Start, End:job.End});
+    }
+  };
+  
+  $scope.getJobList = function () {
+    
+    var promise = AjaxCallService.getJobList();
+   
+    promise.then(function(data){
+     
+       var data = data;
+       for (var i=0; i<data.length; i++){
+
+         if(data[i].State === "PENDING"){
+           jobStackManipulator(data[i],"PENDING",AjaxCallService.JobObjects);
+         }
+      
+          else if(data[i].State === "RUNNING"){
+            jobStackManipulator(data[i],"RUNNING",AjaxCallService.JobObjects);
+         }
+
+          else if(data[i].State === "COMPLETED"){
+            jobStackManipulator(data[i],"COMPLETED",AjaxCallService.JobObjects);
+         }
+       } 
+    });
   };
 }])
 
-.controller('QueuedCtrl', ['$scope', function ($scope) {
+.controller('QueuedCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
 
-    var jobNames = ['job 1','job 2','job 3','job 4'];
-    var startTime = ['2016-01-20T12:34:00','2016-01-20T12:34:00','2016-01-20T12:34:00','2016-01-20T12:34:00'];
-    var endTime = ['2016-02-23T09:49:00','2016-02-23T09:49:00','2016-02-23T09:49:00','2016-02-23T09:49:00'];
-    var i = 0;
-
-    $scope.rowCollection = [];
-
-    for (i; i < 4; i++) {
-        $scope.rowCollection.push({jobname:jobNames[i],start:startTime[i],end:endTime[i]});
-    }
-
-    //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-    $scope.displayedCollection = [].concat($scope.rowCollection);
-
-
+    $scope.displayedCollection = AjaxCallService.JobObjects.PENDING.Jobs;
 }])
-.controller('RunningCtrl', ['$scope', function ($scope) {
+.controller('RunningCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
 
-    var jobNames = ['job 1','job 2','job 3','job 4'];
-    var startTime = ['2016-01-20T12:34:00','2016-01-20T12:34:00','2016-01-20T12:34:00','2016-01-20T12:34:00'];
-    var endTime = ['2016-02-23T09:49:00','2016-02-23T09:49:00','2016-02-23T09:49:00','2016-02-23T09:49:00'];
-    var i = 0;
-
-    $scope.rowCollection = [];
-
-    for (i; i < 4; i++) {
-        $scope.rowCollection.push({jobname:jobNames[i],start:startTime[i],end:endTime[i]});
-    }
-
-    //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-    $scope.displayedCollection = [].concat($scope.rowCollection);
-
-
+    $scope.displayedCollection = AjaxCallService.JobObjects.RUNNING.Jobs;
 }])
-.controller('CompletedCtrl', ['$scope', function ($scope) {
+.controller('CompletedCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
 
-    var jobNames = ['job 1','job 2','job 3','job 4'];
-    var startTime = ['2016-01-20T12:34:00','2016-01-20T12:34:00','2016-01-20T12:34:00','2016-01-20T12:34:00'];
-    var endTime = ['2016-02-23T09:49:00','2016-02-23T09:49:00','2016-02-23T09:49:00','2016-02-23T09:49:00'];
-    var i = 0;
-
-    $scope.rowCollection = [];
-
-    for (i; i < 4; i++) {
-        $scope.rowCollection.push({jobname:jobNames[i],start:startTime[i],end:endTime[i]});
-    }
-
-    //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-    $scope.displayedCollection = [].concat($scope.rowCollection);
+    $scope.displayedCollection = AjaxCallService.JobObjects.COMPLETED.Jobs;
 
 }]);

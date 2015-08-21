@@ -1,22 +1,22 @@
 <div ng-controller="AjaxCall">
-  <button type="button" class="btn" ng-click="getRequest()">Send GET Request</button>
+  <button type="button" class="btn" ng-click="getJobList()">Get Job List</button>
 </div>
 
 <div ng-controller="QueuedCtrl">
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
-      <th st-sort="jobname">Job Name</th>
-      <th st-sort="start">Start Time</th>
-      <th st-sort="end">End Time</th>
+      <th st-sort="JobID">Job Name</th>
+      <th st-sort="Start">Start Time</th>
+      <th st-sort="End">End Time</th>
     </tr>
     </thead>
     <h3>Queued</h3>
     <tbody>
     <tr ng-repeat="row in displayedCollection">
-      <td>{{row.jobname}}</td>
-      <td>{{row.start}}</td>
-      <td>{{row.end}}</td>
+      <td>{{row.JobID}}</td>
+      <td>{{row.Start}}</td>
+      <td>{{row.End}}</td>
       <td>
       <button type="button" class="btn">details</button>
       </td>
@@ -29,17 +29,17 @@
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
       <tr>
-        <th st-sort="jobname">Job Name</th>
-        <th st-sort="start">Start Time</th>
-        <th st-sort="end">End Time</th>
+        <th st-sort="JobID">Job Name</th>
+        <th st-sort="Start">Start Time</th>
+        <th st-sort="End">End Time</th>
       </tr>
       </thead>
       <h3>Running</h3>
       <tbody>
       <tr ng-repeat="row in displayedCollection">
-        <td>{{row.jobname}}</td>
-        <td>{{row.start}}</td>
-        <td>{{row.end}}</td>
+        <td>{{row.JobID}}</td>
+        <td>{{row.Start}}</td>
+        <td>{{row.End}}</td>
         <td>
         <button type="button" class="btn">details</button>
         </td>
@@ -52,17 +52,17 @@
   <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
       <tr>
-        <th st-sort="jobname">Job Name</th>
-        <th st-sort="start">Start Time</th>
-        <th st-sort="end">End Time</th>
+        <th st-sort="JobID">Job Name</th>
+        <th st-sort="Start">Start Time</th>
+        <th st-sort="End">End Time</th>
       </tr>
     </thead>
       <h3>Completed</h3>
     <tbody>
       <tr ng-repeat="row in displayedCollection">
-        <td>{{row.jobname}}</td>
-        <td>{{row.start}}</td>
-        <td>{{row.end}}</td>
+        <td>{{row.JobID}}</td>
+        <td>{{row.Start}}</td>
+        <td>{{row.End}}</td>
         <td>
         <button type="button" class="btn">details</button>
         </td>
