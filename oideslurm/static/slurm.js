@@ -991,20 +991,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   );
 
   return defer.promise;
-  },
-  
- JobObjects:{
-    PENDING:    {
-      Jobs: []
-      },
-    RUNNING:   {
-      Jobs: []
-      },
-    COMPLETED: {
-      Jobs: []
-      }
- }
-
+  }
 };
 }
 ])
@@ -1344,61 +1331,16 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
    $modalInstance.dismiss('cancel');
  };
 })
-.controller('AjaxCall', ['$scope','AjaxCallService', function ($scope,AjaxCallService){
-  
-  var jobStackManipulator = function (job,jobState,jobStacks){
-    var keys = Object.keys(jobStacks);
-    for (var i=0; i<keys.length; i++){
 
-      var targetJobID = job.JobID;
-      var foundFlag = false;
 
-      for(var j=0; j<jobStacks[keys[i]].Jobs.length; j++){
-        if (jobStacks[keys[i]].Jobs[j].JobID === targetJobID){
-          foundFlag = true;
-          if (jobState !== keys[i]) jobStacks[keys[i]].Jobs.splice(j,1);
-        }
-      }
+.controller('JobListCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
 
-      if (!foundFlag && (jobState === keys[i])) jobStacks[keys[i]].Jobs.push({JobID:job.JobID, Start:job.Start, End:job.End});
-    }
-  };
-  
-  $scope.getJobList = function () {
-    
-    var promise = AjaxCallService.getJobList();
-   
-    promise.then(function(data){
-     
-       var data = data;
-       for (var i=0; i<data.length; i++){
-
-         if(data[i].State === "PENDING"){
-           jobStackManipulator(data[i],"PENDING",AjaxCallService.JobObjects);
-         }
+    $scope.displayedCollection = [];
+    $scope.getJobList = function () {
       
-          else if(data[i].State === "RUNNING"){
-            jobStackManipulator(data[i],"RUNNING",AjaxCallService.JobObjects);
-         }
-
-          else if(data[i].State === "COMPLETED"){
-            jobStackManipulator(data[i],"COMPLETED",AjaxCallService.JobObjects);
-         }
-       } 
-    });
-  };
-}])
-
-.controller('QueuedCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
-
-    $scope.displayedCollection = AjaxCallService.JobObjects.PENDING.Jobs;
-}])
-.controller('RunningCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
-
-    $scope.displayedCollection = AjaxCallService.JobObjects.RUNNING.Jobs;
-}])
-.controller('CompletedCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
-
-    $scope.displayedCollection = AjaxCallService.JobObjects.COMPLETED.Jobs;
-
+      var promise = AjaxCallService.getJobList();
+      promise.then(function(data){
+        $scope.displayedCollection = data;  
+      });
+    };
 }]);
