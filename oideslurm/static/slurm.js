@@ -1334,13 +1334,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
 
 .controller('JobListCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
-
-    $scope.displayedCollection = [];
+    
+    $scope.rowCollection = [];
+    $scope.displayCollection = [];
     $scope.getJobList = function () {
       
       var promise = AjaxCallService.getJobList();
       promise.then(function(data){
-        $scope.displayedCollection = data;  
+        $scope.rowCollection = data;
+        $scope.displayCollection = [].concat($scope.rowCollection);  
       });
     };
+   
+    $scope.getters = {
+      State: function(value){
+         var ordered_states = ["PENDING","RUNNING","SUSPENDED","CANCELLED","COMPLETING",
+                               "COMPLETED","CONFIGURING","FAILED","TIMEOUT","PREEMPTED",
+                               "NODE_FAIL","SPECIAL_EXIT" ];
+         var s = value.State;
+         return ordered_states.indexOf(s);
+        }
+    }
 }]);
