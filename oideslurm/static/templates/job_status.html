@@ -1,5 +1,4 @@
 <div ng-controller="JobListCtrl">
-  <button type="button" class="btn" ng-click="getJobList()">Get Job List</button>
   <table st-table="displayCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
@@ -7,6 +6,7 @@
       <th "JobID">Job Name</th>
       <th "Start">Start Time</th>
       <th "End">End Time</th>
+      <th> <button type="button" class="btn btn-primary" ng-click="getJobList()">Update</button></th>
     </tr>
     </thead>
  
@@ -21,5 +21,12 @@
       </td>
     </tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5" class="text-center">
+          <div st-pagination="" st-items-by-page="13" st-displayed-pages="7"></div>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 
