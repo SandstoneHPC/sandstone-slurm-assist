@@ -43,8 +43,8 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
-    array:true,
-    account:true,
+    array:false,
+    account:false,
     begin:false,
     checkpoint:false,
     checkpointDir:false,
@@ -79,7 +79,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.array;
       },
-      defaultValue: "1,2,3-4:5%6",
       validation:{show: true},
       templateOptions: {
           type: 'text',
@@ -121,7 +120,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.account;
       },
-      defaultValue: "account",
       validation:{show: true},
       templateOptions: {
           type: 'text',
@@ -243,7 +241,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.checkpointDir;
       },
-      defaultValue: "./",
       validation:{show: true},
       templateOptions: {
           type: 'text',
@@ -273,7 +270,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       hideExpression:  function($viewValue, $formModelValue, scope) {
           return !scope.$parent.formModel.check.cpusPerTask;
       },
-      defaultValue: "1",
       validation:{show: true},
       templateOptions: {
           type: 'text',
@@ -1355,4 +1351,10 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
          return ordered_states.indexOf(s);
         }
     }
+    
+    $scope.getJobList();
+    
 }]);
+
+
+
