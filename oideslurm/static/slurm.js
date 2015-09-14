@@ -1329,16 +1329,26 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 })
 
 
-.controller('JobListCtrl', ['$scope','AjaxCallService', function ($scope,AjaxCallService) {
+.controller('JobListCtrl', ['$scope','$modal','AjaxCallService', function ($scope,$modal,AjaxCallService) {
     
     $scope.rowCollection = [];
     $scope.displayCollection = [];
+
     $scope.getJobList = function () {
-      
       var promise = AjaxCallService.getJobList();
       promise.then(function(data){
         $scope.rowCollection = data;
         $scope.displayCollection = [].concat($scope.rowCollection);  
+      });
+    };
+    
+    $scope.getDetail = function (row) {
+      var detailModal = $modal.open({
+        template: '{{row}}',
+        controller:'DetailModalCtrl',
+	resolve: {
+          row: function(){ return row; }
+        }
       });
     };
    
@@ -1354,7 +1364,12 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     
     $scope.getJobList();
     
-}]);
+}])
+.controller('DetailModalCtrl', function($scope,$modalInstance,row){
+  $scope.row = row;
+});
+
+
 
 
 
