@@ -1344,7 +1344,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     
     $scope.getDetail = function (row) {
       var detailModal = $modal.open({
-        template: '{{row}}',
+        templateUrl: '/static/slurm/templates/modals/detail_modal.html',
         controller:'DetailModalCtrl',
 	resolve: {
           row: function(){ return row; }
