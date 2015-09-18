@@ -785,7 +785,12 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validators: {
           nodesValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
-                  return /^[1-9]\d*(-[1-9]\d*)?$/.test($viewValue);
+                  if(/(^[1-9]\d*)(-[1-9]\d*)?$/.test($viewValue)){
+                    var match = /(^[1-9]\d*)(-[1-9]\d*)?$/.exec($viewValue)
+                    if (match[2] === undefined) return true;
+		    if (parseInt(match[1]) <= (-parseInt(match[2]))) return true;
+                    else return false;
+                  }
               }
           }
       }
@@ -917,15 +922,14 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
                   var minutes = "([0-5][0-9])";
                   var seconds = "(:[0-5][0-9])";
                   var hours = "(2[0-3]|[01][0-9])";
-                  var days = "(\\d{2}-)";
-
+                  var days = "([1-9]|[1-9]+[0-9])";
+                 
                   /* minutes or minutes:seconds */
                   if (RegExp("^" + minutes + seconds + "?" + "$").test($viewValue)) return true;
-                  /* hours:minutes:seconds */
+                  /* hours:minutes:seconds*/
                   else if (RegExp("^" + hours + ":" + minutes + seconds + "$").test($viewValue)) return true;
-                  /* days-hours:minutes?seconds? */
-                  else if (RegExp("^" + days + hours + "(:" + minutes + ")?" + seconds + "?" + "$").test($viewValue)) return true;
-
+                  /* days-hours:minutes?seconds?*/
+                  else if (RegExp("^" + days +"-"+ hours + "(:" +minutes + ")?" + seconds + "?" + "$").test($viewValue)) return true;
                   else return false;
               }
           }
@@ -1086,6 +1090,72 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     });
   };
 
+  // Limits values may change.  
+  $scope.timeLimits = {
+    "crc-himem": 14*24,
+    "crc-seria": 14*24,
+    "crc-gpu"  : 4,
+    "janus"    : 24,
+    "ipcc"     : 4
+  };
+
+  $scope.nodeLimits = {
+    "crc-himem": 1,
+    "crc-seria": 11,
+    "crc-gpu"  : 2,
+    "janus"    : 1037,
+    "ipcc"     : 4
+   
+  };
+  $scope.serviceUnitEstimate = function(){
+    var seconds = "(:[0-5][0-9])";
+    var minutes = "([0-5][0-9])";
+    var hours   = "(2[0-3]|[01][0-9])";
+    var days    = "([1-9]|[1-9]+[0-9])"
+
+    var defaultTimeLimit = $scope.timeLimits["janus"];
+    var defaultNodeLimit = $scope.nodeLimits["janus"];
+    var timeLimit = 0;
+    var nodeLimit = 0;
+    var model = FormService.formFieldsObj.formModel;
+    
+    //----Get time limit-------------------------------------
+    if (model["time"] === undefined){
+      timeLimit = defaultTimeLimit;
+    }
+
+    else{
+      /* minutes or minutes:seconds */
+      if (RegExp("^" + minutes + seconds + "?" + "$").test(model["time"])){
+        var match = RegExp("^" + minutes + seconds + "?" + "$").exec(model["time"]);
+        timeLimit = parseInt(match[1])/60;
+      }
+      /* hours:minutes:seconds */
+      else if (RegExp("^" + hours + ":" + minutes + seconds + "$").test(model["time"])){
+        var match = RegExp("^" + hours + ":" + minutes + seconds + "$").exec(model["time"]);
+        timeLimit = parseInt(match[1]) + parseInt(match[2])/60;
+      }
+      /* days-hours:minutes?seconds? */
+      else if (RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").test(model["time"])){
+        var match = RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").exec(model["time"]);
+        timeLimit = parseInt(match[1])*24 + parseInt(match[2]);
+      }
+      
+    }
+    
+    //-------Get node limit------------------------------------
+    if (model["nodes"] === undefined){
+      nodeLimit = defaultNodeLimit;
+    }
+   
+    else {
+      var match = /(^[1-9]\d*)(-[1-9]\d*)?$/.exec(model["nodes"]);
+      if (match[2] === undefined) nodeLimit = parseInt(match[1]);
+      else nodeLimit = -1*parseInt(match[2]); // notice the minus sign.
+    };
+    
+    console.log(timeLimit,nodeLimit,timeLimit*nodeLimit);
+  }
 }])
 
 .controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
