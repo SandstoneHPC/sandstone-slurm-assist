@@ -869,7 +869,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       validators: {
           qosValidate: function($viewValue, $formModelValue, scope) {
               if ($viewValue) {
-                  return /^(express|normal|long)$/.test($viewValue);
+                  return /^(janus(-long|-debug)?|himem|crestone|gpu)$/.test($viewValue);
               }
           }
       }
