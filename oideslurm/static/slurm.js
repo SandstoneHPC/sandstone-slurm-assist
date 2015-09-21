@@ -1082,14 +1082,25 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
 
   $scope.saveScript = function(){
     var saveScriptModal = $modal.open({
-      templateUrl: '/static/slurm/templates//modals/save_script_modal.html',
+      templateUrl: '/static/slurm/templates/modals/save_script_modal.html',
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
-      controller:'SaveScriptCtrl'
+      controller:'SaveScriptCtrl',
     });
   };
-
+  
+  $scope.estimate = function (){
+    var estimateModal = $modal.open({
+       templateUrl: '/static/slurm/templates/modals/estimateModal.html',
+       controller: 'estimateCtrl',
+       resolve:{
+         serviceUnit: function (){
+           return $scope.serviceUnitEstimate();
+         }
+       }
+    });
+  };
   // Limits values may change.  
   $scope.timeLimits = {
     "crc-himem": 14*24,
@@ -1154,9 +1165,17 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
       else nodeLimit = -1*parseInt(match[2]); // notice the minus sign.
     };
     
-    console.log(timeLimit,nodeLimit,timeLimit*nodeLimit);
+    return {
+      'timeLimit': timeLimit,
+      'nodeLimit': nodeLimit,
+      'result': timeLimit*nodeLimit
+    };
   }
 }])
+
+.controller('estimateCtrl', function($scope,$modalInstance,serviceUnit){
+  $scope.serviceUnit = serviceUnit;
+})
 
 .controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
   $scope.formModel = FormService.formFieldsObj.formModel;
