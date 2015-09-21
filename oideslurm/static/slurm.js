@@ -1101,6 +1101,18 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
        }
     });
   };
+  
+  $scope.Submit = function () {
+    var SbatchDirectives = ScriptService.SbatchDirectives;
+    var SbatchScript = ScriptService.SbatchScript;
+    var matched = SbatchScript.script.match(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/);
+    // if matched is not null (or undefined)
+    var shellType = 'bash';
+    if (matched) shellType = matched[1];
+    var content = '#!/bin/'+shellType+'\n' + SbatchDirectives.script + SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
+    console.log(content);
+  };
+
   // Limits values may change.  
   $scope.timeLimits = {
     "crc-himem": 14*24,
@@ -1367,7 +1379,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
           '/filebrowser/a/fileutil',
           {
             params: {
-              operation: 'CHECK_EXISTS',
+             operation: 'CHECK_EXISTS',
               filepath: file_abs_path
             }
           }
