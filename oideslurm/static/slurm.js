@@ -1103,6 +1103,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
   };
   
   $scope.Submit = function () {
+    /*
     var SbatchDirectives = ScriptService.SbatchDirectives;
     var SbatchScript = ScriptService.SbatchScript;
     var matched = SbatchScript.script.match(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/);
@@ -1111,6 +1112,14 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
     if (matched) shellType = matched[1];
     var content = '#!/bin/'+shellType+'\n' + SbatchDirectives.script + SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
     console.log(content);
+    */
+    var submittModal = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/submit_modal.html',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      controller:'SubmitCtrl',
+    });   
   };
 
   // Limits values may change.  
@@ -1429,6 +1438,81 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
  };
 })
 
+.controller('SubmitCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+  $scope.treeData = {};
+  var initialContents = $http
+   .get('/filebrowser/filetree/a/dir')
+   .success(function(data, status, headers, config) {
+     for (var i=0;i<data.length;i++) {
+       data[i].children = [];
+     }
+     $scope.treeData.filetreeContents = data;
+   }).
+   error(function(data, status, headers, config) {
+     $log.error('Failed to initialize filetree.');
+   });
+   $scope.getDirContents = function (node,expanded) {
+     $http
+       .get('/filebrowser/filetree/a/dir', {
+         params: {
+           dirpath: node.filepath
+         }
+       }).
+       success(function(data, status, headers, config) {
+         for (var i=0;i<data.length;i++) {
+           if (!data[i].hasOwnProperty('children')) {
+             data[i].children = [];
+           }
+         }
+         node.children = data;
+       }).
+       error(function(data, status, headers, config) {
+         $log.error('Failed to grab dir contents from ',node.filepath);
+       });
+   };
+ $scope.loadFile = {};
+ $scope.invalidFilepath = false;
+
+ $scope.updateSaveName = function (node, selected) {
+   $scope.invalidFilepath = false;
+   if (node.type === 'dir') {
+     $scope.loadFile.filepath = node.filepath;
+   } else {
+     var index = node.filepath.lastIndexOf('/')+1;
+     var filepath = node.filepath.substring(0,index);
+     var filename = node.filepath.substring(index,node.filepath.length);
+     $scope.loadFile.filepath = filepath;
+     $scope.loadFile.filename = filename;
+   }
+ };
+ $scope.treeOptions = {
+   multiSelection: false,
+   isLeaf: function(node) {
+     return node.type !== 'dir';
+   },
+   injectClasses: {
+     iExpanded: "filetree-icon fa fa-folder-open",
+     iCollapsed: "filetree-icon fa fa-folder",
+     iLeaf: "filetree-icon fa fa-file",
+   }
+ };
+
+ $scope.submit = function () {
+
+   $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
+   $modalInstance.close($scope.loadFile);
+   $http({
+     url: "/slurm/a/jobs",
+     method: "POST",
+     params: {_xsrf: getCookie('_xsrf')},
+     data:{'content': $scope.loadFile.filepath}
+   });
+ };
+
+ $scope.cancel = function () {
+   $modalInstance.dismiss('cancel');
+ };
+})
 
 .controller('JobListCtrl', ['$scope','$modal','AjaxCallService', function ($scope,$modal,AjaxCallService) {
     

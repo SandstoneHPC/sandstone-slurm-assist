@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h3 class="modal-title">Submit Saved Script</h3>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <form class="form form-horizontal">
+      <div class="form-group form-group-sm">
+        <label class="col-sm-3 control-label">File Name</label>
+        <div class="col-sm-6">
+          <input class="form-control" type="text" ng-model="loadFile.filename" ng-disabled="true">
+        </div>
+      </div>
+      <div class="form-group form-group-sm">
+        <label class="col-sm-3 control-label">Directory</label>
+        <div class="col-sm-6">
+          <input class="form-control" type="text" ng-model="loadFile.filepath" ng-disabled="true">
+          <!-- <span class="modal-body-message">{{loadFilePath}}{{loadFileName}}</span> -->
+        </div>
+      </div>
+    </form>
+    <div class="col-sm-7 col-sm-offset-2">
+      <treecontrol
+        class="tree-oide"
+        tree-model="treeData.filetreeContents"
+        options="treeOptions"
+        order-by="type+filename"
+        selected-nodes="treeData.selectedNodes"
+        expanded-nodes="treeData.expandedNodes"
+        on-node-toggle="getDirContents(node,expanded)"
+        on-selection="updateSaveName(node, selected)">
+        {{node.filename}}
+        <span class="filetree-permissions">{{node.permissions}}</span>
+      </treecontrol>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    class="btn btn-success"
+    ng-click="submit()"
+    ng-disabled="invalidFilepath">
+    Submit a script to Slurm
+  </button>
+  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

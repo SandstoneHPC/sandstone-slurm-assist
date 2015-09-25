@@ -28,3 +28,12 @@ class SlurmCmdMixin(tornado.web.RequestHandler):
             output.append(job)
 
         return output
+    
+    def job_submit(self,**kwargs):
+
+        file_path = kwargs["filepath"]
+        
+        cmd = ['sbatch'] + [file_path]
+        cmd_out = subprocess.check_output(cmd)
+        print cmd_out
+        return 
