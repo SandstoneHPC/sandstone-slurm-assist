@@ -1291,7 +1291,18 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','formly','formlyBootstrap
              command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
              $scope.formModel.check[command] = true;
              $scope.formModel[command] = args;
+           } 
+           // if parameter specification uses whitespaces (e.g. --nodes 10)
+           else if (/--[a-z/-]+\s+\S+/.test(script[i])){
+             var command = script[i].split('--')[1].split(" ")[0];
+             var x = script[i].split('--')[1]  // this should look like "nodes  10" 
+             var args = x.split(" ")[x.split(' ').length-1];
+             //camelize the command
+             command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             $scope.formModel.check[command] = true;
+             $scope.formModel[command] = args;
            }
+
            // else, namely the command does not take any options (e.g. --immediate, --requeue)
            else {
              //camelize the command
