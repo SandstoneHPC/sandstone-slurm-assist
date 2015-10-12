@@ -16,6 +16,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'oide',
+        'jsonschema>=2.5.1',
     ],
     classifiers=[
         'Development Status :: 1 - Planning',
