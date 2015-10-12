@@ -1,14 +1,21 @@
-<div class="checkbox">
-  <label>
+<div class="checkbox schema-form-checkbox {{form.htmlClass}}"
+     ng-class="{'has-error': form.disableErrorState !== true &&  hasError(), 'has-success': form.disableSuccessState !== true &&  hasSuccess()}">
+  <label class="{{form.labelHtmlClass}}">
+  <div class="input-group">
     <input type="checkbox"
-           class="formly-field-checkbox"
-           ng-model="model[options.key]">
+           sf-changed="form"
+           ng-disabled="form.readonly"
+           ng-model="$$value$$"
+           ng-model-options="form.ngModelOptions"
+           schema-validate="form"
+           class="{{form.fieldHtmlClass}}"
+           name="{{form.key.slice(-1)[0]}}">
+    <span ng-bind-html="form.title"></span>
+    <span class="input-group-btn">
+      <button class="btn btn-default" type="button" popover="{{form.popover}}">?</button>
+      <button class="btn btn-default" type="button" ng-click="form.delete(form.key)">delete</button>
+    </span>
+  </div>
   </label>
+  <div class="help-block" sf-message="form.description"></div>
 </div>
-<span class="input-group-addon ng-scope"
-      popover="{{to.popover}}"
-      popover-placement="left"
-      popover-append-to-body="true"
-      style="cursor:pointer;">
-      <i class="fa fa-question"></i>
-</span>

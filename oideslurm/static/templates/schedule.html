@@ -27,8 +27,8 @@
         <div class="form-group"><b>add new field</b></div>
       </div>
       <form novalidate name="slurmForm">
-        <formly-form model="formModel" fields="formFields" form="slurmForm">
-        </formly-form>
+        <div sf-schema="schema" sf-form="form" sf-model="formModel"
+       sf-options="{destroyStrategy:'remove'}"></div>
       </form>
     </div>
   </div>

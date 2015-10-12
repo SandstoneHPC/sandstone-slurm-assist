@@ -5,8 +5,10 @@
   "license": "AGPLv3",
   "private": true,
   "dependencies": {
-    "angular-formly": "",
-    "angular-formly-templates-bootstrap":"",
-    "angular-smart-table":""
+	"angular-schema-form":"",
+	"angular-sanitize":"",
+	"tv4":"",
+	"objectpath":"",  
+	"angular-smart-table":""
   }
 }

@@ -14,9 +14,11 @@ APP_SPECIFICATION = {
     ),
     'NG_MODULE_SCRIPTS': (
         'slurm.js',
-        'bower_components/api-check/dist/api-check.min.js',
-        'bower_components/angular-formly/dist/formly.min.js',
-        'bower_components/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+        'bower_components/tv4/tv4.js"',
+        'bower_components/angular-sanitize/angular-sanitize.min.js',
+        'bower_components/objectpath/lib/ObjectPath.js',
+        "bower_components/angular-schema-form/dist/schema-form.js",
+        'bower_components/angular-schema-form/dist/bootstrap-decorator.min.js',
         'bower_components/angular-smart-table/dist/smart-table.min.js',
     ),
 }
