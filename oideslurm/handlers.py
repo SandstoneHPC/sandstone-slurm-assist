@@ -1,19 +1,19 @@
 import tornado.web
+import json
 
 import oide.lib.decorators
 import oideslurm.settings as app_settings
 from oideslurm.mixins.slurm_mixin import SlurmCmdMixin
 from oide.lib.handlers.base import BaseHandler
-from jsonschema import Draft4Validator
-import json
+from oideslurm.config_utils import ConfigLoader
+
 
 
 class FormConfigHandler(BaseHandler):
 
     @oide.lib.decorators.authenticated
     def get(self):
-        schema = app_settings.FORM_CONFIG
-        Draft4Validator.check_schema(schema)
+        schema = ConfigLoader.getFormConfigs()
         ctx = {
             'formSchema': schema
             }

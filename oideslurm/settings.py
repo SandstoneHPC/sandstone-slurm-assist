@@ -23,7 +23,7 @@ APP_SPECIFICATION = {
     ),
 }
 
-FORM_CONFIG = {
+BASE_CONFIG = {
         "type": "object",
         "title": "SlurmConfig",
         "properties": {
@@ -151,11 +151,11 @@ FORM_CONFIG = {
                 "type": "string",
                 "pattern": "^([a-zA-Z0-9_-]|%[AajNu])+\\.[a-zA-Z]+$",
             },
-            "qos": {
-                "title": "qos",
-                "type": "string",
-                "pattern": "^(janus(-long|-debug)?|himem|crestone|gpu)$",
-            },
+            # "qos": {
+            #     "title": "qos",
+            #     "type": "string",
+            #     "pattern": "^(janus(-long|-debug)?|himem|crestone|gpu)$",
+            # },
             "requeue": {
                 "title": "requeue",
                 "type": "boolean",
@@ -167,3 +167,16 @@ FORM_CONFIG = {
             },
         }
     }
+
+FORM_CONFIGS = {
+    'janus': {
+        "properties": {
+            "nodes": {
+                "maximum":480
+            },
+        },
+        "required": [
+            "nodes",
+        ]
+    }
+}
