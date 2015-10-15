@@ -6,12 +6,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
  function($routeProvider,schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
   $routeProvider.when('/slurm', {
     templateUrl: '/static/slurm/slurm.html',
-    controller: 'SbatchCtrl'//,
-    //resolve: {
-    //  formConfig: function (FormService) {
-    //    return FormService.getFormConfig();
-    //  }
-    //}
+    controller: 'SbatchCtrl'
   });
   //Add to the bootstrap directive
     schemaFormDecoratorsProvider.addMapping(
@@ -36,7 +31,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
 }])
 
 .factory('FormService', ['$http', function ($http) {
-  var formConfig = {};
+  var formFieldsObj = {};
   // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
@@ -69,169 +64,19 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
     requeue:false,
     time:false
   };
-  var formModel = {check:check};
-  var schema = {
-      "type": "object",
-      "title": "SlurmConfig",
-      "properties": {
-        "array":  {
-          "title": "array",
-          "type": "string"
-        },
-        "account":{
-          'title': "account",
-          "type":"string",
-          "pattern": "^\\S+@\\S+$",
-        },
-        "begin":  {
-          "title": "begin",
-          "type": "string",
-          "pattern": "^(2[0-3]|[01][0-9]):[0-5][0-9]$",
-        },
-        "checkpoint":  {
-          "title": "checkpoint",
-          "type": "string",
-          "pattern": "^(2[0-3]|[01][0-9]):[0-5][0-9]$",
-        },
-        "checkpoint-dir":  {
-          "title": "checkpoint-dir",
-          "type": "string",
-          "pattern": "^([.a-zA-Z0-9_-]*)\\/(([a-zA-Z0-9_-]+\\//?)*)$",
-        },
-        "cpu-per-task":  {
-          "title": "cpu-per-task",
-          "type": "integer",
-          "minimum":1,
-          "maximum":100
-        },
-        "workdir":  {
-          "title": "workdir",
-          "type": "string",
-          "pattern": "^([.a-zA-Z0-9_-]*)\\/(([a-zA-Z0-9_-]+\\//?)*)$",
-        },
-        "error":  {
-          "title": "error",
-          "type": "string",
-          "pattern": "^([a-zA-Z0-9_-]|%[AajNu])+\\.[a-zA-Z]+$",
-        },
-        "export":  {
-          "title": "export",
-          "type": "string",
-          "pattern": "^(ALL|NONE)$",
-        },
-        "export-file":  {
-          "title": "export-file",
-          "type": "string",
-          "pattern": "^[.a-zA-Z0-9_-]+$",
-        },
-        "nodefile":  {
-          "title": "nodefile",
-          "type": "string",
-          "pattern": "^([.a-zA-Z0-9_-]*)\\/(([a-zA-Z0-9_-]+\\/?)*)[.a-zA-Z0-9_-]+$",
-        },
-        "get-user-env":  {
-          "title": "get-user-env",
-          "type": "string",
-          "pattern": "^(\\d*[SL]?)$|^([nN]o[\\s\\-][oO]ptions?)$",
-        },
-        "immediate":  {
-          "title": "immediate",
-          "type": "boolean",
-        },
-        "input":  {
-          "title": "input",
-          "type": "string",
-          "pattern": "^([a-zA-Z0-9_-]|%[AajNu])+\\.[a-zA-Z]+$",
-        },
-        "job-name":  {
-          "title": "job-name",
-          "type": "string",
-          "pattern": "^[.a-zA-Z0-9_-]+$",
-        },
-        "jobid":  {
-          "title": "jobid",
-          "type": "string",
-          "pattern": "^[0-9]+$",
-        },
-        "no-kill":  {
-          "title": "no-kill",
-          "type": "boolean",
-        },
-        "licenses":  {
-          "title": "licenses",
-          "type": "string",
-          "pattern": "^[0-9a-zA-Z]+(@[.a-zA-Z0-9]+)?(:[0-9]+)?(,[0-9a-zA-Z]+(@[.a-zA-Z0-9]+)?(:[0-9]+)?)*$",
-        },
-        "mail-type":  {
-          "title": "mail-type",
-          "type": "string",
-          "pattern": "^(BEGIN|END|FAIL|REQUEUE|TIME_LIMIT(_[589]0)*)$",
-        },
-        "mail-user":  {
-          "title": "mail-user",
-          "type": "string",
-        },
-        "mem":  {
-          "title": "mem",
-          "type": "number",
-          "minimum":1,
-          "maximum":1000
-        },
-        "mem-per-cpu":  {
-          "title": "mem-per-cpu",
-          "type": "number",
-          "minimum":1,
-          "maximum":1000
-        },
-        "nodes":  {
-          "title": "nodes",
-          "type": "number",
-          "minimum":1,
-          "maximum":1000
-        },
-        "no-requeue":  {
-          "title": "no-requeue",
-          "type": "boolean",
-        },
-        "output":  {
-          "title": "output",
-          "type": "string",
-          "pattern": "^([a-zA-Z0-9_-]|%[AajNu])+\\.[a-zA-Z]+$",
-        },
-        "qos":  {
-          "title": "qos",
-          "type": "string",
-          "pattern": "^(janus(-long|-debug)?|himem|crestone|gpu)$",
-        },
-        "requeue":  {
-          "title": "requeue",
-          "type": "boolean",
-        },
-        "time":  {
-          "title": "time",
-          "type": "string",
-          "pattern": "^([1-9]|[1-9]+[0-9])-(2[0-3]|[01][0-9])$",
-        },
-      }
-    };
-
-
-  return {
-    formFieldsObj:{
-      schema:schema,
-      formModel:formModel
-    },
-    setFormConfig: function (fc) {
-      formConfig = fc;
-    },
-    getFormConfig: function () {
+  formFieldsObj.formModel = {check:check};
+  
+  var getFormSchema = function () {
       return $http
         .get('/slurm/a/config')
-
         .success(function (data, status, headers, config) {
-          return data;
+          formFieldsObj.schema = data.formSchema;
         });
-    }
+    };
+  getFormSchema();
+
+  return {
+    formFieldsObj:formFieldsObj
   };
 }])
 
@@ -308,9 +153,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
 
   };
 })
-.controller('SbatchCtrl', ['$scope',/* 'formConfig',*/ 'FormService', '$log', function($scope,/*formConfig,*/FormService,$log) {
-  //FormService.setFormConfig(formConfig);
-
+.controller('SbatchCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.schema = FormService.formFieldsObj.schema;
   $scope.options = Object.keys($scope.formModel.check);
@@ -331,7 +174,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
         "delete": function (key){$scope.formModel.check[key] = false;},
         "required": true
       }
-  ]
+  ];
 
 
   $scope.onEnter = function($event) {
