@@ -65,18 +65,27 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
     time:false
   };
   formFieldsObj.formModel = {check:check};
+  formFieldsObj.qosSchema = {};
+  formFieldsObj.qosSelected = undefined;
   
   var getFormSchema = function () {
       return $http
         .get('/slurm/a/config')
         .success(function (data, status, headers, config) {
-          formFieldsObj.schema = data.formSchema;
+          formFieldsObj.schemas = data.formSchema;
+          formFieldsObj.qosOptions = Object.keys(data.formSchema);
+          formFieldsObj.qosSelected = formFieldsObj.qosOptions[0];
+          formFieldsObj.qosSchema = formFieldsObj.schemas[formFieldsObj.qosSelected];
         });
     };
   getFormSchema();
 
   return {
-    formFieldsObj:formFieldsObj
+    formFieldsObj:formFieldsObj,
+    changeQos: function (newQos) {
+      formFieldsObj.qosSchema = formFieldsObj.schemas[newQos];
+      formFieldsObj.qosSelected = newQos;
+    }
   };
 }])
 
@@ -155,7 +164,12 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
 })
 .controller('SbatchCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
   $scope.formModel = FormService.formFieldsObj.formModel;
-  $scope.schema = FormService.formFieldsObj.schema;
+  $scope.qosOptions = FormService.formFieldsObj.qosOptions;
+  $scope.qosSelected = FormService.formFieldsObj.qosSelected;
+  $scope.schema = FormService.formFieldsObj.qosSchema;
+  $scope.changeQos = function() {
+    FormService.changeQos($scope.qosSelected);
+  };
   $scope.options = Object.keys($scope.formModel.check);
   $scope.form = [
       {
