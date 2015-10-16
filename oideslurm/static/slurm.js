@@ -1,14 +1,22 @@
 'use strict';
 
-angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','smart-table'])
+angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
 
-.config(['$routeProvider','schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfPathProvider',
- function($routeProvider,schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
-  $routeProvider.when('/slurm', {
-    templateUrl: '/static/slurm/slurm.html',
-    controller: 'SbatchCtrl'
-  });
+.config(['$stateProvider','$urlRouterProvider', 'schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfPathProvider',
+ function($stateProvider, $urlRouterProvider, schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
+  // $routeProvider.when('/slurm', {
+  //   templateUrl: '/static/slurm/slurm.html',
+  //   controller: 'SbatchCtrl'
+  // });
   //Add to the bootstrap directive
+    $stateProvider.state('slurm', {
+      'url': '/slurm',
+      'views': {
+        '': {
+          templateUrl: '/static/slurm/slurm.html'
+        }
+      }
+    });
     schemaFormDecoratorsProvider.addMapping(
       'bootstrapDecorator',
       'custom_input',
