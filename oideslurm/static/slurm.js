@@ -14,6 +14,24 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
       'views': {
         '': {
           templateUrl: '/static/slurm/slurm.html'
+        },
+        'schedule@slurm': {
+          templateUrl: '/static/slurm/templates/schedule.html'
+        },
+        'jobstatus@slurm': {
+          templateUrl: '/static/slurm/templates/job_status.html'
+        },
+        'directives@slurm': {
+          templateUrl: '/static/slurm/templates/directives.html',
+          controller: 'DirectivesCtrl'
+        },
+        'sbatch@slurm': {
+          templateUrl: '/static/slurm/templates/sbatch.html',
+          controller: 'SbatchCtrl'
+        },
+        'sbatchscript@slurm': {
+          templateUrl: '/static/slurm/templates/sbatchscript.html',
+          controller: 'ScriptCtrl'
         }
       }
     });
