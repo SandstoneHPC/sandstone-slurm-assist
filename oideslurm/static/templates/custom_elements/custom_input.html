@@ -1,4 +1,4 @@
-<!--<div class="form-group schema-form-{{form.type}} {{form.htmlClass}}"
+<div class="form-group schema-form-{{form.type}} {{form.htmlClass}}"
      ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess(), 'has-feedback': form.feedback !== false }">
   <label class="control-label {{form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{form.key.slice(-1)[0]}}">{{form.title}}</label>
 
@@ -33,10 +33,4 @@
 
 
   <div class="help-block" sf-message="form.description"></div>
-</div>
--->
-<div> <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->
-  <label>{{form.title}}</div>
-  <input sf-field-model schema-validate="form" type="text">
-  <div sf-message="form.description"></div>
 </div>

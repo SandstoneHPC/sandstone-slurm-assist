@@ -1,15 +1,40 @@
 'use strict';
+angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
 
-angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','smart-table'])
+.config(['$stateProvider','$urlRouterProvider', 'schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfPathProvider',
+ function($stateProvider, $urlRouterProvider, schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
+  // $routeProvider.when('/slurm', {
+  //   templateUrl: '/static/slurm/slurm.html',
+  //   controller: 'SbatchCtrl'
+  // });
+  //Add to the bootstrap directive
+    $stateProvider.state('slurm', {
+      'url': '/slurm',
+      'views': {
+        '': {
+          templateUrl: '/static/slurm/slurm.html'
+        },
+        'schedule@slurm': {
+          templateUrl: '/static/slurm/templates/schedule.html'
+        },
+        'jobstatus@slurm': {
+          templateUrl: '/static/slurm/templates/job_status.html'
+        },
+        'directives@slurm': {
+          templateUrl: '/static/slurm/templates/directives.html',
+          controller: 'DirectivesCtrl'
+        },
+        'sbatch@slurm': {
+          templateUrl: '/static/slurm/templates/sbatch.html',
+          controller: 'SbatchCtrl'
+        },
+        'sbatchscript@slurm': {
+          templateUrl: '/static/slurm/templates/sbatchscript.html',
+          controller: 'ScriptCtrl'
+        }
+      }
+    });
 
-.config(['$routeProvider','schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfBuilderProvider',
- function($routeProvider,schemaFormProvider,  schemaFormDecoratorsProvider, sfBuilderProvider) {
-  $routeProvider.when('/slurm', {
-    templateUrl: '/static/slurm/slurm.html',
-    controller: 'SbatchCtrl'
-  });
-
-    /*
     schemaFormDecoratorsProvider.addMapping(
       'bootstrapDecorator',
       'custom_input',
