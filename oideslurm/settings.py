@@ -18,7 +18,7 @@ APP_SPECIFICATION = {
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/objectpath/lib/ObjectPath.js',
         'bower_components/angular-schema-form/dist/schema-form.js',
-        'bower_components/angular-schema-form/dist/bootstrap-decorator.min.js',
+        'bower_components/angular-schema-form-bootstrap/bootstrap-decorator.min.js',
         'bower_components/angular-smart-table/dist/smart-table.min.js',
     ),
 }
@@ -29,7 +29,8 @@ BASE_CONFIG = {
         "properties": {
             "array": {
                 "title": "array",
-                "type": "string"
+                "type": "string",
+                "pattern": "^\\d+$|^(\\d+-\\d+)(:\\d+)?$",
             },
             "account": {
                 'title': "account",

@@ -2,13 +2,14 @@
 
 angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','smart-table'])
 
-.config(['$routeProvider','schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfPathProvider',
- function($routeProvider,schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
+.config(['$routeProvider','schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfBuilderProvider',
+ function($routeProvider,schemaFormProvider,  schemaFormDecoratorsProvider, sfBuilderProvider) {
   $routeProvider.when('/slurm', {
     templateUrl: '/static/slurm/slurm.html',
     controller: 'SbatchCtrl'
   });
-  //Add to the bootstrap directive
+
+    /*
     schemaFormDecoratorsProvider.addMapping(
       'bootstrapDecorator',
       'custom_input',
@@ -28,6 +29,23 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
       'custom_checkbox',
       '/static/slurm/templates/custom_elements/custom_checkbox.html'
     );
+    */
+
+
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',         // Name of the decorator you want to add to.
+    'custom_input',                    // Form type that should render this add-on
+    '/static/slurm/templates/custom_elements/custom_input.html',    // Template name in $templateCache
+    sfBuilderProvider.stdBuilders // List of builder functions to apply.
+  );
+
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',         // Name of the decorator you want to add to.
+    'custom_checkbox',                    // Form type that should render this add-on
+    '/static/slurm/templates/custom_elements/custom_checkbox.html',    // Template name in $templateCache
+    sfBuilderProvider.stdBuilders // List of builder functions to apply.
+  );
+
 }])
 
 .factory('FormService', ['$http', function ($http) {
@@ -67,7 +85,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
   formFieldsObj.formModel = {check:check};
   formFieldsObj.qosSchema = {};
   formFieldsObj.qosSelected = undefined;
-  
+
   var getFormSchema = function () {
       return $http
         .get('/slurm/a/config')
@@ -171,21 +189,22 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
     FormService.changeQos($scope.qosSelected);
   };
   $scope.options = Object.keys($scope.formModel.check);
+  $scope.delete =function (key){$scope.formModel.check[key] = false;};
   $scope.form = [
       {
         "key": "array",
-        "type":"custom_input",
+        "type":"nyanya",
         "condition": "model.check.array",
-        "popover":"Anta Bakaa?",
-        "delete": function (key){$scope.formModel.check[key] = false;},
+        "popover":"Test",
+        "delete": $scope.delete,
         "required": true
       },
       {
         "key": 'immediate',
         "type":"custom_checkbox",
         "condition": "model.check.immediate",
-        "popover":"Anta Bakaa?",
-        "delete": function (key){$scope.formModel.check[key] = false;},
+        "popover":"Test",
+        "delete": $scope.delete,
         "required": true
       }
   ];

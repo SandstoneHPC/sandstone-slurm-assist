@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
 	"angular-schema-form":"",
+	"angular-schema-form-bootstrap":"",
 	"angular-sanitize":"",
 	"tv4":"",
 	"objectpath":"",  

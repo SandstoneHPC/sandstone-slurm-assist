@@ -5,15 +5,19 @@
     <input type="checkbox"
            sf-changed="form"
            ng-disabled="form.readonly"
-           ng-model="$$value$$"
+           sf-field-model
            ng-model-options="form.ngModelOptions"
            schema-validate="form"
            class="{{form.fieldHtmlClass}}"
            name="{{form.key.slice(-1)[0]}}">
     <span ng-bind-html="form.title"></span>
     <span class="input-group-btn">
-      <button class="btn btn-default" type="button" popover="{{form.popover}}">?</button>
-      <button class="btn btn-default" type="button" ng-click="form.delete(form.key)">delete</button>
+      <button class="btn btn-default" type="button" popover="{{form.popover}}" popover-placement="left">
+        <i class="fa fa-question"></i>
+      </button>
+      <button class="btn btn-default" type="button" ng-click="form.delete(form.key)">
+        <i class="fa fa-times"></i>
+      </button>
     </span>
   </div>
   </label>
