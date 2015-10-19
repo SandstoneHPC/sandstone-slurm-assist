@@ -1,13 +1,18 @@
 'use strict';
-angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
+angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
+.run(["$templateCache", function($templateCache) {
+  $templateCache.put('/static/slurm/templates/custom_elements/custom_input.html','<div class=\"form-group schema-form-{{form.type}} {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess(), \'has-feedback\': form.feedback !== false }\"> <label class=\"control-label {{form.labelHtmlClass}}\" ng-class=\"{\'sr-only\': !showTitle()}\" for=\"{{form.key.slice(-1)[0]}}\">{{form.title}}</label><div class=\"input-group\"> <input ng-show=\"form.key\" type=\"{{form.type}}\" step=\"any\" sf-changed=\"form\" placeholder=\"{{form.placeholder}}\" class=\"form-control {{form.fieldHtmlClass}}\" id=\"{{form.key.slice(-1)[0]}}\" ng-model-options=\"form.ngModelOptions\" sf-field-model ng-disabled=\"form.readonly\" schema-validate=\"form\" name=\"{{form.key.slice(-1)[0]}}\" aria-describedby=\"{{form.key.slice(-1)[0] + \'Status\'}}\"> <span ng-if=\"hasError() || hasSuccess()\" id=\"{{form.key.slice(-1)[0] + \'Status\'}}\" class=\"sr-only\">{{ hasSuccess() ? \'(success)\' : \'(error)\' }}</span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\"> <i class=\"fa fa-times\"></i> </button> </span></div> <div class=\"help-block\" sf-message=\"form.description\"></div></div>');
+  $templateCache.put('/static/slurm/templates/custom_elements/custom_checkbox.html','<div class=\"checkbox schema-form-checkbox {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess()}\"> <label class=\"{{form.labelHtmlClass}}\"> <div class=\"input-group\"> <input type=\"checkbox\" sf-changed=\"form\" ng-disabled=\"form.readonly\" sf-field-model ng-model-options=\"form.ngModelOptions\" schema-validate=\"form\" class=\"{{form.fieldHtmlClass}}\" name=\"{{form.key.slice(-1)[0]}}\"> <span ng-bind-html=\"form.title\"></span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\"> <i class=\"fa fa-times\"></i> </button> </span> </div> </label> <div class=\"help-block\" sf-message=\"form.description\"></div></div>');
+  }])
 
-.config(['$stateProvider','$urlRouterProvider', 'schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfPathProvider',
- function($stateProvider, $urlRouterProvider, schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
+.config(['$stateProvider','$urlRouterProvider', 'schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfBuilderProvider','sfPathProvider',
+ function($stateProvider, $urlRouterProvider, schemaFormProvider,  schemaFormDecoratorsProvider, sfBuilderProvider, sfPathProvider) {
   // $routeProvider.when('/slurm', {
   //   templateUrl: '/static/slurm/slurm.html',
   //   controller: 'SbatchCtrl'
   // });
-  //Add to the bootstrap directive
+
+    var template =
     $stateProvider.state('slurm', {
       'url': '/slurm',
       'views': {
@@ -34,28 +39,6 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
         }
       }
     });
-
-    schemaFormDecoratorsProvider.addMapping(
-      'bootstrapDecorator',
-      'custom_input',
-      '/static/slurm/templates/custom_elements/custom_input.html'
-    );
-    schemaFormDecoratorsProvider.createDirective(
-      'custom_input',
-      '/static/slurm/templates/custom_elements/custom_input.html'
-    );
-
-    schemaFormDecoratorsProvider.addMapping(
-      'bootstrapDecorator',
-      'custom_checkbox',
-      '/static/slurm/templates/custom_elements/custom_checkbox.html'
-    );
-    schemaFormDecoratorsProvider.createDirective(
-      'custom_checkbox',
-      '/static/slurm/templates/custom_elements/custom_checkbox.html'
-    );
-    */
-
 
   schemaFormDecoratorsProvider.defineAddOn(
     'bootstrapDecorator',         // Name of the decorator you want to add to.
@@ -218,7 +201,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
   $scope.form = [
       {
         "key": "array",
-        "type":"nyanya",
+        "type":"custom_input",
         "condition": "model.check.array",
         "popover":"Test",
         "delete": $scope.delete,
@@ -302,16 +285,7 @@ angular.module('oide.slurm', ['ngRoute','ui.bootstrap','schemaForm','ui.ace','sm
   };
 
   $scope.Submit = function () {
-    /*
-    var SbatchDirectives = ScriptService.SbatchDirectives;
-    var SbatchScript = ScriptService.SbatchScript;
-    var matched = SbatchScript.script.match(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/);
-    // if matched is not null (or undefined)
-    var shellType = 'bash';
-    if (matched) shellType = matched[1];
-    var content = '#!/bin/'+shellType+'\n' + SbatchDirectives.script + SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
-    console.log(content);
-    */
+  
     var submittModal = $modal.open({
       templateUrl: '/static/slurm/templates/modals/submit_modal.html',
       backdrop: 'static',

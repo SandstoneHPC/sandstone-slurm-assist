@@ -9,32 +9,7 @@
     <h1 class="lead text-uppercase">
       sbatch builder
     </h1>
-<<<<<<< HEAD
-    <div id="builder-form-container" ng-controller="SbatchCtrl as ctrl">
-      <div id="qos-select" class="form-inline">
-        <div class="form-group">
-          <select
-            class="form-control"
-            ng-model="qosSelected"
-            ng-change="changeQos()"
-            ng-options="qos for qos in qosOptions">
-          </select>
-        </div>
-        <div class="form-group"><b>Select a QOS</b></div>
-      </div>
-      <div id="top-drop-down" class="form-inline">
-        <div class="form-group">
-          <input type="text" ng-model="selected" class="form-control form-inline" ng-keypress="onEnter($event)" ng-focus="onFocus($event)" typeahead="option for option in options | filter:$viewValue:emptyOrMatch" typeahead-focus>
-        </div>
-        <div class="form-group"><b>add new field</b></div>
-      </div>
-      <form novalidate name="slurmForm"
-            sf-schema="schema" sf-form="form" sf-model="formModel">
-      </form>
-=======
-    <div id="builder-form-container" ui-view="sbatch">
->>>>>>> b4a53ac1a5b0356d1afa06edadce4e68d55809c7
-    </div>
+    <div id="builder-form-container" ui-view="sbatch"></div>
   </div>
   <div class="col-md-12" ng-controller="controlBar">
     <div id="assist-button-panel" class="well well-lg">
