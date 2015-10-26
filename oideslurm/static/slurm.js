@@ -32,7 +32,12 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         },
         'sbatch@slurm': {
           templateUrl: '/static/slurm/templates/sbatch.html',
-          controller: 'SbatchCtrl'
+          controller: 'SbatchCtrl',
+          resolve: {
+            config: function(FormService) {
+              return FormService.getFormSchema();
+            }
+          }
         },
         'sbatchscript@slurm': {
           templateUrl: '/static/slurm/templates/sbatchscript.html',
@@ -105,10 +110,10 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
           formFieldsObj.qosSchema = formFieldsObj.schemas[formFieldsObj.qosSelected];
         });
     };
-  getFormSchema();
 
   return {
     formFieldsObj:formFieldsObj,
+    getFormSchema:getFormSchema,
     changeQos: function (newQos) {
       formFieldsObj.qosSchema = formFieldsObj.schemas[newQos];
       formFieldsObj.qosSelected = newQos;
@@ -189,7 +194,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
   };
 })
-.controller('SbatchCtrl', ['$scope','FormService','$log',function($scope,FormService,$log) {
+.controller('SbatchCtrl', ['$scope','FormService','$log','config',function($scope,FormService,$log,config) {
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.qosOptions = FormService.formFieldsObj.qosOptions;
   $scope.qosSelected = FormService.formFieldsObj.qosSelected;
