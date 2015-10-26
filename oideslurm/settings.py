@@ -179,5 +179,15 @@ FORM_CONFIGS = {
         "required": [
             "nodes",
         ]
+    },
+    'janus-long': {
+        "properties": {
+            "nodes": {
+                "maximum":960
+            },
+        },
+        "required": [
+            "nodes",
+        ]
     }
 }

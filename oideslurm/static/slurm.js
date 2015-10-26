@@ -206,12 +206,17 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.qosOptions = FormService.formFieldsObj.qosOptions;
   $scope.qosSelected = FormService.formFieldsObj.qosSelected;
   $scope.schema = FormService.formFieldsObj.qosSchema;
+
   $scope.changeQos = function() {
+    console.log("Changed qos!");
     FormService.changeQos($scope.qosSelected);
+    $scope.schema = FormService.formFieldsObj.qosSchema;
+    $scope.form = angular.copy($scope.defaultForm);
+    $scope.$broadcast("schemaFormRedraw");
   };
 
   $scope.delete =function (key){$scope.formModel.check[key] = false;};
-  $scope.form = [
+  $scope.defaultForm = [
       {
         "key": "array",
         "type":"input",
@@ -237,10 +242,30 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "required": true
       }
   ];
+  $scope.form = angular.copy($scope.defaultForm);
 
   // $scope.options only includes form fileds defined in $scope.form
   $scope.options = $scope.form.map(function(e){return e.key;});
+  $scope.$watchCollection("form",function(newVal,oldVal){
+    $scope.options = newVal.map(function(e){return e.key;});
+    console.log("New field added.");
+    $scope.$broadcast("schemaFormRedraw");
+  })
 
+  $scope.addNewField = function(){
+    console.log("Adding a new element to form");
+    $scope.form.push(
+      {
+        "key": "begin",
+        "type":"input",
+        "condition": "model.check.begin",
+        "popover":"Test",
+        "delete": $scope.delete,
+        "required": true
+      }
+    )
+    console.log($scope.form);
+  }
 
   $scope.onEnter = function($event) {
     if ($event.which===13){
@@ -396,6 +421,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 })
 
 .controller('LoadScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+  $scope.schema = FormService.formFieldsObj.qosSchema;
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.SbatchScript = ScriptService.SbatchScript;
   $scope.treeData = {};
@@ -487,7 +513,13 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              //camelize the command
              command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
              $scope.formModel.check[command] = true;
-             $scope.formModel[command] = args;
+             if($scope.schema.properties[command].type === 'string'){
+                $scope.formModel[command] = args;
+             }
+             else{
+               $scope.formModel[command] = Number(args);
+             }
+
            }
            // if parameter specification uses whitespaces (e.g. --nodes 10)
            else if (/--[a-z/-]+\s+\S+/.test(script[i])){
@@ -497,7 +529,12 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              //camelize the command
              command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
              $scope.formModel.check[command] = true;
-             $scope.formModel[command] = args;
+             if($scope.schema.properties[command].type === 'string'){
+                $scope.formModel[command] = args;
+             }
+             else{
+               $scope.formModel[command] = Number(args);
+             }
            }
 
            // else, namely the command does not take any options (e.g. --immediate, --requeue)
