@@ -48,15 +48,22 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
   schemaFormDecoratorsProvider.defineAddOn(
     'bootstrapDecorator',         // Name of the decorator you want to add to.
-    'custom_input',                    // Form type that should render this add-on
+    'input',                    // Form type that should render this add-on
     '/static/slurm/templates/custom_elements/custom_input.html',    // Template name in $templateCache
     sfBuilderProvider.stdBuilders // List of builder functions to apply.
   );
 
   schemaFormDecoratorsProvider.defineAddOn(
     'bootstrapDecorator',         // Name of the decorator you want to add to.
-    'custom_checkbox',                    // Form type that should render this add-on
+    'checkbox',                    // Form type that should render this add-on
     '/static/slurm/templates/custom_elements/custom_checkbox.html',    // Template name in $templateCache
+    sfBuilderProvider.stdBuilders // List of builder functions to apply.
+  );
+
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',         // Name of the decorator you want to add to.
+    'number',                    // Form type that should render this add-on
+    '/static/slurm/templates/custom_elements/custom_input.html',    // Template name in $templateCache
     sfBuilderProvider.stdBuilders // List of builder functions to apply.
   );
 
@@ -202,12 +209,12 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.changeQos = function() {
     FormService.changeQos($scope.qosSelected);
   };
-  $scope.options = Object.keys($scope.formModel.check);
+
   $scope.delete =function (key){$scope.formModel.check[key] = false;};
   $scope.form = [
       {
         "key": "array",
-        "type":"custom_input",
+        "type":"input",
         "condition": "model.check.array",
         "popover":"Test",
         "delete": $scope.delete,
@@ -215,13 +222,24 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       },
       {
         "key": 'immediate',
-        "type":"custom_checkbox",
+        "type":"checkbox",
         "condition": "model.check.immediate",
+        "popover":"Test",
+        "delete": $scope.delete,
+        "required": true
+      },
+      {
+        "key": 'nodes',
+        "type":"number",
+        "condition": "model.check.nodes",
         "popover":"Test",
         "delete": $scope.delete,
         "required": true
       }
   ];
+
+  // $scope.options only includes form fileds defined in $scope.form
+  $scope.options = $scope.form.map(function(e){return e.key;});
 
 
   $scope.onEnter = function($event) {
