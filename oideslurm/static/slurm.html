@@ -1,9 +1,11 @@
 <div class="spacer"></div>
 <tabset>
   <tab heading="Schedule">
-    <div ng-include="'/static/slurm/templates/schedule.html'" style="height:90vh"></div>
+    <!-- <div ng-include="'/static/slurm/templates/schedule.html'" style="height:90vh"></div> -->
+    <div ui-view="schedule" style="height:90vh"></div>
   </tab>
   <tab heading="Job Status">
-    <div ng-include="'/static/slurm/templates/job_status.html'" style="height:90vh"></div>
+    <!-- <div ng-include="'/static/slurm/templates/job_status.html'" style="height:90vh"></div> -->
+    <div ui-view="jobstatus" style="height:90vh"></div>
   </tab>
 </tabset>

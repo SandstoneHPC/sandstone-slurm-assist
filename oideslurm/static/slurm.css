@@ -40,6 +40,9 @@
   height: 90% !important;
   overflow-y: scroll;
 }
+#qos-select {
+  margin-bottom: 20px;
+}
 #directive-section {
   height: 46%;
   margin-bottom: 10px;
