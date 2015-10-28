@@ -212,7 +212,30 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     FormService.changeQos($scope.qosSelected);
     $scope.schema = FormService.formFieldsObj.qosSchema;
     $scope.form = angular.copy($scope.defaultForm);
+
+    // clean up the form model
+    for (var v in $scope.formModel) {
+      if (v !== "check"){
+        delete $scope.formModel[v];
+        $scope.formModel.check[v] = false;
+      }
+    }
+
+    $scope.defaultUpdate($scope);
     $scope.$broadcast("schemaFormRedraw");
+  };
+
+  // updating default form fields specific to a qos config
+  $scope.defaultUpdate = function (scope){
+    var required = scope.schema.required;
+    required.forEach(function(e,i,array){
+      scope.formModel.check[e] = true;
+      scope.form.forEach(function(e2,i2,array){
+        if (e2.key === e) {               // if the key is in required
+          array[i2].delete = undefined;  // disable the delete function
+        }
+      });
+    });
   };
 
   $scope.delete =function (key){$scope.formModel.check[key] = false;};
@@ -242,30 +265,23 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "required": true
       }
   ];
+  // below for the reason why using angular.copy
+  // https://github.com/Textalk/angular-schema-form/issues/428
   $scope.form = angular.copy($scope.defaultForm);
 
   // $scope.options only includes form fileds defined in $scope.form
   $scope.options = $scope.form.map(function(e){return e.key;});
+
+  $scope.defaultUpdate($scope);
+
+  // $scope.$watchCollection watches $scope.form and if a new element is pushed into the array
+  // or an existing one is deleted, it broadcasts "schemaFormRedraw" to schemaForm and renders
+  // the form fileds .
   $scope.$watchCollection("form",function(newVal,oldVal){
     $scope.options = newVal.map(function(e){return e.key;});
     console.log("New field added.");
     $scope.$broadcast("schemaFormRedraw");
   })
-
-  $scope.addNewField = function(){
-    console.log("Adding a new element to form");
-    $scope.form.push(
-      {
-        "key": "begin",
-        "type":"input",
-        "condition": "model.check.begin",
-        "popover":"Test",
-        "delete": $scope.delete,
-        "required": true
-      }
-    )
-    console.log($scope.form);
-  }
 
   $scope.onEnter = function($event) {
     if ($event.which===13){
