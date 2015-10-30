@@ -99,7 +99,6 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     nodes:false,
     noRequeue:false,
     output:false,
-    qos:false,
     requeue:false,
     time:false
   };
@@ -207,6 +206,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.qosSelected = FormService.formFieldsObj.qosSelected;
   $scope.schema = FormService.formFieldsObj.qosSchema;
 
+  $scope.formModel["qos"] = $scope.qosSelected;
+
   $scope.changeQos = function() {
     console.log("Changed qos!");
     FormService.changeQos($scope.qosSelected);
@@ -222,6 +223,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     }
 
     $scope.defaultUpdate($scope);
+    $scope.formModel["qos"] = $scope.qosSelected;
     $scope.$broadcast("schemaFormRedraw");
   };
 
@@ -281,6 +283,13 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     $scope.options = newVal.map(function(e){return e.key;});
     console.log("New field added.");
     $scope.$broadcast("schemaFormRedraw");
+  })
+
+  $scope.$watch(
+    function(){ return FormService.formFieldsObj.qosSelected;}
+    ,function(newVal, oldVal){
+      console.log(newVal,oldVal);
+      $scope.qosSelected = newVal;
   })
 
   $scope.onEnter = function($event) {
@@ -528,12 +537,19 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              var args = script[i].split('--')[1].split("=")[1];
              //camelize the command
              command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
-             $scope.formModel.check[command] = true;
-             if($scope.schema.properties[command].type === 'string'){
-                $scope.formModel[command] = args;
+             if (command === "qos"){
+               $scope.formModel[command] = args;
+               FormService.formFieldsObj.qosSelected = args;
+               console.log(FormService.formFieldsObj.qosSelected,args);
              }
-             else{
-               $scope.formModel[command] = Number(args);
+             else {
+               $scope.formModel.check[command] = true;
+               if($scope.schema.properties[command].type === 'string'){
+                 $scope.formModel[command] = args;
+               }
+               else{
+                 $scope.formModel[command] = Number(args);
+               }
              }
 
            }
@@ -544,12 +560,18 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              var args = x.split(" ")[x.split(' ').length-1];
              //camelize the command
              command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
-             $scope.formModel.check[command] = true;
-             if($scope.schema.properties[command].type === 'string'){
-                $scope.formModel[command] = args;
+             if (command === "qos"){
+               $scope.formModel[command] = args;
+               FormService.formFieldsObj.qosSelected = args;
              }
-             else{
-               $scope.formModel[command] = Number(args);
+             else {
+               $scope.formModel.check[command] = true;
+               if($scope.schema.properties[command].type === 'string'){
+                 $scope.formModel[command] = args;
+               }
+               else{
+                 $scope.formModel[command] = Number(args);
+               }
              }
            }
 
