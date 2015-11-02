@@ -2,8 +2,8 @@
 angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
 
 .run(["$templateCache", function($templateCache) {
-  $templateCache.put('/static/slurm/templates/custom_elements/custom_input.html','<div class=\"form-group schema-form-{{form.type}} {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess(), \'has-feedback\': form.feedback !== false }\"> <label class=\"control-label {{form.labelHtmlClass}}\" ng-class=\"{\'sr-only\': !showTitle()}\" for=\"{{form.key.slice(-1)[0]}}\">{{form.title}}</label><div class=\"input-group\"> <input ng-show=\"form.key\" type=\"{{form.type}}\" step=\"any\" sf-changed=\"form\" placeholder=\"{{form.placeholder}}\" class=\"form-control {{form.fieldHtmlClass}}\" id=\"{{form.key.slice(-1)[0]}}\" ng-model-options=\"form.ngModelOptions\" sf-field-model ng-disabled=\"form.readonly\" schema-validate=\"form\" name=\"{{form.key.slice(-1)[0]}}\" aria-describedby=\"{{form.key.slice(-1)[0] + \'Status\'}}\"> <span ng-if=\"hasError() || hasSuccess()\" id=\"{{form.key.slice(-1)[0] + \'Status\'}}\" class=\"sr-only\">{{ hasSuccess() ? \'(success)\' : \'(error)\' }}</span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\"> <i class=\"fa fa-times\"></i> </button> </span></div></div>');
-  $templateCache.put('/static/slurm/templates/custom_elements/custom_checkbox.html','<div class=\"checkbox schema-form-checkbox {{form.htmlClass}}\"> <label class=\"{{form.labelHtmlClass}}\"> <div class=\"input-group\"> <input type=\"checkbox\" sf-changed=\"form\" ng-disabled=\"form.readonly\" sf-field-model ng-model-options=\"form.ngModelOptions\" schema-validate=\"form\" class=\"{{form.fieldHtmlClass}}\" name=\"{{form.key.slice(-1)[0]}}\"> <span ng-bind-html=\"form.title\"></span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\"> <i class=\"fa fa-times\"></i> </button> </span> </div> </label> </div>');
+  $templateCache.put('/static/slurm/templates/custom_elements/custom_input.html','<div class=\"form-group schema-form-{{form.type}} {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess(), \'has-feedback\': form.feedback !== false }\"> <label class=\"control-label {{form.labelHtmlClass}}\" ng-class=\"{\'sr-only\': !showTitle()}\" for=\"{{form.key.slice(-1)[0]}}\">{{form.title}}</label><div class=\"input-group\"> <input ng-show=\"form.key\" type=\"{{form.type}}\" step=\"any\" sf-changed=\"form\" placeholder=\"{{form.placeholder}}\" class=\"form-control {{form.fieldHtmlClass}}\" id=\"{{form.key.slice(-1)[0]}}\" ng-model-options=\"form.ngModelOptions\" sf-field-model ng-disabled=\"form.readonly\" schema-validate=\"form\" name=\"{{form.key.slice(-1)[0]}}\" aria-describedby=\"{{form.key.slice(-1)[0] + \'Status\'}}\"> <span ng-if=\"hasError() || hasSuccess()\" id=\"{{form.key.slice(-1)[0] + \'Status\'}}\" class=\"sr-only\">{{ hasSuccess() ? \'(success)\' : \'(error)\' }}</span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span></div></div>');
+  $templateCache.put('/static/slurm/templates/custom_elements/custom_checkbox.html','<div class=\"checkbox schema-form-checkbox {{form.htmlClass}}\"> <label class=\"{{form.labelHtmlClass}}\"> <div class=\"input-group\"> <input type=\"checkbox\" sf-changed=\"form\" ng-disabled=\"form.readonly\" sf-field-model ng-model-options=\"form.ngModelOptions\" schema-validate=\"form\" class=\"{{form.fieldHtmlClass}}\" name=\"{{form.key.slice(-1)[0]}}\"> <span ng-bind-html=\"form.title\"></span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span> </div> </label> </div>');
 
   }])
 
@@ -228,7 +228,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       scope.formModel.check[e] = true;
       scope.form.forEach(function(e2,i2,array){
         if (e2.key === e) {               // if the key is in required
-          array[i2].delete = undefined;  // disable the delete function
+          array[i2].disabled = true;  // disable the delete function
         }
       });
     });
@@ -242,6 +242,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check.array",
         "popover":'Submit a job array, multiple jobs to be executed with identical parameters. The indexes specification identifies what array index values should be used. Multiple values may be specified using a comma separated list and/or a range of values with a "-" separator. For example, "--array=0-15" or "--array=0,6,16-32". A step function can also be specified with a suffix containing a colon and number. For example, "--array=0-15:4" is equivalent to "--array=0,4,8,12". A maximum number of simultaneously running tasks from the job array may be specified using a "%" separator. For example "--array=0-15%4" will limit the number of simultaneously running tasks from this job array to 4. The minimum index value is 0. the maximum value is one less than the configuration parameter MaxArraySize.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -250,6 +251,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check.account",
         "popover":"Charge resources used by this job to specified account. The account is an arbitrary string. The account name may be changed after job submission using the scontrol command.",
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -258,6 +260,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check.begin",
         "popover":"Submit the batch script to the SLURM controller immediately, like normal, but tell the controller to defer the allocation of the job until the specified time. Time may be of the form HH:MM:SS to run a job at a specific time of day (seconds are optional). (If that time is already past, the next day is assumed.) You may also specify midnight, noon, fika (3 PM) or teatime (4 PM) and you can have a time-of-day suffixed with AM or PM for running in the morning or the evening. You can also say what day the job will be run, by specifying a date of the form MMDDYY or MM/DD/YY YYYY-MM-DD. Combine date and time using the following format YYYY-MM-DD[THH:MM[:SS]]. You can also give times like now + count time-units, where the time-units can be seconds (default), minutes, hours, days, or weeks and you can tell SLURM to run the job today with the keyword today and to run the job tomorrow with the keyword tomorrow. The value may be changed after job submission using the scontrol command. For example: --begin=16:00 , --begin=now+1hour, --begin=now+60 (seconds by default), --begin=2016-01-20T12:34:00, Notes on date/time specifications: - Although the \'seconds\' field of the HH:MM:SS time specification is allowed by the code, note that the poll time of the SLURM scheduler is not precise enough to guarantee dispatch of the job on the exact second. The job will be eligible to start on the next poll following the specified time. The exact poll interval depends on the SLURM scheduler (e.g., 60 seconds with the default sched/builtin).- If no time (HH:MM:SS) is specified, the default is (00:00:00). - If a date is specified without a year (e.g., MM/DD) then the current year is assumed, unless the combination of MM/DD and HH:MM:SS has already passed for that year, in which case the next year is used.",
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -267,6 +270,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['checkpoint']",
         "popover":'Specifies the interval between creating checkpoints of the job step. By default, the job step will have no checkpoints created. Acceptable time formats include "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds".',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -276,6 +280,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['checkpoint-dir']",
         "popover":'Specifies the directory into which the job or job step\'s checkpoint should be written (used by the checkpoint/blcrm and checkpoint/xlch plugins only). The default value is the current working directory. Checkpoint files will be of the form "<job_id>.ckpt" for jobs and "<job_id>.<step_id>.ckpt" for job steps.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -285,6 +290,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['cpu-per-task']",
         "popover":'Advise the SLURM controller that ensuing job steps will require ncpus number of processors per task. Without this option, the controller will just try to allocate one processor per task. For instance, consider an application that has 4 tasks, each requiring 3 processors. If our cluster is comprised of quad-processors nodes and we simply ask for 12 processors, the controller might give us only 3 nodes. However, by using the --cpus-per-task=3 options, the controller knows that each task requires 3 processors on the same node, and the controller will grant an allocation of 4 nodes, one for each of the 4 tasks.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -293,6 +299,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['workdir']",
         "popover":'Set the working directory of the batch script to directory before it is executed. The path can be specified as full path or relative path to the directory where the command is executed.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -302,6 +309,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['error']",
         "popover":'Instruct SLURM to connect the batch script\'s standard error directly to the file name specified in the "filename pattern". By default both standard output and standard error are directed to the same file. For job arrays, the default file name is "slurm-%A_%a.out", "%A" is replaced by the job ID and "%a" with the array index. For other jobs, the default file name is "slurm-%j.out", where the "%j" is replaced by the job ID. See the --input option for filename specification options.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -310,6 +318,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['export']",
         "popover":'Identify which environment variables are propagated to the batch job. Multiple environment variable names should be comma separated. Environment variable names may be specified to propagate the current value of those variables (e.g. "--export=EDITOR") or specific values for the variables may be exported (e.g.. "--export=EDITOR=/bin/vi") in addition to the environment variables that would otherwise be set. This option particularly important for jobs that are submitted on one cluster and execute on a different cluster (e.g. with different paths). By default all environment variables are propagated. If the argument is NONE or specific environment variable names, then the --get-user-env option will implicitly be set to load other environment variables based upon the user\'s configuration on the cluster which executes the job.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -319,6 +328,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['export-file']",
         "popover":'If a number between 3 and OPEN_MAX is specified as the argument to this option, a readable file descriptor will be assumed (STDIN and STDOUT are not supported as valid arguments). Otherwise a filename is assumed. Export environment variables defined in <filename> or read from <fd> to the job\'s execution environment. The content is one or more environment variable definitions of the form NAME=value, each separated by a null character. This allows the use of special characters in environment definitions.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -328,6 +338,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['nodefile']",
         "popover":'Much like --nodelist, but the list is contained in a file of name node file. The node names of the list may also span multiple lines in the file. Duplicate node names in the file will be ignored. The order of the node names in the list is not important; the node names will be sorted by SLURM.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -336,6 +347,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['get-user-env']",
         "popover":'This option will tell sbatch to retrieve the login environment variables for the user specified in the --uid option. The environment variables are retrieved by running something of this sort "su - <username> -c /usr/bin/env" and parsing the output. Be aware that any environment variables already set in sbatch\'s environment will take precedence over any environment variables in the user\'s login environment. Clear any environment variables before calling sbatch that you do not want propagated to the spawned program. The optional timeout value is in seconds. Default value is 8 seconds. The optional mode value control the "su" options. With a mode value of "S", "su" is executed without the "-" option. With a mode value of "L", "su" is executed with the "-" option, replicating the login environment. If mode not specified, the mode established at SLURM build time is used. Example of use include "--get-user-env"(in this case, write "no option" to the input field), "--get-user-env=10" "--get-user-env=10L", and "--get-user-env=S". This option was originally created for use by Moab.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -345,6 +357,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check.immediate",
         "popover":'Specifies the directory into which the job or job step\'s checkpoint should be written (used by the checkpoint/blcrm and checkpoint/xlch plugins only). The default value is the current working directory. Checkpoint files will be of the form "<job_id>.ckpt" for jobs and "<job_id>.<step_id>.ckpt" for job steps.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -353,6 +366,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['input']",
         "popover":'Instruct SLURM to connect the batch script\'s standard input directly to the file name specified in the "filename pattern". By default, "/dev/null" is open on the batch script\'s standard input and both standard output and standard error are directed to a file of the name "slurm-%j.out", where the "%j" is replaced with the job allocation number, as described below. The filename pattern may contain one or more replacement symbols, which are a percent sign "%" followed by a letter (e.g. %j). Supported replacement symbols are: %A:Job array\'s master job allocation number. %a:Job array ID (index) number. %j:Job allocation number.%N:Node name. Only one file is created, so %N will be replaced by the name of the first node in the job, which is the one that runs the script.%u:User name.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -361,6 +375,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['job-name']",
         "popover":'Specify a name for the job allocation. The specified name will appear along with the job id number when querying running jobs on the system. The default is the name of the batch script, or just "sbatch" if the script is read on sbatch\'s standard input.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -369,6 +384,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['jobid']",
         "popover":'Allocate resources as the specified job id. NOTE: Only valid for user root.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -377,6 +393,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['no-kill']",
         "popover":'Do not automatically terminate a job if one of the nodes it has been allocated fails. The user will assume the responsibilities for fault-tolerance should a node fail. When there is a node failure, any active job steps (usually MPI jobs) on that node will almost certainly suffer a fatal error, but with --no-kill, the job allocation will not be revoked so the user may launch new job steps on the remaining nodes in their allocation. By default SLURM terminates the entire job allocation if any node fails in its range of allocated nodes.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -385,6 +402,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['licenses']",
         "popover":'Specification of licenses (or other resources available on all nodes of the cluster) which must be allocated to this job. License names can be followed by a colon and count (the default count is one). Multiple license names should be comma separated (e.g. "--licenses=foo:4,bar"). To submit jobs using remote licenses, those served by the slurmdbd, specify the name of the server providing the licenses. For example "--license=nastran@slurmdb:12".',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -393,6 +411,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['mail-type']",
         "popover":'Notify user by email when certain event types occur. Valid type values are BEGIN, END, FAIL, REQUEUE, ALL (equivalent to BEGIN, END, FAIL and REQUEUE), TIME_LIMIT, TIME_LIMIT_90 (reached 90 percent of time limit), TIME_LIMIT_80 (reached 80 percent of time limit), and TIME_LIMIT_50 (reached 50 percent of time limit). Multiple type values may be specified in a comma separated list. The user to be notified is indicated with --mail-user.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -401,6 +420,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['mail-user']",
         "popover":'User to receive email notification of state changes as defined by --mail-type. The default value is the submitting user.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -409,6 +429,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['mem']",
         "popover":'Specify the real memory required per node in MegaBytes. Default value is DefMemPerNode and the maximum value is MaxMemPerNode. If configured, both parameters can be seen using the scontrol show config command. This parameter would generally be used if whole nodes are allocated to jobs (SelectType=select/linear). Also see --mem-per-cpu. --mem and --mem-per-cpu are mutually exclusive. NOTE: A memory size specification is treated as a special case and grants the job access to all of the memory on each node. NOTE: Enforcement of memory limits currently relies upon the task/cgroup plugin or enabling of accounting, which samples memory use on a periodic basis (data need not be stored, just collected). In both cases memory use is based upon the job\'s Resident Set Size (RSS). A task may exceed the memory limit until the next periodic accounting sample.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -417,6 +438,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['mem-per-cpu']",
         "popover":'Mimimum memory required per allocated CPU in MegaBytes. Default value is DefMemPerCPU and the maximum value is MaxMemPerCPU (see exception below). If configured, both parameters can be seen using the scontrol show config command. Note that if the job\'s --mem-per-cpu value exceeds the configured MaxMemPerCPU, then the user\'s limit will be treated as a memory limit per task; --mem-per-cpu will be reduced to a value no larger than MaxMemPerCPU; --cpus-per-task will be set and the value of --cpus-per-task multiplied by the new --mem-per-cpu value will equal the original --mem-per-cpu value specified by the user. This parameter would generally be used if individual processors are allocated to jobs (SelectType=select/cons_res). If resources are allocated by the core, socket or whole nodes; the number of CPUs allocated to a job may be higher than the task count and the value of --mem-per-cpu should be adjusted accordingly. Also see --mem. --mem and --mem-per-cpu are mutually exclusive.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
 
@@ -426,6 +448,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check.nodes",
         "popover":'Request that a minimum of minnodes nodes be allocated to this job. A maximum node count may also be specified with maxnodes. If only one number is specified, this is used as both the minimum and maximum node count. The partition\'s node limits supersede those of the job. If a job\'s node limits are outside of the range permitted for its associated partition, the job will be left in a PENDING state. This permits possible execution at a later time, when the partition limit is changed. If a job node limit exceeds the number of nodes configured in the partition, the job will be rejected. Note that the environment variable SLURM_NNODES will be set to the count of nodes actually allocated to the job. See the ENVIRONMENT VARIABLES section for more information. If -N is not specified, the default behavior is to allocate enough nodes to satisfy the requirements of the -n and -c options. The job will be allocated as many nodes as possible within the range specified and without delaying the initiation of the job. The node count specification may include a numeric value followed by a suffix of "k" (multiplies numeric value by 1,024) or "m" (multiplies numeric value by 1,048,576).',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -434,6 +457,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['no-requeue']",
         "popover":'Specifies that the batch job should not be requeued after node failure. Setting this option will prevent system administrators from being able to restart the job (for example, after a scheduled downtime). When a job is requeued, the batch script is initiated from its beginning. Also see the --requeue option. The JobRequeue configuration parameter controls the default behavior on the cluster.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -442,6 +466,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['output']",
         "popover":'Instruct SLURM to connect the batch script\'s standard output directly to the file name specified in the "filename pattern". By default both standard output and standard error are directed to the same file. For job arrays, the default file name is "slurm-%A_%a.out", "%A" is replaced by the job ID and "%a" with the array index. For other jobs, the default file name is "slurm-%j.out", where the "%j" is replaced by the job ID. See the --input option for filename specification options.',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       },
       {
@@ -450,6 +475,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         "condition": "model.check['time']",
         "popover":'Set a limit on the total run time of the job allocation. If the requested time limit exceeds the partition\'s time limit, the job will be left in a PENDING state (possibly indefinitely). The default time limit is the partition\'s default time limit. When the time limit is reached, each task in each job step is sent SIGTERM followed by SIGKILL. The interval between signals is specified by the SLURM configuration parameter KillWait. A time limit of zero requests that no time limit be imposed. Acceptable time formats include "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds".',
         "delete": $scope.delete,
+        "disabled": false,
         "required": true
       }
 
