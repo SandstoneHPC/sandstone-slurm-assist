@@ -214,17 +214,11 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     $scope.schema = FormService.formFieldsObj.qosSchema;
     $scope.form = angular.copy($scope.defaultForm);
 
-    // clean up the form model
-    for (var v in $scope.formModel) {
-      if (v !== "check"){
-        delete $scope.formModel[v];
-        $scope.formModel.check[v] = false;
-      }
-    }
-
     $scope.defaultUpdate($scope);
     $scope.formModel["qos"] = $scope.qosSelected;
+    $scope.$broadcast("schemaFormValidate");
     $scope.$broadcast("schemaFormRedraw");
+
   };
 
   // updating default form fields specific to a qos config
@@ -468,7 +462,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.options = $scope.form.map(function(e){return e.key;});
 
   $scope.defaultUpdate($scope);
-  
+
+
   // $scope.$watchCollection watches $scope.form and if a new element is pushed into the array
   // or an existing one is deleted, it broadcasts "schemaFormRedraw" to schemaForm and renders
   // the form fileds .
@@ -476,6 +471,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     $scope.options = newVal.map(function(e){return e.key;});
     console.log("New field added.");
     $scope.$broadcast("schemaFormRedraw");
+    $scope.$broadcast("schemaFormValidate");
   })
 
   $scope.$watch(
@@ -483,6 +479,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     ,function(newVal, oldVal){
       console.log(newVal,oldVal);
       $scope.qosSelected = newVal;
+      $scope.changeQos();
   })
 
   $scope.onEnter = function($event) {
