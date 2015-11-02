@@ -13,7 +13,7 @@
   max-height: 20vh;
   overflow-y: scroll;
   overflow-x: hidden;
-  width: 100%;
+  width: 200px;
   margin-top: 1%;
 }
 .control-label {

@@ -468,7 +468,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.options = $scope.form.map(function(e){return e.key;});
 
   $scope.defaultUpdate($scope);
-
+  
   // $scope.$watchCollection watches $scope.form and if a new element is pushed into the array
   // or an existing one is deleted, it broadcasts "schemaFormRedraw" to schemaForm and renders
   // the form fileds .
