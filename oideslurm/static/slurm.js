@@ -105,6 +105,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   formFieldsObj.formModel = {check:check};
   formFieldsObj.qosSchema = {};
   formFieldsObj.qosSelected = undefined;
+  formFieldsObj.invalid = true;
 
   var getFormSchema = function () {
       return $http
@@ -218,7 +219,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     $scope.formModel["qos"] = $scope.qosSelected;
     $scope.$broadcast("schemaFormValidate");
     $scope.$broadcast("schemaFormRedraw");
-
+    console.log($scope.slurmForm);
   };
 
   // updating default form fields specific to a qos config
@@ -498,15 +499,23 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     console.log("New field added.");
     $scope.$broadcast("schemaFormRedraw");
     $scope.$broadcast("schemaFormValidate");
-  })
+  });
 
+  // This watches the value of selected qos
   $scope.$watch(
     function(){ return FormService.formFieldsObj.qosSelected;}
     ,function(newVal, oldVal){
       console.log(newVal,oldVal);
       $scope.qosSelected = newVal;
       $scope.changeQos();
-  })
+  });
+
+  // This watches the validity of the form
+  $scope.$watch(
+    function(){return $scope.slurmForm.$invalid;},
+    function(newVal,oldVal){
+      FormService.formFieldsObj.invalid = newVal;
+    });
 
   $scope.onEnter = function($event) {
     if ($event.which===13){
@@ -541,6 +550,9 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 
 .controller('controlBar',['$scope','$modal','FormService','ScriptService','$log',function($scope,$modal,FormService,ScriptService,$log){
+
+  // For disabling the submit button
+  $scope.formFieldsObj = FormService.formFieldsObj;
 
   $scope.loadScript = function(){
     var loadScriptModal = $modal.open({
