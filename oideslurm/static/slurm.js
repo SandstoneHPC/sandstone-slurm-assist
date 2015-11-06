@@ -219,7 +219,6 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     $scope.formModel["qos"] = $scope.qosSelected;
     $scope.$broadcast("schemaFormValidate");
     $scope.$broadcast("schemaFormRedraw");
-    console.log($scope.slurmForm);
   };
 
   // updating default form fields specific to a qos config
@@ -586,14 +585,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     });
   };
 
-  $scope.Submit = function () {
+  $scope.SaveAndSubmit = function () {
 
     var submittModal = $modal.open({
       templateUrl: '/static/slurm/templates/modals/submit_modal.html',
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
-      controller:'SubmitCtrl',
+      controller:'SaveAndSubmitScriptCtrl',
     });
   };
 
@@ -948,8 +947,9 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
    $modalInstance.dismiss('cancel');
  };
 })
-
-.controller('SubmitCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+.controller('SaveAndSubmitScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+  $scope.SbatchDirectives = ScriptService.SbatchDirectives;
+  $scope.SbatchScript = ScriptService.SbatchScript;
   $scope.treeData = {};
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
@@ -980,20 +980,20 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
        error(function(data, status, headers, config) {
          $log.error('Failed to grab dir contents from ',node.filepath);
        });
-   };
- $scope.loadFile = {};
+ };
+ $scope.newFile = {};
  $scope.invalidFilepath = false;
 
  $scope.updateSaveName = function (node, selected) {
    $scope.invalidFilepath = false;
    if (node.type === 'dir') {
-     $scope.loadFile.filepath = node.filepath;
+     $scope.newFile.filepath = node.filepath;
    } else {
      var index = node.filepath.lastIndexOf('/')+1;
      var filepath = node.filepath.substring(0,index);
      var filename = node.filepath.substring(index,node.filepath.length);
-     $scope.loadFile.filepath = filepath;
-     $scope.loadFile.filename = filename;
+     $scope.newFile.filepath = filepath;
+     $scope.newFile.filename = filename;
    }
  };
  $scope.treeOptions = {
@@ -1008,17 +1008,82 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
    }
  };
 
- $scope.submit = function () {
+ $scope.saveAndSubmit = function () {
+      var matched = $scope.SbatchScript.script.match(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/);
+      // if matched is not null (or undefined)
+      var shellType = 'bash';
+      if (matched) shellType = matched[1];
+      var content = '#!/bin/'+shellType+'\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
+      var file_abs_path = $scope.newFile.filepath + $scope.newFile.filename;
 
-   $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
-   $modalInstance.close($scope.loadFile);
-   $http({
-     url: "/slurm/a/jobs",
-     method: "POST",
-     params: {_xsrf: getCookie('_xsrf')},
-     data:{'content': $scope.loadFile.filepath}
-   });
- };
+      $http
+        .get(
+          '/filebrowser/a/fileutil',
+          {
+            params: {
+             operation: 'CHECK_EXISTS',
+              filepath: file_abs_path
+            }
+          }
+        )
+        .success(function (data, status, headers, config) {
+          if (data.result) {
+            $http({
+              url: '/filebrowser/localfiles'+file_abs_path,
+              method: 'PUT',
+              params: {
+                _xsrf: getCookie('_xsrf')
+              },
+              data: {'content': content}
+            })
+            .success(function (data,status, headers, config) {
+              $log.debug('Saved file: ', file_abs_path);
+
+              // submit a job with a specified script
+              $modalInstance.close($scope.newFile);
+              $http({
+                url: "/slurm/a/jobs",
+                method: "POST",
+                params: {_xsrf: getCookie('_xsrf')},
+                data:{'content': file_abs_path}
+              });
+
+            });
+          } else {
+            $http({
+              url: '/filebrowser/localfiles'+file_abs_path,
+              method: 'POST',
+              params: {
+                _xsrf: getCookie('_xsrf')
+              }
+            })
+            .success(function (data,status, headers, config) {
+              $http({
+                url: '/filebrowser/localfiles'+file_abs_path,
+                method: 'PUT',
+                params: {
+                  _xsrf: getCookie('_xsrf')
+                },
+                data: {'content': content}
+              })
+              .success(function (data,status, headers, config) {
+                $log.debug('Saved file: ', file_abs_path);
+
+                // submit a job with a specified script
+                $modalInstance.close($scope.newFile);
+                $http({
+                  url: "/slurm/a/jobs",
+                  method: "POST",
+                  params: {_xsrf: getCookie('_xsrf')},
+                  data:{'content': file_abs_path}
+                });
+              });
+            });
+          }
+          });
+
+        $modalInstance.dismiss('cancel');
+        };
 
  $scope.cancel = function () {
    $modalInstance.dismiss('cancel');
