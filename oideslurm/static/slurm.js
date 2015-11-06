@@ -371,7 +371,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       },
       {
         "key": 'job-name',
-        "type":"number",
+        "type":"input",
         "condition": "model.check['job-name']",
         "popover":'Specify a name for the job allocation. The specified name will appear along with the job id number when querying running jobs on the system. The default is the name of the batch script, or just "sbatch" if the script is read on sbatch\'s standard input.',
         "delete": $scope.delete,
@@ -763,7 +763,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              var command = script[i].split('--')[1].split("=")[0];
              var args = script[i].split('--')[1].split("=")[1];
              //camelize the command
-             command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             //command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
              if (command === "qos"){
                $scope.formModel[command] = args;
                FormService.formFieldsObj.qosSelected = args;
@@ -786,7 +786,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              var x = script[i].split('--')[1]  // this should look like "nodes  10"
              var args = x.split(" ")[x.split(' ').length-1];
              //camelize the command
-             command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             //command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
              if (command === "qos"){
                $scope.formModel[command] = args;
                FormService.formFieldsObj.qosSelected = args;

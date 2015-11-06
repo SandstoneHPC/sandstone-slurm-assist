@@ -177,7 +177,6 @@ FORM_CONFIGS = {
             },
         },
         "required": [
-            "array",
             "nodes",
         ]
     },
