@@ -2,7 +2,6 @@ import tornado.web
 import subprocess
 
 
-
 class SlurmCmdMixin(tornado.web.RequestHandler):
     # This class will contain any methods necessary
     # for running slurm commands and parsing output.
@@ -34,6 +33,13 @@ class SlurmCmdMixin(tornado.web.RequestHandler):
         file_path = kwargs["filepath"]
         
         cmd = ['sbatch'] + [file_path]
-        cmd_out = subprocess.check_output(cmd)
-        print cmd_out
-        return 
+	try:
+	    #df = subprocess.Popen(cmd,stdout=subprocess.PIPE)
+	    #output, err = df.communicate()
+	    cmd_out = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
+            print "cmd_out:",cmd_out
+	    return (0,cmd_out)
+        except subprocess.CalledProcessError as e:
+	    print "e.output:",e.output
+	    print "e.returncode:",e.returncode
+	    return (e.returncode,e.output)
