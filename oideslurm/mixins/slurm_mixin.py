@@ -37,9 +37,6 @@ class SlurmCmdMixin(tornado.web.RequestHandler):
 	    #df = subprocess.Popen(cmd,stdout=subprocess.PIPE)
 	    #output, err = df.communicate()
 	    cmd_out = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
-            print "cmd_out:",cmd_out
 	    return (0,cmd_out)
         except subprocess.CalledProcessError as e:
-	    print "e.output:",e.output
-	    print "e.returncode:",e.returncode
 	    return (e.returncode,e.output)

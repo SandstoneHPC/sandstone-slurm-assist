@@ -1046,7 +1046,11 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
                 method: "POST",
                 params: {_xsrf: getCookie('_xsrf')},
                 data:{'content': file_abs_path}
-              });
+              }).success(function(data, status, header, config){
+			$log.debug("Successful Submission");
+	      }).error(function(data, status, header, config){
+			$log.error("Submission Failed", data ,status, header, config);
+	      });
 
             });
           } else {
@@ -1076,7 +1080,11 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
                   method: "POST",
                   params: {_xsrf: getCookie('_xsrf')},
                   data:{'content': file_abs_path}
-                });
+                }).success(function(data, status, header, config){
+			$log.debug("Successful Submission");
+		}).error(function(data, status, header, config){
+			$log.error("Submission Failed", data ,status, header, config);
+		});
               });
             });
           }
