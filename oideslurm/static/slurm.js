@@ -169,6 +169,120 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 }
 ])
 
+.factory('ModalService',['$modal','FormService',function($modal,FormService){
+   var timeLimits = {
+    "crc-himem": 14*24,
+    "crc-seria": 14*24,
+    "crc-gpu"  : 4,
+    "janus"    : 24,
+    "ipcc"     : 4
+  };
+
+  var nodeLimits = {
+    "crc-himem": 1,
+    "crc-seria": 11,
+    "crc-gpu"  : 2,
+    "janus"    : 1037,
+    "ipcc"     : 4
+
+  };
+  
+  var serviceUnitEstimate = function(){
+    var seconds = "(:[0-5][0-9])";
+    var minutes = "([0-5][0-9])";
+    var hours   = "(2[0-3]|[01][0-9])";
+    var days    = "([1-9]|[1-9]+[0-9])"
+
+    var defaultTimeLimit = timeLimits["janus"];
+    var defaultNodeLimit = nodeLimits["janus"];
+    var timeLimit = 0;
+    var nodeLimit = 0;
+    var model = FormService.formFieldsObj.formModel;
+
+    //----Get time limit-------------------------------------
+    if (model["time"] === undefined){
+      timeLimit = defaultTimeLimit;
+    }
+
+    else{
+      /* minutes or minutes:seconds */
+      if (RegExp("^" + minutes + seconds + "?" + "$").test(model["time"])){
+        var match = RegExp("^" + minutes + seconds + "?" + "$").exec(model["time"]);
+        timeLimit = parseInt(match[1])/60;
+      }
+      /* hours:minutes:seconds */
+      else if (RegExp("^" + hours + ":" + minutes + seconds + "$").test(model["time"])){
+        var match = RegExp("^" + hours + ":" + minutes + seconds + "$").exec(model["time"]);
+        timeLimit = parseInt(match[1]) + parseInt(match[2])/60;
+      }
+      /* days-hours:minutes?seconds? */
+      else if (RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").test(model["time"])){
+        var match = RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").exec(model["time"]);
+        timeLimit = parseInt(match[1])*24 + parseInt(match[2]);
+      }
+
+    }
+
+    //-------Get node limit------------------------------------
+    if (model["nodes"] === undefined){
+      nodeLimit = defaultNodeLimit;
+    }
+
+    else {
+      var match = /(^[1-9]\d*)(-[1-9]\d*)?$/.exec(model["nodes"]);
+      if (match[2] === undefined) nodeLimit = parseInt(match[1]);
+      else nodeLimit = -1*parseInt(match[2]); // notice the minus sign.
+    };
+
+    return {
+      'timeLimit': timeLimit,
+      'nodeLimit': nodeLimit,
+      'result': timeLimit*nodeLimit
+    };
+  }
+
+  return {
+    loadScript: function(){
+    var loadScriptModal = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/load_script_modal.html',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      controller:'LoadScriptCtrl'
+    });
+    },
+    saveScript: function(){
+    var saveScriptModal = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/save_script_modal.html',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      controller:'SaveScriptCtrl',
+    });
+    },
+    estimate: function (){
+    var estimateModal = $modal.open({
+       templateUrl: '/static/slurm/templates/modals/estimateModal.html',
+       controller: 'estimateCtrl',
+       resolve:{
+         serviceUnit: function (){
+           return serviceUnitEstimate();
+         }
+       }
+    });
+    },
+    SaveAndSubmit: function () {
+    var submittModal = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/submit_modal.html',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      controller:'SaveAndSubmitScriptCtrl',
+    });
+  }
+};
+}])
+
 // a directive below is kind of a hacky solution to
 // the issue of typeahead
 .directive('typeaheadFocus', function (){
@@ -548,124 +662,16 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 }])
 
 
-.controller('controlBar',['$scope','$modal','FormService','ScriptService','$log',function($scope,$modal,FormService,ScriptService,$log){
+.controller('controlBar',['$scope','$modal','FormService','ScriptService','ModalService','$log',function($scope,$modal,FormService,ScriptService,ModalService,$log){
 
   // For disabling the submit button
   $scope.formFieldsObj = FormService.formFieldsObj;
 
-  $scope.loadScript = function(){
-    var loadScriptModal = $modal.open({
-      templateUrl: '/static/slurm/templates/modals/load_script_modal.html',
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      controller:'LoadScriptCtrl'
-    });
-    };
+  $scope.loadScript = ModalService.loadScript; 
+  $scope.saveScript = ModalService.saveScript;
+  $scope.estimate = ModalService.estimate;
+  $scope.SaveAndSubmit = ModalService.SaveAndSubmit;
 
-  $scope.saveScript = function(){
-    var saveScriptModal = $modal.open({
-      templateUrl: '/static/slurm/templates/modals/save_script_modal.html',
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      controller:'SaveScriptCtrl',
-    });
-  };
-
-  $scope.estimate = function (){
-    var estimateModal = $modal.open({
-       templateUrl: '/static/slurm/templates/modals/estimateModal.html',
-       controller: 'estimateCtrl',
-       resolve:{
-         serviceUnit: function (){
-           return $scope.serviceUnitEstimate();
-         }
-       }
-    });
-  };
-
-  $scope.SaveAndSubmit = function () {
-
-    var submittModal = $modal.open({
-      templateUrl: '/static/slurm/templates/modals/submit_modal.html',
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      controller:'SaveAndSubmitScriptCtrl',
-    });
-  };
-
-  // Limits values may change.
-  $scope.timeLimits = {
-    "crc-himem": 14*24,
-    "crc-seria": 14*24,
-    "crc-gpu"  : 4,
-    "janus"    : 24,
-    "ipcc"     : 4
-  };
-
-  $scope.nodeLimits = {
-    "crc-himem": 1,
-    "crc-seria": 11,
-    "crc-gpu"  : 2,
-    "janus"    : 1037,
-    "ipcc"     : 4
-
-  };
-  $scope.serviceUnitEstimate = function(){
-    var seconds = "(:[0-5][0-9])";
-    var minutes = "([0-5][0-9])";
-    var hours   = "(2[0-3]|[01][0-9])";
-    var days    = "([1-9]|[1-9]+[0-9])"
-
-    var defaultTimeLimit = $scope.timeLimits["janus"];
-    var defaultNodeLimit = $scope.nodeLimits["janus"];
-    var timeLimit = 0;
-    var nodeLimit = 0;
-    var model = FormService.formFieldsObj.formModel;
-
-    //----Get time limit-------------------------------------
-    if (model["time"] === undefined){
-      timeLimit = defaultTimeLimit;
-    }
-
-    else{
-      /* minutes or minutes:seconds */
-      if (RegExp("^" + minutes + seconds + "?" + "$").test(model["time"])){
-        var match = RegExp("^" + minutes + seconds + "?" + "$").exec(model["time"]);
-        timeLimit = parseInt(match[1])/60;
-      }
-      /* hours:minutes:seconds */
-      else if (RegExp("^" + hours + ":" + minutes + seconds + "$").test(model["time"])){
-        var match = RegExp("^" + hours + ":" + minutes + seconds + "$").exec(model["time"]);
-        timeLimit = parseInt(match[1]) + parseInt(match[2])/60;
-      }
-      /* days-hours:minutes?seconds? */
-      else if (RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").test(model["time"])){
-        var match = RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").exec(model["time"]);
-        timeLimit = parseInt(match[1])*24 + parseInt(match[2]);
-      }
-
-    }
-
-    //-------Get node limit------------------------------------
-    if (model["nodes"] === undefined){
-      nodeLimit = defaultNodeLimit;
-    }
-
-    else {
-      var match = /(^[1-9]\d*)(-[1-9]\d*)?$/.exec(model["nodes"]);
-      if (match[2] === undefined) nodeLimit = parseInt(match[1]);
-      else nodeLimit = -1*parseInt(match[2]); // notice the minus sign.
-    };
-
-    return {
-      'timeLimit': timeLimit,
-      'nodeLimit': nodeLimit,
-      'result': timeLimit*nodeLimit
-    };
-  }
 }])
 
 .controller('estimateCtrl', function($scope,$modalInstance,serviceUnit){
@@ -890,7 +896,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       // if matched is not null (or undefined)
       var shellType = 'bash';
       if (matched) shellType = matched[1];
-      var content = '#!/bin/'+shellType+'\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
+      var content = '#!/bin/'+shellType +'\n'+ $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/,"");
       var file_abs_path = $scope.newFile.filepath + $scope.newFile.filename;
 
       $http
@@ -948,6 +954,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
  };
 })
 .controller('SaveAndSubmitScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+  
+
   $scope.SbatchDirectives = ScriptService.SbatchDirectives;
   $scope.SbatchScript = ScriptService.SbatchScript;
   $scope.treeData = {};
@@ -1013,7 +1021,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       // if matched is not null (or undefined)
       var shellType = 'bash';
       if (matched) shellType = matched[1];
-      var content = '#!/bin/'+shellType+'\n' + $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)/,"");
+      var content = '#!/bin/'+shellType +'\n'+ $scope.SbatchDirectives.script + $scope.SbatchScript.script.replace(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/,"");
       var file_abs_path = $scope.newFile.filepath + $scope.newFile.filename;
 
       $http
