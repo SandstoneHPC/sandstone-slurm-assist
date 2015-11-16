@@ -279,7 +279,19 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       size: 'lg',
       controller:'SaveAndSubmitScriptCtrl',
     });
+  },
+  ShowResult: function (result) {
+    var submittModal = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/result_modal.html',
+      controller:'ShowResultCtrl',
+      resolve:{
+        submission_result: function(){
+	   return result;
+	}
+      }
+    });
   }
+
 };
 }])
 
@@ -689,7 +701,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
      for (var i=0;i<data.length;i++) {
        data[i].children = [];
      }
-     $scope.treeData.filetreeContents = data;
+    $scope.treeData.filetreeContents = data;
    }).
    error(function(data, status, headers, config) {
      $log.error('Failed to initialize filetree.');
@@ -953,8 +965,9 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
    $modalInstance.dismiss('cancel');
  };
 })
-.controller('SaveAndSubmitScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
+.controller('SaveAndSubmitScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,ModalService,$http,$log){
   
+  $scope.ShowResult = ModalService.ShowResult;
 
   $scope.SbatchDirectives = ScriptService.SbatchDirectives;
   $scope.SbatchScript = ScriptService.SbatchScript;
@@ -1017,6 +1030,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
  };
 
  $scope.saveAndSubmit = function () {
+      var result = {status: 'Test', description:'This should not be shown.'};
       var matched = $scope.SbatchScript.script.match(/#!\/bin\/(sh|ksh|bash|zsh|csh|tcsh)\n/);
       // if matched is not null (or undefined)
       var shellType = 'bash';
@@ -1056,8 +1070,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
                 data:{'content': file_abs_path}
               }).success(function(data, status, header, config){
 			$log.debug("Successful Submission");
+			result.status = "Success";
+			result.description = "Successful Submission";
+			$scope.ShowResult(result); 
 	      }).error(function(data, status, header, config){
 			$log.error("Submission Failed", data ,status, header, config);
+			result.status = "Error";
+			result.description = data;
+			$scope.ShowResult(result);
 	      });
 
             });
@@ -1090,8 +1110,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
                   data:{'content': file_abs_path}
                 }).success(function(data, status, header, config){
 			$log.debug("Successful Submission");
+			result.status = "Success";
+			result.description = "Successful Submission";
+			$scope.ShowResult(result);
 		}).error(function(data, status, header, config){
 			$log.error("Submission Failed", data ,status, header, config);
+			result.status = "Error";
+			result.description = data;
+			$scope.ShowResult(result);
 		});
               });
             });
@@ -1105,7 +1131,9 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
    $modalInstance.dismiss('cancel');
  };
 })
-
+.controller('ShowResultCtrl',function($scope,$modalInstance,submission_result){
+   $scope.result = submission_result;
+})
 .controller('JobListCtrl', ['$scope','$modal','AjaxCallService', function ($scope,$modal,AjaxCallService) {
 
     $scope.rowCollection = [];
