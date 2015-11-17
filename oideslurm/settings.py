@@ -152,11 +152,12 @@ BASE_CONFIG = {
                 "type": "string",
                 "pattern": "^([a-zA-Z0-9_-]|%[AajNu])+\\.[a-zA-Z]+$",
             },
-            # "qos": {
-            #     "title": "qos",
-            #     "type": "string",
-            #     "pattern": "^(janus(-long|-debug)?|himem|crestone|gpu)$",
-            # },
+            "qos": {
+                "title": "qos",
+                "type": "string",
+                "pattern": "^(janus(-long|-debug)?|himem|crestone|gpu)$",
+                "readonly": True,
+            },
             "requeue": {
                 "title": "requeue",
                 "type": "boolean",
