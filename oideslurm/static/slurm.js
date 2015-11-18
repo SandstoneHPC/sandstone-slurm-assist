@@ -350,14 +350,16 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   // updating default form fields specific to a qos config
   $scope.defaultUpdate = function (scope){
     var required = scope.schema.required;
-    required.forEach(function(e,i,array){
-      scope.formModel.check[e] = true;
-      scope.form.forEach(function(e2,i2,array){
-        if (e2.key === e) {               // if the key is in required
-          array[i2].disabled = true;  // disable the delete function
-        }
+    if (required !== undefined){
+      required.forEach(function(e,i,array){
+        scope.formModel.check[e] = true;
+        scope.form.forEach(function(e2,i2,array){
+          if (e2.key === e) {               // if the key is in required
+            array[i2].disabled = true;  // disable the delete function
+          }
+        });
       });
-    });
+    }
   };
 
   $scope.delete =function (key){$scope.formModel.check[key] = false;};
