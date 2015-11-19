@@ -35,7 +35,6 @@ BASE_CONFIG = {
             "account": {
                 'title': "account",
                 "type":"string",
-                "pattern": "^\\S+@\\S+$",
             },
             "begin": {
                 "title": "begin",
