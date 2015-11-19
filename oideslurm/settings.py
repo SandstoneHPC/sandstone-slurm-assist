@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 APP_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,6 +24,12 @@ APP_SPECIFICATION = {
     ),
 }
 
+account_cmd = 'sacctmgr list ass user=$(whoami) -P -n format=account'
+user_accounts = subprocess.check_output(
+                        account_cmd,
+                        shell=True,
+                        ).split()
+
 BASE_CONFIG = {
         "type": "object",
         "title": "SlurmConfig",
@@ -35,6 +42,7 @@ BASE_CONFIG = {
             "account": {
                 'title': "account",
                 "type":"string",
+                "enum": user_accounts,
             },
             "begin": {
                 "title": "begin",

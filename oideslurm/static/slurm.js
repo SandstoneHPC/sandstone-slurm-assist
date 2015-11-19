@@ -375,7 +375,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       },
       {
         "key": "account",
-        "type":"input",
+        // "type":"input",
         "condition": "model.check.account",
         "popover":"Charge resources used by this job to specified account. The account is an arbitrary string. The account name may be changed after job submission using the scontrol command.",
         "delete": $scope.delete,
