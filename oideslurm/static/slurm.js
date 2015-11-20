@@ -9,10 +9,6 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 .config(['$stateProvider','$urlRouterProvider', 'schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfBuilderProvider','sfPathProvider',
  function($stateProvider, $urlRouterProvider, schemaFormProvider,  schemaFormDecoratorsProvider, sfBuilderProvider, sfPathProvider) {
-  // $routeProvider.when('/slurm', {
-  //   templateUrl: '/static/slurm/slurm.html',
-  //   controller: 'SbatchCtrl'
-  // });
 
     $stateProvider.state('slurm', {
       'url': '/slurm',
@@ -74,33 +70,33 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   // check is for checking if a specific field is selected by a user
   // Default fields have true at the beginning
   var check = {
-    array:false,
-    account:false,
-    begin:false,
-    checkpoint:false,
+    'array':false,
+    'account':false,
+    'begin':false,
+    'checkpoint':false,
     'checkpoint-dir':false,
     'cpu-per-task':false,
-    workdir:false,
-    error:false,
-    export:false,
+    'workdir':false,
+    'error':false,
+    'export':false,
     'export-file':false,
-    nodefile:false,
+    'nodefile':false,
     'get-user-env':false,
-    immediate:false,
-    input:false,
+    'immediate':false,
+    'input':false,
     'job-name':false,
-    jobid:false,
+    'jobid':false,
     'no-kill':false,
-    licenses:false,
+    'licenses':false,
     'mail-type':false,
     'mail-user':false,
-    mem:false,
+    'mem':false,
     'mem-per-cpu':false,
-    nodes:false,
+    'nodes':false,
     'no-requeue':false,
-    output:false,
-    requeue:false,
-    time:false
+    'output':false,
+    'requeue':false,
+    'time':false
   };
   formFieldsObj.formModel = {check:check};
   formFieldsObj.qosSchema = {};
