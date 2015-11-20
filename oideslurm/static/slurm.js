@@ -2,6 +2,7 @@
 angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
 
 .run(["$templateCache", function($templateCache) {
+  /* Angular Schema Form uses $templateCache for user defined template html. Therefore modification to template files has to occur here.*/
   $templateCache.put('/static/slurm/templates/custom_elements/custom_input.html','<div class=\"form-group schema-form-{{form.type}} {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess(), \'has-feedback\': form.feedback !== false }\"> <label class=\"control-label {{form.labelHtmlClass}}\" ng-class=\"{\'sr-only\': !showTitle()}\" for=\"{{form.key.slice(-1)[0]}}\">{{form.title}}</label><div class=\"input-group\"> <input ng-show=\"form.key\" type=\"{{form.type}}\" step=\"any\" sf-changed=\"form\" placeholder=\"{{form.placeholder}}\" class=\"form-control {{form.fieldHtmlClass}}\" id=\"{{form.key.slice(-1)[0]}}\" ng-model-options=\"form.ngModelOptions\" sf-field-model ng-disabled=\"form.readonly\" schema-validate=\"form\" name=\"{{form.key.slice(-1)[0]}}\" aria-describedby=\"{{form.key.slice(-1)[0] + \'Status\'}}\"> <span ng-if=\"hasError() || hasSuccess()\" id=\"{{form.key.slice(-1)[0] + \'Status\'}}\" class=\"sr-only\">{{ hasSuccess() ? \'(success)\' : \'(error)\' }}</span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span></div></div>');
   $templateCache.put('/static/slurm/templates/custom_elements/custom_checkbox.html','<div class=\"checkbox schema-form-checkbox {{form.htmlClass}}\"> <label class=\"{{form.labelHtmlClass}}\"> <div class=\"input-group\"> <input type=\"checkbox\" sf-changed=\"form\" ng-disabled=\"form.readonly\" sf-field-model ng-model-options=\"form.ngModelOptions\" schema-validate=\"form\" class=\"{{form.fieldHtmlClass}}\" name=\"{{form.key.slice(-1)[0]}}\"> <span ng-bind-html=\"form.title\"></span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span> </div> </label> </div>');
 
@@ -42,6 +43,10 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       }
     });
 
+  /* Code below registers the custom templates and overrides the default field 
+   * types, such as input, checkbox and number with the newly defined ones.
+   * Note that /static/slurm/templates/custom_elements/custom_*.html is just a referece name
+   * to the template. It does not import the template (it's defined at $templateCache).*/
   schemaFormDecoratorsProvider.defineAddOn(
     'bootstrapDecorator',         // Name of the decorator you want to add to.
     'input',                    // Form type that should render this add-on
@@ -65,10 +70,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 }])
 
+
 .factory('FormService', ['$http', function ($http) {
+  
+  /* formFieldsObj contains necessary objects such as formModel, qosSchema etc.
+   * and is shared among several controllers*/ 
   var formFieldsObj = {};
-  // check is for checking if a specific field is selected by a user
-  // Default fields have true at the beginning
+  
+  // check is used for checking if a specific field is selected by a user.
   var check = {
     'array':false,
     'account':false,
@@ -98,11 +107,17 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     'requeue':false,
     'time':false
   };
+  /* formModel should contain model values for the form. The only exception is check, 
+   * which is basically used to show form fields selected by a user. 
+   * */
   formFieldsObj.formModel = {check:check};
   formFieldsObj.qosSchema = {};
   formFieldsObj.qosSelected = undefined;
   formFieldsObj.invalid = true;
-
+  
+  /* getFormSchema is a fucntion that retrieves a schema config from back-end.
+   * Note that this is an asynchronous function.
+   * */
   var getFormSchema = function () {
       return $http
         .get('/slurm/a/config')
@@ -113,17 +128,22 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
           formFieldsObj.qosSchema = formFieldsObj.schemas[formFieldsObj.qosSelected];
         });
     };
+  
+  /* changeQos takes a newQos as an argument then select a scheme corresponding to the new qos*/
+  var changeQos = function (newQos) {
+      formFieldsObj.qosSchema = formFieldsObj.schemas[newQos];
+      formFieldsObj.qosSelected = newQos;
+    };
 
   return {
     formFieldsObj:formFieldsObj,
     getFormSchema:getFormSchema,
-    changeQos: function (newQos) {
-      formFieldsObj.qosSchema = formFieldsObj.schemas[newQos];
-      formFieldsObj.qosSelected = newQos;
-    }
+    changeQos: changeQos,
   };
 }])
 
+/* ScriptService provides objects which store the string values of both SBATCH script and SBATCH directives.
+ * */
 .factory('ScriptService',function(){
   // script is used from SBATCH SCRIPT
   var SbatchScript = {script:''};
@@ -134,6 +154,10 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   };
 })
 
+/* AjaxCallService provides functions that basically return a promise object.
+ * This service is used in JobListCtrl in which one can retrieve a list of submitted
+ * jobs and the detail of a specified job. 
+ * */
 .factory('AjaxCallService',['$http','$q',function($http,$q){
   return {
   getJobList: function(){
@@ -292,7 +316,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 }])
 
 // a directive below is kind of a hacky solution to
-// the issue of typeahead
+// the issue of typeahead 
 .directive('typeaheadFocus', function (){
   return {
     require: 'ngModel',
@@ -504,7 +528,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       },
       {
         "key": 'jobid',
-        "type":"input", // this should be a number
+        "type":"number",
         "condition": "model.check['jobid']",
         "popover":'Allocate resources as the specified job id. NOTE: Only valid for user root.',
         "delete": $scope.delete,

@@ -111,8 +111,8 @@ BASE_CONFIG = {
             },
             "jobid": {
                 "title": "jobid",
-                "type": "string",
-                "pattern": "^[0-9]+$",
+                "type": "number",
+                "minimum": 0, 
             },
             "no-kill": {
                 "title": "no-kill",
