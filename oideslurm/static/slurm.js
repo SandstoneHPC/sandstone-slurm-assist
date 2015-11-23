@@ -5,7 +5,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   /* Angular Schema Form uses $templateCache for user defined template html. Therefore modification to template files has to occur here.*/
   $templateCache.put('/static/slurm/templates/custom_elements/custom_input.html','<div class=\"form-group schema-form-{{form.type}} {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess(), \'has-feedback\': form.feedback !== false }\"> <label class=\"control-label {{form.labelHtmlClass}}\" ng-class=\"{\'sr-only\': !showTitle()}\" for=\"{{form.key.slice(-1)[0]}}\">{{form.title}}</label><div class=\"input-group\"> <input ng-show=\"form.key\" type=\"{{form.type}}\" step=\"any\" sf-changed=\"form\" placeholder=\"{{form.placeholder}}\" class=\"form-control {{form.fieldHtmlClass}}\" id=\"{{form.key.slice(-1)[0]}}\" ng-model-options=\"form.ngModelOptions\" sf-field-model ng-disabled=\"form.readonly\" schema-validate=\"form\" name=\"{{form.key.slice(-1)[0]}}\" aria-describedby=\"{{form.key.slice(-1)[0] + \'Status\'}}\"> <span ng-if=\"hasError() || hasSuccess()\" id=\"{{form.key.slice(-1)[0] + \'Status\'}}\" class=\"sr-only\">{{ hasSuccess() ? \'(success)\' : \'(error)\' }}</span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span></div></div>');
   $templateCache.put('/static/slurm/templates/custom_elements/custom_checkbox.html','<div class=\"checkbox schema-form-checkbox {{form.htmlClass}}\"> <label class=\"{{form.labelHtmlClass}}\"> <div class=\"input-group\"> <input type=\"checkbox\" sf-changed=\"form\" ng-disabled=\"form.readonly\" sf-field-model ng-model-options=\"form.ngModelOptions\" schema-validate=\"form\" class=\"{{form.fieldHtmlClass}}\" name=\"{{form.key.slice(-1)[0]}}\"> <span ng-bind-html=\"form.title\"></span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span> </div> </label> </div>');
-
+  $templateCache.put('/static/slurm/templates/custom_elements/custom_select.html','<div class=\"form-group schema-form-{{form.type}} {{form.htmlClass}}\" ng-class=\"{\'has-error\': form.disableErrorState !== true && hasError(), \'has-success\': form.disableSuccessState !== true && hasSuccess(), \'has-feedback\': form.feedback !== false }\"> <label class=\"control-label {{form.labelHtmlClass}}\" ng-class=\"{\'sr-only\': !showTitle()}\" for=\"{{form.key.slice(-1)[0]}}\">{{form.title}}</label><div class=\"input-group\"> <select ng-show=\"form.key\" sf-changed=\"form\" placeholder=\"{{form.placeholder}}\" class=\"form-control {{form.fieldHtmlClass}}\" id=\"{{form.key.slice(-1)[0]}}\" ng-model-options=\"form.ngModelOptions\" sf-field-model ng-disabled=\"form.readonly\" ng-options=\"item.value as item.name group by item.group for item in form.titleMap\" schema-validate=\"form\" name=\"{{form.key.slice(-1)[0]}}\" aria-describedby=\"{{form.key.slice(-1)[0] + \'Status\'}}\"></select><span ng-if=\"hasError() || hasSuccess()\" id=\"{{form.key.slice(-1)[0] + \'Status\'}}\" class=\"sr-only\">{{ hasSuccess() ? \'(success)\' : \'(error)\' }}</span> <span class=\"input-group-btn\"> <button class=\"btn btn-default\" type=\"button\" popover=\"{{form.popover}}\" popover-placement=\"left\"> <i class=\"fa fa-question\"></i> </button> <button class=\"btn btn-default\" type=\"button\" ng-click=\"form.delete(form.key)\" ng-disabled=\"form.disabled\"> <i class=\"fa fa-times\"></i> </button> </span></div></div>');
   }])
 
 .config(['$stateProvider','$urlRouterProvider', 'schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfBuilderProvider','sfPathProvider',
@@ -68,6 +68,12 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     sfBuilderProvider.stdBuilders // List of builder functions to apply.
   );
 
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',         // Name of the decorator you want to add to.
+    'select',                    // Form type that should render this add-on
+    '/static/slurm/templates/custom_elements/custom_select.html',    // Template name in $templateCache
+    sfBuilderProvider.stdBuilders // List of builder functions to apply.
+  );
 }])
 
 
@@ -189,7 +195,11 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 }
 ])
 
-.factory('ModalService',['$modal','FormService',function($modal,FormService){
+/* ModalService provides functions that open a modal.
+ * serviceUnitEstimate is a function that returns an object containing the limits
+ * of time and node and the estimated service unit value (timeLimit * nodeLimit).
+ * */
+.factory('ModalService',['$modal','FormService','$log',function($modal,FormService,$log){
    var timeLimits = {
     "crc-himem": 14*24,
     "crc-seria": 14*24,
@@ -208,11 +218,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   };
   
   var serviceUnitEstimate = function(){
-    var seconds = "(:[0-5][0-9])";
-    var minutes = "([0-5][0-9])";
+    var seconds = ":([0-5][0-9])";
+    var minutes = ":([0-5][0-9])";
     var hours   = "(2[0-3]|[01][0-9])";
-    var days    = "([1-9]|[1-9]+[0-9])"
-
+    var days    = "(\\d{2})-";
+    
+    /*
+    * These defaults values are based on janus qos. One may change this later for different qoses.
+    *  */
     var defaultTimeLimit = timeLimits["janus"];
     var defaultNodeLimit = nodeLimits["janus"];
     var timeLimit = 0;
@@ -221,24 +234,19 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
     //----Get time limit-------------------------------------
     if (model["time"] === undefined){
-      timeLimit = defaultTimeLimit;
+	timeLimit = defaultTimeLimit;
     }
 
     else{
-      /* minutes or minutes:seconds */
-      if (RegExp("^" + minutes + seconds + "?" + "$").test(model["time"])){
-        var match = RegExp("^" + minutes + seconds + "?" + "$").exec(model["time"]);
-        timeLimit = parseInt(match[1])/60;
-      }
       /* hours:minutes:seconds */
-      else if (RegExp("^" + hours + ":" + minutes + seconds + "$").test(model["time"])){
-        var match = RegExp("^" + hours + ":" + minutes + seconds + "$").exec(model["time"]);
+      if (RegExp("^" + hours  + minutes + seconds + "$").test(model["time"])){
+	var match = RegExp("^" + hours + minutes + seconds + "$").exec(model["time"]);
         timeLimit = parseInt(match[1]) + parseInt(match[2])/60;
       }
-      /* days-hours:minutes?seconds? */
-      else if (RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").test(model["time"])){
-        var match = RegExp("^" + days +"-"+ hours + "(:" + minutes + ")?" + seconds + "?" + "$").exec(model["time"]);
-        timeLimit = parseInt(match[1])*24 + parseInt(match[2]);
+      /* days-hours:minutes:seconds */
+      else if (RegExp("^" + days + hours + minutes + seconds + "$").test(model["time"])){
+        var match = RegExp("^" + days + hours + minutes + seconds + "$").exec(model["time"]);
+	timeLimit = parseInt(match[1])*24 + parseInt(match[2]);
       }
 
     }
@@ -249,9 +257,9 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     }
 
     else {
-      var match = /(^[1-9]\d*)(-[1-9]\d*)?$/.exec(model["nodes"]);
-      if (match[2] === undefined) nodeLimit = parseInt(match[1]);
-      else nodeLimit = -1*parseInt(match[2]); // notice the minus sign.
+      var match = /^[1-9]\d*$/.exec(model["nodes"]);
+      $log.debug(match);
+      nodeLimit = parseInt(match[0]);
     };
 
     return {
@@ -299,24 +307,25 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       size: 'lg',
       controller:'SaveAndSubmitScriptCtrl',
     });
-  },
-  ShowResult: function (result) {
-    var submittModal = $modal.open({
-      templateUrl: '/static/slurm/templates/modals/result_modal.html',
-      controller:'ShowResultCtrl',
-      resolve:{
+    },
+     ShowResult: function (result) {
+       var submittModal = $modal.open({
+        templateUrl: '/static/slurm/templates/modals/result_modal.html',
+        controller:'ShowResultCtrl',
+        resolve:{
         submission_result: function(){
 	   return result;
 	}
       }
     });
-  }
-
-};
+    }
+  };
 }])
 
-// a directive below is kind of a hacky solution to
-// the issue of typeahead 
+/* a directive below is kind of a hacky solution to the issue of typeahead.
+ * For more information, refer to the following page:
+ * http://stackoverflow.com/questions/24764802/angular-js-automatically-focus-input-and-show-typeahead-dropdown-ui-bootstra
+*/
 .directive('typeaheadFocus', function (){
   return {
     require: 'ngModel',
@@ -347,6 +356,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
   };
 })
+
 .controller('SbatchCtrl', ['$scope','FormService','$log','config',function($scope,FormService,$log,config) {
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.qosOptions = FormService.formFieldsObj.qosOptions;
@@ -355,6 +365,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
   $scope.formModel["qos"] = $scope.qosSelected;
 
+  // changing the qos 
   $scope.changeQos = function() {
     console.log("Changed qos!");
     FormService.changeQos($scope.qosSelected);
@@ -374,7 +385,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       required.forEach(function(e,i,array){
         scope.formModel.check[e] = true;
         scope.form.forEach(function(e2,i2,array){
-          if (e2.key === e) {               // if the key is in required
+          if (e2.key === e) {           // if the key is in required
             array[i2].disabled = true;  // disable the delete function
           }
         });
@@ -383,6 +394,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   };
 
   $scope.delete =function (key){$scope.formModel.check[key] = false;};
+
+  // $scope.defaultForm defines the input form
   $scope.defaultForm = [
       {
         "key": "array",
@@ -395,7 +408,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       },
       {
         "key": "account",
-        // "type":"input",
+        "type":"select",
         "condition": "model.check.account",
         "popover":"Charge resources used by this job to specified account. The account is an arbitrary string. The account name may be changed after job submission using the scontrol command.",
         "delete": $scope.delete,
