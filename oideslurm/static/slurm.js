@@ -676,7 +676,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     function(newVal,oldVal){
       FormService.formFieldsObj.invalid = newVal;
     });
-
+  
   $scope.onEnter = function($event) {
     if ($event.which===13){
         $scope.formModel.check[$scope.selected] = true;
@@ -686,16 +686,24 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 }])
 .controller('DirectivesCtrl', ['$scope','FormService','ScriptService','$log',function($scope,FormService,ScriptService,$log) {
-  // This function distinguishes boolean values and "no option" string from other options
+  
+  /* This function distinguishes boolean values and "no option" string from other options, i.e.
+   * it returns an empty string '' if the input s is boolean value or s matches 'no option' (only used 
+   * by get-user-env), otherwise returns '=' + s. */
   var noBoolean = function (s){ return ((typeof s === 'boolean')||(/^([nN]o[\s\-][oO]ptions?)$/.test(s)))?  '' : '=' + s; };
+  
   $scope.aceModelDirectives = ScriptService.SbatchDirectives;
   $scope.directivesObj = FormService.formFieldsObj.formModel;
+
+  /* This watches directivesObj, namely formModel. If formModel in SbatchCtrl is updated,
+     $scope.$watch detects the change and propagates it to directivesObj. */
   $scope.$watch('directivesObj', function(newVal, oldVal){
-  var dirString = '';
+
+    var dirString = '';
 
     for (var k in newVal) {
       if ((typeof newVal[k] !== 'undefined') && (newVal[k] !== '') && (k !== 'check') && (newVal[k] !== false)) {
-        dirString += '#SBATCH --' + k.replace(/([A-Z])/g,function(whole,s1){return '-'+s1.toLowerCase();}) + noBoolean(newVal[k]) + '\n';
+        dirString += '#SBATCH --' + k + noBoolean(newVal[k]) + '\n';
       }
     }
     $scope.aceModelDirectives.script = dirString;
