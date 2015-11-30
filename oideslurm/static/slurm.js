@@ -717,11 +717,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 }])
 
 
+
 .controller('controlBar',['$scope','$modal','FormService','ScriptService','ModalService','$log',function($scope,$modal,FormService,ScriptService,ModalService,$log){
 
   // For disabling the submit button
   $scope.formFieldsObj = FormService.formFieldsObj;
 
+  /* Functions below are used for displaying a modal for each of tasks
+   * (save, load and submit a script and show the estimated service unit).*/
   $scope.loadScript = ModalService.loadScript; 
   $scope.saveScript = ModalService.saveScript;
   $scope.estimate = ModalService.estimate;
@@ -821,15 +824,15 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
          if (/^#SBATCH/.test(script[i])){
            // and if a command takes some optional parameters (e.g. --begin=12:00)
            if (/--[a-z/-]+=/.test(script[i])){
+
              var command = script[i].split('--')[1].split("=")[0];
              var args = script[i].split('--')[1].split("=")[1];
-             //camelize the command
-             //command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             
              if (command === "qos"){
                $scope.formModel[command] = args;
                FormService.formFieldsObj.qosSelected = args;
-               console.log(FormService.formFieldsObj.qosSelected,args);
              }
+
              else {
                $scope.formModel.check[command] = true;
                if($scope.schema.properties[command].type === 'string'){
@@ -846,8 +849,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
              var command = script[i].split('--')[1].split(" ")[0];
              var x = script[i].split('--')[1]  // this should look like "nodes  10"
              var args = x.split(" ")[x.split(' ').length-1];
-             //camelize the command
-             //command = command.replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+
              if (command === "qos"){
                $scope.formModel[command] = args;
                FormService.formFieldsObj.qosSelected = args;
@@ -865,10 +867,12 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
            // else, namely the command does not take any options (e.g. --immediate, --requeue)
            else {
-             //camelize the command
-             var command = script[i].split('--')[1].replace(/-([a-z])/g,function(whole,s1){return s1.toUpperCase();});
+             var command = script[i].split('--')[1];
              $scope.formModel.check[command] = true;
-             if (command === "getUserEnv") $scope.formModel[command] = "no option";
+	     /* Since get-user-env can be either with or without parameters, we need to distinguish 
+              * one from antoher. Here, we assume if the parameters are not specified, the modal value 
+              * should contain "no option". */
+             if (command === "get-user-env") $scope.formModel[command] = "no option";
              else $scope.formModel[command] = true;
            }
          }
@@ -1010,11 +1014,13 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 })
 .controller('SaveAndSubmitScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,ModalService,$http,$log){
   
+  // For displaying the result modal 
   $scope.ShowResult = ModalService.ShowResult;
 
   $scope.SbatchDirectives = ScriptService.SbatchDirectives;
   $scope.SbatchScript = ScriptService.SbatchScript;
   $scope.treeData = {};
+
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
    .success(function(data, status, headers, config) {
@@ -1115,11 +1121,13 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 			$log.debug("Successful Submission");
 			result.status = "Success";
 			result.description = "Successful Submission";
+			// open the result modal with the description
 			$scope.ShowResult(result); 
 	      }).error(function(data, status, header, config){
 			$log.error("Submission Failed", data ,status, header, config);
 			result.status = "Error";
 			result.description = data;
+			// open the result modal with the description
 			$scope.ShowResult(result);
 	      });
 
@@ -1155,11 +1163,13 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 			$log.debug("Successful Submission");
 			result.status = "Success";
 			result.description = "Successful Submission";
+			// open the result modal with the description
 			$scope.ShowResult(result);
 		}).error(function(data, status, header, config){
 			$log.error("Submission Failed", data ,status, header, config);
 			result.status = "Error";
 			result.description = data;
+			// open the result modal with the description
 			$scope.ShowResult(result);
 		});
               });
@@ -1174,14 +1184,19 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
    $modalInstance.dismiss('cancel');
  };
 })
+
 .controller('ShowResultCtrl',function($scope,$modalInstance,submission_result){
    $scope.result = submission_result;
 })
+/* JobListCtrl deals with displaying the information of submitted jobs. AjaxCallService is injected into this,
+ * enabling JobListCtrl to fetch job info from the back-end.
+ * */
 .controller('JobListCtrl', ['$scope','$modal','AjaxCallService', function ($scope,$modal,AjaxCallService) {
 
     $scope.rowCollection = [];
     $scope.displayCollection = [];
 
+    // Get the list of jobs with their infomation
     $scope.getJobList = function () {
       var promise = AjaxCallService.getJobList();
       promise.then(function(data){
@@ -1189,7 +1204,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         $scope.displayCollection = [].concat($scope.rowCollection);
       });
     };
-
+    
+    // open a modal with detail for a specified job (= row).
     $scope.getDetail = function (row) {
       var detailModal = $modal.open({
         templateUrl: '/static/slurm/templates/modals/detail_modal.html',
@@ -1199,7 +1215,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         }
       });
     };
-
+    
+    //This function is used to sort the jobs based on their status.
     $scope.getters = {
       State: function(value){
          var ordered_states = ["PENDING","RUNNING","SUSPENDED","CANCELLED","COMPLETING",
