@@ -651,16 +651,6 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.defaultUpdate($scope);
 
 
-  // $scope.$watchCollection watches $scope.form and if a new element is pushed into the array
-  // or an existing one is deleted, it broadcasts "schemaFormRedraw" to schemaForm and renders
-  // the form fileds .
-  $scope.$watchCollection("form",function(newVal,oldVal){
-    $scope.options = newVal.map(function(e){return e.key;});
-    console.log("New field added.");
-    $scope.$broadcast("schemaFormRedraw");
-    $scope.$broadcast("schemaFormValidate");
-  });
-
   // This watches the value of selected qos
   $scope.$watch(
     function(){ return FormService.formFieldsObj.qosSelected;}
