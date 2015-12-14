@@ -25,10 +25,14 @@ APP_SPECIFICATION = {
 }
 
 account_cmd = 'sacctmgr list ass user=$(whoami) -P -n format=account'
-user_accounts = subprocess.check_output(
-                        account_cmd,
-                        shell=True,
-                        ).split()
+
+try:
+	user_accounts = subprocess.check_output(
+        	                account_cmd,
+        	                shell=True,
+        	                ).split()
+except:
+	user_accounts = ["dummy account"]
 
 BASE_CONFIG = {
         "type": "object",
