@@ -26,6 +26,7 @@ var selectQos = function(index) {
 describe("SBATCH builder", function (){
   browser.get('/#/slurm');
   // testing if the change in selected qos propagates to ace-editor (SBATCH Directives)
+
   selectQos(0);
   selectQos(1);
   selectQos(2);
@@ -121,6 +122,42 @@ describe("SBATCH builder", function (){
     // click the 'save' button
     var saveFile = element(by.buttonText('Save File As'));
     saveFile.click();
+    browser.sleep(3000);
+  });
+
+  it('should be able to load a saved script', function(){
+    browser.get('/#/slurm');
+
+    var loadButton = element(by.id('load-button'));
+    loadButton.click();
+    browser.sleep(1000);
+
+    // expand the file tree
+    var fileNode = element.all(by.css('.tree-branch-head')).first();
+    fileNode.click();
+    browser.sleep(1000);
+
+    // select the folder at the top
+    var folder = element.all(by.css('.tree-label')).first();
+    folder.click();
+    browser.sleep(1000);
+
+    // for each element (either a folder or file ) in the top directory
+    element.all(by.css('ul.ng-scope > li ul.ng-scope > li'))
+      .each(function (e){
+        // get the name of the element
+        e.$('.tree-label span').getText().then(function(name){
+          if (name === "test.sh")
+          {
+            e.$('.tree-label').click();
+          }
+        });
+      });
+
+
+    // click the 'save' button
+    var loadFile = element(by.buttonText('Load File'));
+    loadFile.click();
     browser.sleep(3000);
   });
 
