@@ -29,8 +29,6 @@ describe("SBATCH builder", function (){
   selectQos(0);
   selectQos(1);
   selectQos(2);
-  selectQos(3);
-  selectQos(4);
 
   it('should have a value on the ace-editor',function (){
     browser.get('/#/slurm');
@@ -84,6 +82,46 @@ describe("SBATCH builder", function (){
     expect(el_array.isPresent()).toBe(false);
     browser.sleep(1500);
 
+  });
+
+  it('should be able to save a script', function(){
+    browser.get('/#/slurm');
+
+    var el_nodes = element(by.model("model['nodes']"));
+    // write 12 to node field
+    el_nodes.sendKeys('12');
+
+    var SBATCH_SCRIPT = element(by.id('ace-script'));
+    var text_input = SBATCH_SCRIPT.$('textarea.ace_text-input');
+
+    // write TEST to a textarea of SBATCH SCRIPT
+    browser.actions().doubleClick(SBATCH_SCRIPT).perform();
+    text_input.sendKeys('TEST');
+    browser.sleep(1000);
+
+    var saveButton = element(by.id('save-button'));
+    saveButton.click();
+    browser.sleep(1000);
+
+    // expand the file tree
+    var fileNode = element.all(by.css('.tree-branch-head')).first();
+    fileNode.click();
+    browser.sleep(1000);
+
+    // select the folder at the top
+    var folder = element.all(by.css('.tree-label')).first();
+    folder.click();
+    browser.sleep(1000);
+
+    // name the new scipt as 'test.sh'
+    var fileName = element(by.model("newFile.filename"));
+    fileName.sendKeys("test.sh");
+    browser.sleep(1000);
+
+    // click the 'save' button
+    var saveFile = element(by.buttonText('Save File As'));
+    saveFile.click();
+    browser.sleep(3000);
   });
 
 });
