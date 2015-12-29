@@ -26,7 +26,7 @@ var selectQos = function(index) {
 describe("SBATCH builder", function (){
   browser.get('/#/slurm');
   // testing if the change in selected qos propagates to ace-editor (SBATCH Directives)
-  
+
   selectQos(0);
   selectQos(1);
   selectQos(2);
@@ -34,7 +34,7 @@ describe("SBATCH builder", function (){
   it('should have a value on the ace-editor',function (){
     browser.get('/#/slurm');
     var el = element(by.model("model['nodes']"));
-    browser.sleep(1500);
+
     // type "1" in a form field "nodes".
     var numberOfNodes = '1';
     el.sendKeys(numberOfNodes);
@@ -43,7 +43,7 @@ describe("SBATCH builder", function (){
       expect(nodes.split("=")[1]).toBe(numberOfNodes);
     });
     // cheking the submit button
-    browser.sleep(1500);
+    expect(element(by.id('submit-button')).isEnabled()).toBe(true);
   });
 
   it('should NOT have a value on the ace-editor since the value is invalid',function (){
@@ -57,8 +57,8 @@ describe("SBATCH builder", function (){
       var shouldBeUndefined = text.split("\n")[1];
       expect(shouldBeUndefined).toBe(undefined);
     });
-    // cheking the submit button
-    browser.sleep(1500);
+    // cheking the submit button (in this case it should be disabled since node's value is invalid)
+    expect(element(by.id('submit-button')).isEnabled()).toBe(false);
   });
 
   it('should add a new form field and delete it', function(){
