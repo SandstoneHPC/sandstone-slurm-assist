@@ -26,7 +26,7 @@ var selectQos = function(index) {
 describe("SBATCH builder", function (){
   browser.get('/#/slurm');
   // testing if the change in selected qos propagates to ace-editor (SBATCH Directives)
-
+  
   selectQos(0);
   selectQos(1);
   selectQos(2);
@@ -122,7 +122,7 @@ describe("SBATCH builder", function (){
     // click the 'save' button
     var saveFile = element(by.buttonText('Save File As'));
     saveFile.click();
-    browser.sleep(3000);
+    browser.sleep(1000);
   });
 
   it('should be able to load a saved script', function(){
@@ -154,11 +154,34 @@ describe("SBATCH builder", function (){
         });
       });
 
-
     // click the 'save' button
     var loadFile = element(by.buttonText('Load File'));
     loadFile.click();
-    browser.sleep(3000);
+    browser.sleep(1000);
+
+    var scriptText = element(by.id('ace-script')).$('.ace_content');
+    var directivesText = element(by.id('ace-directives')).$('.ace_content');
+
+    scriptText.getText().then(function(text){
+      /*
+        Text should look like:
+        #!/bin/bash
+        TEST
+      */
+      expect(text.split("\n")[0]).toBe('#!/bin/bash');
+      expect(text.split("\n")[1]).toBe('TEST');
+    });
+
+    directivesText.getText().then(function(text){
+      /*
+      Text should look like:
+      #SBATCH --qos=janus-long
+      #SBATCH --nodes=12
+      */
+      expect(text.split("\n")[0]).toBe('#SBATCH --qos=janus-long');
+      expect(text.split("\n")[1]).toBe('#SBATCH --nodes=12');
+    });
+
   });
 
 });
