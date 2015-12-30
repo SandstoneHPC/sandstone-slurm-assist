@@ -21,6 +21,7 @@ APP_SPECIFICATION = {
         'bower_components/angular-schema-form/dist/schema-form.js',
         'bower_components/angular-schema-form-bootstrap/bootstrap-decorator.min.js',
         'bower_components/angular-smart-table/dist/smart-table.min.js',
+	'bower_components/angular-mocks/angular-mocks.js',
     ),
 }
 
@@ -116,7 +117,7 @@ BASE_CONFIG = {
             "jobid": {
                 "title": "jobid",
                 "type": "number",
-                "minimum": 0, 
+                "minimum": 0,
             },
             "no-kill": {
                 "title": "no-kill",

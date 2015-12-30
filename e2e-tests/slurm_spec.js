@@ -23,7 +23,39 @@ var selectQos = function(index) {
   });
 };
 
+
 describe("SBATCH builder", function (){
+
+  beforeEach(function() {
+    browser.addMockModule('httpMocker', function() {
+      angular.module('httpMocker', ['oide.slurm','ngMockE2E'])
+      .run(function($httpBackend) {
+
+        $httpBackend.whenGET(/.*/).passThrough();
+        $httpBackend.whenGET('/test').respond('THIS IS A TEST');
+        var dummy =[{
+          JobID:'1',
+          Start:"Unknown",
+          End:"Unknown",
+          State:"Unknown",
+          AllocCPUS:"Unknown",
+          QOS:"Unknown",
+          NodeList:"Unknown",
+          TotalCPU:"Unknown",
+          CPUTime:"Unknown",
+          NNodes:"Unknown"
+        }];
+
+        $httpBackend.whenGET(
+          '/slurm/a/jobs')
+          .respond(function(method,url,data,headers){
+            return [200,dummy,{}];
+          });
+
+      })
+    })
+  });
+
   browser.get('/#/slurm');
   // testing if the change in selected qos propagates to ace-editor (SBATCH Directives)
 
@@ -31,7 +63,23 @@ describe("SBATCH builder", function (){
   selectQos(1);
   selectQos(2);
 
+  it('should have the name of selecte qos', function() {
+
+    selectDropdownbyNum(3)
+    browser.get('/slurm/a/jobs'); // not properly refered to the dummy 
+    browser.sleep(50000);
+    // refer to https://technpol.wordpress.com/2013/12/01/protractor-and-dropdowns-validation/
+    var el = element(by.model('qosSelected')).$('option:checked');
+    element(by.css('div.ace_content')).getText().then(function(text) {
+      el.getText().then(function(selectedText){
+        expect(text.split("=")[1]).toBe(selectedText);
+      });
+
+    });
+  });
+
   it('should have a value on the ace-editor',function (){
+
     browser.get('/#/slurm');
     var el = element(by.model("model['nodes']"));
 

@@ -10,6 +10,7 @@
 	"angular-sanitize":"",
 	"tv4":"",
 	"objectpath":"",  
-	"angular-smart-table":""
+	"angular-smart-table":"",
+	"angular-mocks":""
   }
 }
