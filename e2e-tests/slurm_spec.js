@@ -10,7 +10,7 @@ var selectDropdownbyNum = function (optionNum) {
 };
 
 var selectQos = function(index) {
-  it('should have the name of selecte qos', function() {
+  it('should have the name of selected qos', function() {
     selectDropdownbyNum(index);
     // refer to https://technpol.wordpress.com/2013/12/01/protractor-and-dropdowns-validation/
     var el = element(by.model('qosSelected')).$('option:checked');
@@ -25,49 +25,33 @@ var selectQos = function(index) {
 
 
 describe("SBATCH builder", function (){
-
+  var mockModule;
   beforeEach(function() {
-    browser.addMockModule('httpMocker', function() {
-      angular.module('httpMocker', ['oide.slurm','ngMockE2E'])
-      .run(function($httpBackend) {
-
-        $httpBackend.whenGET(/.*/).passThrough();
-        $httpBackend.whenGET('/test').respond('THIS IS A TEST');
-        var dummy =[{
-          JobID:'1',
-          Start:"Unknown",
-          End:"Unknown",
-          State:"Unknown",
-          AllocCPUS:"Unknown",
-          QOS:"Unknown",
-          NodeList:"Unknown",
-          TotalCPU:"Unknown",
-          CPUTime:"Unknown",
-          NNodes:"Unknown"
-        }];
-
-        $httpBackend.whenGET(
-          '/slurm/a/jobs')
-          .respond(function(method,url,data,headers){
-            return [200,dummy,{}];
-          });
-
-      })
-    })
+    mockModule = require('./mock.js');
+    browser.addMockModule('httpMocker',mockModule.readModule);
   });
 
   browser.get('/#/slurm');
-  // testing if the change in selected qos propagates to ace-editor (SBATCH Directives)
 
+  // testing if the change in selected qos propagates to ace-editor (SBATCH Directives)
   selectQos(0);
   selectQos(1);
-  selectQos(2);
+
+  it('should get a fake JSON object from a fake mocked back-end', function(){
+    browser.get('/#/slurm');
+    element.all(by.css('ul.nav-tabs > li')).then(function(items){
+      items[1].click();
+      element.all(by.repeater('row in displayCollection')).then(function(tableItems){
+        expect(tableItems.length).toBe(2);
+      });
+    });
+
+
+  });
 
   it('should have the name of selecte qos', function() {
-
+    browser.get('/#/slurm');
     selectDropdownbyNum(3)
-    browser.get('/slurm/a/jobs'); // not properly refered to the dummy 
-    browser.sleep(50000);
     // refer to https://technpol.wordpress.com/2013/12/01/protractor-and-dropdowns-validation/
     var el = element(by.model('qosSelected')).$('option:checked');
     element(by.css('div.ace_content')).getText().then(function(text) {
@@ -231,5 +215,7 @@ describe("SBATCH builder", function (){
     });
 
   });
+
+
 
 });
