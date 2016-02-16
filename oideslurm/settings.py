@@ -162,7 +162,7 @@ BASE_CONFIG = {
             "output": {
                 "title": "output",
                 "type": "string",
-                "pattern": "^([a-zA-Z0-9_-]|%[AajNu])+\\.[a-zA-Z]+$",
+                "pattern": "^(\/(.+)+\/)*(\w+)(\.(\w+))*",
             },
             "qos": {
                 "title": "qos",
