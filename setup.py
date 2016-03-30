@@ -4,13 +4,13 @@ from setuptools import find_packages
 
 setup(
     name='oide-slurm-assist',
-    version='0.7.2',
+    version='0.7.3',
     author=u'Zebula Sampedro',
     author_email='sampedro@colorado.edu',
     packages=find_packages(),
     include_package_data=True,
     url='https://github.com/ResearchComputing/oide-slurm-assist',
-    license='AGPLv3, see LICENSE',
+    license='MIT, see LICENSE',
     description="Online Integrated Development Environment (OIDE) - Slurm Assist App",
     long_description=open('DESCRIPTION.rst').read(),
     zip_safe=False,
@@ -19,7 +19,7 @@ setup(
         'jsonschema>=2.5.1',
     ],
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: Unix',
@@ -27,7 +27,7 @@ setup(
         'Topic :: Software Development :: Build Tools',
         'Topic :: Text Editors :: Integrated Development Environments (IDE)',
         'Topic :: Terminals :: Terminal Emulators/X Terminals',
-        'License :: OSI Approved :: GNU Affero General Public License v3',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: JavaScript',
     ],
