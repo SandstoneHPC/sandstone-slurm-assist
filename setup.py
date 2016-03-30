@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='oide-slurm-assist',
-    version='0.0.dev1',
+    version='0.7.2',
     author=u'Zebula Sampedro',
     author_email='sampedro@colorado.edu',
     packages=find_packages(),
@@ -12,7 +12,7 @@ setup(
     url='https://github.com/ResearchComputing/oide-slurm-assist',
     license='AGPLv3, see LICENSE',
     description="Online Integrated Development Environment (OIDE) - Slurm Assist App",
-    long_description=open('README.md').read(),
+    long_description=open('DESCRIPTION.rst').read(),
     zip_safe=False,
     install_requires=[
         'oide',

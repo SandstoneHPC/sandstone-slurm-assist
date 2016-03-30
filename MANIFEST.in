@@ -1,4 +1,5 @@
-include AUTHORS CHANGES README.md INSTALL LICENSE
-recursive-include oideslurm *
-exclude .git
-recursive-exclude .gitignore
+include AUTHORS CHANGES README.md INSTALL LICENSE DESCRIPTION.rst
+recursive-esclude oideslurm *.pyc
+recursive-include oideslurm *.py *.html *.js *.css
+prune .git
+prune .gitignore
