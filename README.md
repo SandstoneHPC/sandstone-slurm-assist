@@ -14,6 +14,9 @@ Install the python package (a virtualenv is recommended):
 ```
 python setup.py install
 ```
+
+Now, add `oideslurm` to the `INSTALLED_APPS` settings tuple in your `oide_settings.py` file.
+
 The OIDE, which will now include the OIDE Slurm Assist app, can now be run with the following command:
 ```
 oide
