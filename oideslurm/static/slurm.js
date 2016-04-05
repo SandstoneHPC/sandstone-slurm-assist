@@ -730,7 +730,43 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.schema = FormService.formFieldsObj.qosSchema;
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.SbatchScript = ScriptService.SbatchScript;
-  $scope.treeData = {};
+  $scope.treeData = {
+    filetreeContents: [],
+    selectedNodes: []
+  };
+
+  $scope.sd = {
+    noSelections: true,
+    multipleSelections: false,
+    dirSelected: false
+  };
+
+  $scope.loadFile = {};
+  $scope.invalidFilepath = false;
+
+  $scope.$watch(function(){
+    return $scope.treeData.selectedNodes;
+  }, function(newValue){
+    // $scope.newFile = newValue[0];
+    if(newValue.length == 0) {
+      return;
+    }
+    $scope.updateSelection(newValue[0]);
+  });
+
+  $scope.updateSelection = function (node, selected) {
+    var index = node.filepath.lastIndexOf('/')+1;
+    var filepath = node.filepath.substring(0,index);
+    var filename = node.filepath.substring(index,node.filepath.length);
+    var fileExtension = '';
+    if (filename.length >= 7) {
+      fileExtension = filename.substring(filename.length-6,filename.length);
+    }
+    $scope.loadFile.filepath = node.filepath;
+    $scope.loadFile.filename = node.filename;
+    $scope.invalidFilepath = false;
+  };
+
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
    .success(function(data, status, headers, config) {
@@ -761,8 +797,6 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
          $log.error('Failed to grab dir contents from ',node.filepath);
        });
  };
- $scope.loadFile = {};
- $scope.invalidFilepath = false;
 
  $scope.updateSaveName = function (node, selected) {
    $scope.invalidFilepath = false;
@@ -802,7 +836,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
      else delete $scope.formModel[k];
    }
 
-   $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
+  //  $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
    $modalInstance.close($scope.loadFile);
    $http
      .get('/filebrowser/localfiles' + $scope.loadFile.filepath)
