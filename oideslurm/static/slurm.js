@@ -43,7 +43,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
       }
     });
 
-  /* Code below registers the custom templates and overrides the default field 
+  /* Code below registers the custom templates and overrides the default field
    * types, such as input, checkbox and number with the newly defined ones.
    * Note that /static/slurm/templates/custom_elements/custom_*.html is just a referece name
    * to the template. It does not import the template (it's defined at $templateCache).*/
@@ -78,11 +78,11 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 
 .factory('FormService', ['$http', function ($http) {
-  
+
   /* formFieldsObj contains necessary objects such as formModel, qosSchema etc.
-   * and is shared among several controllers*/ 
+   * and is shared among several controllers*/
   var formFieldsObj = {};
-  
+
   // check is used for checking if a specific field is selected by a user.
   var check = {
     'array':false,
@@ -113,14 +113,14 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     'requeue':false,
     'time':false
   };
-  /* formModel should contain model values for the form. The only exception is check, 
-   * which is basically used to show form fields selected by a user. 
+  /* formModel should contain model values for the form. The only exception is check,
+   * which is basically used to show form fields selected by a user.
    * */
   formFieldsObj.formModel = {check:check};
   formFieldsObj.qosSchema = {};
   formFieldsObj.qosSelected = undefined;
   formFieldsObj.invalid = true;
-  
+
   /* getFormSchema is a fucntion that retrieves a schema config from back-end.
    * Note that this is an asynchronous function.
    * */
@@ -134,7 +134,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
           formFieldsObj.qosSchema = formFieldsObj.schemas[formFieldsObj.qosSelected];
         });
     };
-  
+
   /* changeQos takes a newQos as an argument then select a scheme corresponding to the new qos*/
   var changeQos = function (newQos) {
       formFieldsObj.qosSchema = formFieldsObj.schemas[newQos];
@@ -162,7 +162,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 /* AjaxCallService provides functions that basically return a promise object.
  * This service is used in JobListCtrl in which one can retrieve a list of submitted
- * jobs and the detail of a specified job. 
+ * jobs and the detail of a specified job.
  * */
 .factory('AjaxCallService',['$http','$q',function($http,$q){
   return {
@@ -216,13 +216,13 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     "ipcc"     : 4
 
   };
-  
+
   var serviceUnitEstimate = function(){
     var seconds = ":([0-5][0-9])";
     var minutes = ":([0-5][0-9])";
     var hours   = "(2[0-3]|[01][0-9])";
     var days    = "(\\d{2})-";
-    
+
     /*
     * These defaults values are based on janus qos. One may change this later for different qoses.
     *  */
@@ -365,7 +365,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
   $scope.formModel["qos"] = $scope.qosSelected;
 
-  // changing the qos 
+  // changing the qos
   $scope.changeQos = function() {
     console.log("Changed qos!");
     FormService.changeQos($scope.qosSelected);
@@ -666,7 +666,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
     function(newVal,oldVal){
       FormService.formFieldsObj.invalid = newVal;
     });
-  
+
   $scope.onEnter = function($event) {
     if ($event.which===13){
         $scope.formModel.check[$scope.selected] = true;
@@ -676,12 +676,12 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
 }])
 .controller('DirectivesCtrl', ['$scope','FormService','ScriptService','$log',function($scope,FormService,ScriptService,$log) {
-  
+
   /* This function distinguishes boolean values and "no option" string from other options, i.e.
-   * it returns an empty string '' if the input s is boolean value or s matches 'no option' (only used 
+   * it returns an empty string '' if the input s is boolean value or s matches 'no option' (only used
    * by get-user-env), otherwise returns '=' + s. */
   var noBoolean = function (s){ return ((typeof s === 'boolean')||(/^([nN]o[\s\-][oO]ptions?)$/.test(s)))?  '' : '=' + s; };
-  
+
   $scope.aceModelDirectives = ScriptService.SbatchDirectives;
   $scope.directivesObj = FormService.formFieldsObj.formModel;
 
@@ -715,7 +715,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
   /* Functions below are used for displaying a modal for each of tasks
    * (save, load and submit a script and show the estimated service unit).*/
-  $scope.loadScript = ModalService.loadScript; 
+  $scope.loadScript = ModalService.loadScript;
   $scope.saveScript = ModalService.saveScript;
   $scope.estimate = ModalService.estimate;
   $scope.SaveAndSubmit = ModalService.SaveAndSubmit;
@@ -730,7 +730,43 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
   $scope.schema = FormService.formFieldsObj.qosSchema;
   $scope.formModel = FormService.formFieldsObj.formModel;
   $scope.SbatchScript = ScriptService.SbatchScript;
-  $scope.treeData = {};
+  $scope.treeData = {
+    filetreeContents: [],
+    selectedNodes: []
+  };
+
+  $scope.sd = {
+    noSelections: true,
+    multipleSelections: false,
+    dirSelected: false
+  };
+
+  $scope.loadFile = {};
+  $scope.invalidFilepath = false;
+
+  $scope.$watch(function(){
+    return $scope.treeData.selectedNodes;
+  }, function(newValue){
+    // $scope.newFile = newValue[0];
+    if(newValue.length == 0) {
+      return;
+    }
+    $scope.updateSelection(newValue[0]);
+  });
+
+  $scope.updateSelection = function (node, selected) {
+    var index = node.filepath.lastIndexOf('/')+1;
+    var filepath = node.filepath.substring(0,index);
+    var filename = node.filepath.substring(index,node.filepath.length);
+    var fileExtension = '';
+    if (filename.length >= 7) {
+      fileExtension = filename.substring(filename.length-6,filename.length);
+    }
+    $scope.loadFile.filepath = node.filepath;
+    $scope.loadFile.filename = node.filename;
+    $scope.invalidFilepath = false;
+  };
+
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
    .success(function(data, status, headers, config) {
@@ -761,8 +797,6 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
          $log.error('Failed to grab dir contents from ',node.filepath);
        });
  };
- $scope.loadFile = {};
- $scope.invalidFilepath = false;
 
  $scope.updateSaveName = function (node, selected) {
    $scope.invalidFilepath = false;
@@ -802,7 +836,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
      else delete $scope.formModel[k];
    }
 
-   $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
+  //  $scope.loadFile.filepath = $scope.loadFile.filepath+$scope.loadFile.filename;
    $modalInstance.close($scope.loadFile);
    $http
      .get('/filebrowser/localfiles' + $scope.loadFile.filepath)
@@ -817,7 +851,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 
              var command = script[i].split('--')[1].split("=")[0];
              var args = script[i].split('--')[1].split("=")[1];
-             
+
              if (command === "qos"){
                $scope.formModel[command] = args;
                FormService.formFieldsObj.qosSelected = args;
@@ -859,8 +893,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
            else {
              var command = script[i].split('--')[1];
              $scope.formModel.check[command] = true;
-	     /* Since get-user-env can be either with or without parameters, we need to distinguish 
-              * one from antoher. Here, we assume if the parameters are not specified, the modal value 
+	     /* Since get-user-env can be either with or without parameters, we need to distinguish
+              * one from antoher. Here, we assume if the parameters are not specified, the modal value
               * should contain "no option". */
              if (command === "get-user-env") $scope.formModel[command] = "no option";
              else $scope.formModel[command] = true;
@@ -882,7 +916,29 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 .controller('SaveScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,$http,$log){
   $scope.SbatchDirectives = ScriptService.SbatchDirectives;
   $scope.SbatchScript = ScriptService.SbatchScript;
-  $scope.treeData = {};
+
+  $scope.treeData = {
+    filetreeContents: [],
+    selectedNodes: []
+  };
+
+  $scope.sd = {
+    noSelections: true,
+    multipleSelections: false,
+    dirSelected: false
+  };
+
+  $scope.$watch(function(){
+    return $scope.treeData.selectedNodes;
+  }, function(newValue){
+    if(newValue.length > 0) {
+      $scope.newFile.filepath = newValue[0].filepath;
+      $scope.invalidFilepath = false;
+    } else {
+      $scope.invalidFilepath = true;
+    }
+  });
+
   var initialContents = $http
    .get('/filebrowser/filetree/a/dir')
    .success(function(data, status, headers, config) {
@@ -1003,8 +1059,8 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
  };
 })
 .controller('SaveAndSubmitScriptCtrl',function($scope,$modalInstance,FormService,ScriptService,ModalService,$http,$log){
-  
-  // For displaying the result modal 
+
+  // For displaying the result modal
   $scope.ShowResult = ModalService.ShowResult;
 
   $scope.SbatchDirectives = ScriptService.SbatchDirectives;
@@ -1112,7 +1168,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
 			result.status = "Success";
 			result.description = "Successful Submission";
 			// open the result modal with the description
-			$scope.ShowResult(result); 
+			$scope.ShowResult(result);
 	      }).error(function(data, status, header, config){
 			$log.error("Submission Failed", data ,status, header, config);
 			result.status = "Error";
@@ -1194,7 +1250,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         $scope.displayCollection = [].concat($scope.rowCollection);
       });
     };
-    
+
     // open a modal with detail for a specified job (= row).
     $scope.getDetail = function (row) {
       var detailModal = $modal.open({
@@ -1205,7 +1261,7 @@ angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table'
         }
       });
     };
-    
+
     //This function is used to sort the jobs based on their status.
     $scope.getters = {
       State: function(value){
