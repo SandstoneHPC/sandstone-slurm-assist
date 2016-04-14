@@ -5,11 +5,7 @@
   "license": "AGPLv3",
   "private": true,
   "dependencies": {
-	"angular-schema-form":"",
-	"angular-schema-form-bootstrap":"",
 	"angular-sanitize":"",
-	"tv4":"",
-	"objectpath":"",
 	"angular-smart-table":"",
 	"angular-mocks":""
   }
