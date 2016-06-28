@@ -13,9 +13,9 @@ class FormConfigHandler(BaseHandler):
 
     @sandstone.lib.decorators.authenticated
     def get(self):
-        schema = ConfigLoader.getFormConfigs()
+        form_config = ConfigLoader.getFormConfig()
         ctx = {
-            'formSchema': schema
+            'formConfig': form_config
             }
         self.write(ctx)
 

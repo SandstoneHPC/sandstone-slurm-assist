@@ -233,8 +233,8 @@ FORM_CONFIG = {
     'features': [],
     # [(<str: gname>, <str: type>, <int (optional): count>), ...]
     'gres': [],
-    # Site-specific config to patch base schema with (can be None)
-    'overrides': {
+    # Site-specific queue config
+    'queues': {
         # Key off of (<str: qos>, <str: partition>)
         ('janus-debug',None): {
             # Form is prepopulated with these fields/values (can be None)
@@ -242,13 +242,16 @@ FORM_CONFIG = {
                 'nodes': 1,
                 'time': '00:01:00',
             },
-            # Schema overrides (can be None)
+            # Schema specified here will be used to patch base schema (can be None)
             'schema': {
                 "properties": {
                     "time": {
                         "pattern": "^(00\\-)?(((00):[0-5][0-9]:[0-5][0-9])|(01:00:00))$",
                     },
                 },
+                'required': [
+                    'nodes',
+                ]
             }
         }
     },
