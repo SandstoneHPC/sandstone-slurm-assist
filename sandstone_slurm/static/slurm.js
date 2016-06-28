@@ -1,5 +1,5 @@
 'use strict';
-angular.module('oide.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
+angular.module('sandstone.slurm', ['ui.bootstrap','schemaForm','ui.ace','smart-table', 'ui.router'])
 
 .run(["$templateCache", function($templateCache) {
   /* Angular Schema Form uses $templateCache for user defined template html. Therefore modification to template files has to occur here.*/

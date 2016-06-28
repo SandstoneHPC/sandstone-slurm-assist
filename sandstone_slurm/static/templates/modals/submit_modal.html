@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">Save File As</h3>
+    <h3 class="modal-title">Save & Submit Script</h3>
 </div>
 <div class="modal-body">
   <div class="container-fluid">
@@ -14,13 +14,13 @@
         <label class="col-sm-3 control-label">Save Directory</label>
         <div class="col-sm-6">
           <input class="form-control" type="text" ng-model="newFile.filepath" ng-disabled="true">
-          <!-- <span class="modal-body-message">{{newFilePath}}{{newFileName}}</span> -->
+          <!-- <span class="modal-body-message">{{newFilePath}}{{loadFileName}}</span> -->
         </div>
       </div>
     </form>
     <div class="col-sm-7 col-sm-offset-2">
-      <!-- <treecontrol
-        class="tree-oide"
+      <treecontrol
+        class="tree-sandstone"
         tree-model="treeData.filetreeContents"
         options="treeOptions"
         order-by="type+filename"
@@ -30,19 +30,16 @@
         on-selection="updateSaveName(node, selected)">
         {{node.filename}}
         <span class="filetree-permissions">{{node.permissions}}</span>
-      </treecontrol> -->
-      <div
-        oide-filetree
-        tree-data="treeData" selection-desc="sd" leaf-level="dir"></div>       
+      </treecontrol>
     </div>
   </div>
 </div>
 <div class="modal-footer">
   <button
     class="btn btn-success"
-    ng-click="saveAs()"
+    ng-click="saveAndSubmit()"
     ng-disabled="invalidFilepath">
-    Save File As
+    Save and Submit a Script
   </button>
   <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

@@ -1,0 +1,16 @@
+{
+  "name": "Sandstone HPC - Slurm Assist",
+  "description": "Sandstone HPC - Slurm Assist",
+  "homepage": "https://github.com/SandstoneHPC/sandstone-slurm-assist.git",
+  "license": "AGPLv3",
+  "private": true,
+  "dependencies": {
+	"angular-schema-form":"",
+	"angular-schema-form-bootstrap":"",
+	"angular-sanitize":"",
+	"tv4":"",
+	"objectpath":"",
+	"angular-smart-table":"",
+	"angular-mocks":""
+  }
+}

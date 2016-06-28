@@ -1,17 +1,17 @@
 import tornado.web
 import json
 
-import oide.lib.decorators
-import oideslurm.settings as app_settings
-from oideslurm.mixins.slurm_mixin import SlurmCmdMixin
-from oide.lib.handlers.base import BaseHandler
-from oideslurm.config_utils import ConfigLoader
+import sandstone.lib.decorators
+import sandstone_slurm.settings as app_settings
+from sandstone_slurm.mixins.slurm_mixin import SlurmCmdMixin
+from sandstone.lib.handlers.base import BaseHandler
+from sandstone_slurm.config_utils import ConfigLoader
 
 
 
 class FormConfigHandler(BaseHandler):
 
-    @oide.lib.decorators.authenticated
+    @sandstone.lib.decorators.authenticated
     def get(self):
         schema = ConfigLoader.getFormConfigs()
         ctx = {
@@ -21,7 +21,7 @@ class FormConfigHandler(BaseHandler):
 
 class JobListHandler(BaseHandler,SlurmCmdMixin):
 
-    @oide.lib.decorators.authenticated
+    @sandstone.lib.decorators.authenticated
     def get(self):
         # This method should return all sacct data for
         # the running user.
@@ -30,7 +30,7 @@ class JobListHandler(BaseHandler,SlurmCmdMixin):
         self.write(json_obj)
 
 
-    @oide.lib.decorators.authenticated
+    @sandstone.lib.decorators.authenticated
     def post(self):
         # This method should take the filepath of an
         # sbatch file as an argument, and then schedule
@@ -45,13 +45,13 @@ class JobListHandler(BaseHandler,SlurmCmdMixin):
 
 class JobHandler(BaseHandler,SlurmCmdMixin):
 
-    @oide.lib.decorators.authenticated
+    @sandstone.lib.decorators.authenticated
     def get(self,jobid):
         # This method should retrieve sacct data
         # for the job specified by jobid
         self.write(self.run_sacct(jobid=jobid))
 
-    @oide.lib.decorators.authenticated
+    @sandstone.lib.decorators.authenticated
     def delete(self,jobid):
         # This method should dequeue the job specified
         # by jobid, via scancel.

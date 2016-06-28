@@ -1,40 +1,40 @@
-# oide-slurm-assist
-Slurm scheduler assist app for the OIDE. Currently, this app is set up to handle the particular Slurm configuration employed by Research Computing. Generalization is a work-in-progress.
+# sandstone-slurm-assist
+Slurm scheduler assist app for Sandstone HPC. Currently, this app is set up to handle the particular Slurm configuration employed by Research Computing. Generalization is a work-in-progress.
 
-## Installing OIDE Slurm Assist using PIP
+## Installing Sandstone HPC Slurm Assist using PIP
 
-To install OIDE Slurm Assist using PIP, run:
+To install Sandstone HPC Slurm Assist using PIP, run:
 ```
-pip install oide-slurm-assist
+pip install sandstone-slurm-assist
 ```
 
-Now, add `oideslurm` to the `INSTALLED_APPS` settings tuple in your `oide_settings.py` file.
+Now, add `sandstone_slurm` to the `INSTALLED_APPS` settings tuple in your `sandstone_settings.py` file.
 
-The OIDE, which will now include the OIDE Slurm Assist app, can now be run with the following command:
+Sandstone HPC, which will now include the Slurm Assist app, can now be run with the following command:
 ```
-oide
+sandstone
 ```
-To use the OIDE with Slurm Assist, point your browser to `localhost:8888`.
+To use Sandstone HPC with Slurm Assist, point your browser to `localhost:8888`.
 
 
-## Installing OIDE Slurm Assist from source
+## Installing Slurm Assist from source
 
-The OIDE Slurm Assist requires that you first install [The OIDE](https://github.com/ResearchComputing/OIDE)
+Slurm Assist requires that you first install [Sandstone IDE](https://github.com/SandstoneHPC/sandstone-ide)
 
-Once the OIDE is installed, clone the OIDE Slurm Assist repository and enter the project directory:
+Once the Sandstone IDE is installed, clone the Slurm Assist repository and enter the project directory:
 ```
-git clone https://github.com/ResearchComputing/oide-slurm-assist.git
-cd oide-slurm-assist
+git clone https://github.com/SandstoneHPC/sandstone-slurm-assist.git
+cd sandstone-slurm-assist
 ```
 Install the python package (a virtualenv is recommended):
 ```
 python setup.py install
 ```
 
-Now, add `oideslurm` to the `INSTALLED_APPS` settings tuple in your `oide_settings.py` file.
+Now, add `sandstone_slurm` to the `INSTALLED_APPS` settings tuple in your `sandstone_settings.py` file.
 
-The OIDE, which will now include the OIDE Slurm Assist app, can now be run with the following command:
+Sandstone IDE, which will now include the Slurm Assist app, can now be run with the following command:
 ```
-oide
+sandstone
 ```
-To use the OIDE, point your browser to `localhost:8888`.
+To use Sandstone IDE, point your browser to `localhost:8888`.

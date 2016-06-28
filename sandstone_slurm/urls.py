@@ -1,6 +1,6 @@
-from oideslurm.handlers import FormConfigHandler
-from oideslurm.handlers import JobListHandler
-from oideslurm.handlers import JobHandler
+from sandstone_slurm.handlers import FormConfigHandler
+from sandstone_slurm.handlers import JobListHandler
+from sandstone_slurm.handlers import JobHandler
 
 
 
