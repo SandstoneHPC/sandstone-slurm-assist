@@ -1,11 +1,12 @@
-<div class="spacer"></div>
-<tabset>
-  <tab heading="Schedule">
-    <!-- <div ng-include="'/static/slurm/templates/schedule.html'" style="height:90vh"></div> -->
-    <div ui-view="schedule" style="height:90vh"></div>
-  </tab>
-  <tab heading="Job Status">
-    <!-- <div ng-include="'/static/slurm/templates/job_status.html'" style="height:90vh"></div> -->
-    <div ui-view="jobstatus" style="height:90vh"></div>
-  </tab>
-</tabset>
+<div id="slurm-main" class="row main fill">
+  <div class="col-md-12 fill">
+    <tabset justified="true" type="pills">
+      <tab heading="Schedule">
+        <div class="viewpane schedule-view" ui-view="schedule"></div>
+      </tab>
+      <tab heading="Status">
+        <div class="viewpane status-view" ui-view="status"></div>
+      </tab>
+    </tabset>
+  </div>
+</div>

@@ -15,6 +15,10 @@ APP_SPECIFICATION = {
     ),
     'NG_MODULE_SCRIPTS': (
         'slurm.js',
+        'schedule.controller.js',
+        'status.controller.js',
+        'sa-assistform.directive.js',
+        'sa-sbatchscript.directive.js',
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/angular-smart-table/dist/smart-table.min.js',
 	    'bower_components/angular-mocks/angular-mocks.js',

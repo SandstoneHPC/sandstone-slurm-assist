@@ -1,4 +1,4 @@
-<div ng-controller="JobListCtrl">
+<div>
   <table st-table="displayCollection" st-safe-src="rowCollection" class="table table-striped">
     <thead>
     <tr>
@@ -9,7 +9,7 @@
       <th> <button type="button" class="btn btn-primary" ng-click="getJobList()">Update</button></th>
     </tr>
     </thead>
- 
+
     <tbody>
     <tr ng-repeat="row in displayCollection">
       <td>{{row.State}}</td>
@@ -29,4 +29,3 @@
       </tr>
     </tfoot>
   </table>
-

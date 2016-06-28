@@ -1,32 +1,28 @@
 <div class="row partial-fill">
-  <div id="assist-col-left" class="col-md-6 main assist-col">
-    <div id="directive-section" class="col-md-12" ui-view="directives">
-    </div>
-    <div id="script-section" class="col-md-12" ui-view="sbatchscript">
-    </div>
+  <div id="sched-col-left" class="col-md-6 main sched-col">
+    <div sa-sbatch-script></div>
   </div>
-  <div id="assist-col-right" class="col-md-6 main assist-col">
-    <h1 class="lead text-uppercase">
-      sbatch builder
-    </h1>
-    <div id="builder-form-container" ui-view="sbatch"></div>
+  <div id="sched-col-right" class="col-md-6 main sched-col">
+    <div sa-assist-form schema="ctrl.schema" form="ctrl.form"></div>
   </div>
-  <div class="col-md-12" ng-controller="controlBar">
-    <div id="assist-button-panel" class="well well-lg">
+
+  <div class="col-md-12">
+    <div id="sched-button-panel" class="well well-lg">
       <div class="btn-group btn-group-justified" role="group">
         <div class="btn-group" role="group">
-          <button type="button" id="save-button" class="btn btn-default assist-button" ng-click="saveScript()">Save Script for Later</button>
+          <button type="button" id="save-button" class="btn btn-default sched-button">Save Script for Later</button>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" id="load-button" class="btn btn-default assist-button" ng-click="loadScript()">Load Saved Script</button>
+          <button type="button" id="load-button" class="btn btn-default sched-button">Load Saved Script</button>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" id="estimate-button" class="btn btn-default assist-button" ng-click="estimate()">Service Unit Estimate</button>
+          <button type="button" id="estimate-button" class="btn btn-default sched-button">Service Unit Estimate</button>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" id="submit-button" class="btn btn-success assist-button" ng-disabled="formFieldsObj.invalid" ng-click="SaveAndSubmit()">Schedule Job</button>
+          <button type="button" id="submit-button" class="btn btn-success sched-button">Schedule Job</button>
         </div>
       </div>
     </div>
   </div>
+
 </div>

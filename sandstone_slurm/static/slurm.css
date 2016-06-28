@@ -1,57 +1,64 @@
-.partial-fill {
-  height: 98%;
+/*
+ * Main content
+ */
+
+/*.main {
+  padding: 20px;
 }
-.ace-schedule {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  height: 90%;
+@media (min-width: 768px) {
+  .main {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
 }
-.assist-col {
-  height: 90%
-}
-.popover {
-  max-height: 20vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  width: 200px;
-  margin-top: 1%;
-}
-.control-label {
-  font-weight: normal !important;
+.main .page-header {
+  margin-top: 0;
+}*/
+
+.viewpane {
+  width: 100%;
+  padding: 10px;
 }
 
-.tabset, .tab-content, .tab-pane, .tabbable {
-  height: 90vh;
-}
-.tab-content {
-  padding-left: 30px;
-  padding-right: 30px;
+#slurm-main .nav-pills > li.active > a {
+  border-color: #93c54b;
+  color: #93c54b;
+  background-color: white;
 }
 
-.spacer {
-  height: 15px;
+.viewpane.schedule-view {
+  height: 88vh;
 }
 
-#assist-button-panel {
-  margin-left: 25px;
-  margin-right: 25px;
+.viewpane.status-view {
+  height: 88vh;
+  /*overflow-y: auto;*/
 }
-#builder-form-container {
-  height: 90% !important;
-  overflow-y: scroll;
+
+/*
+ * Script Editor Styles
+  */
+.sa-script-panel {
+
 }
-#qos-select {
-  margin-bottom: 20px;
+.sa-script-label {
+  color: #888888;
 }
-#directive-section {
-  height: 46%;
+.sa-directives {
+  height: 30vh;
+  overflow-y: auto;
+  border-bottom-color: transparent;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-bottom: 0px;
+}
+.sa-script-editor {
+  border: 1px solid #cccccc;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin-top: 0px;
   margin-bottom: 10px;
-}
-#script-section {
-  height: 46%;
-  margin-top: 20px;
-}
-#top-drop-down .dropdown-menu{
-  max-height: 40vh;
-  overflow-y: scroll;
+  height: 40vh;
 }
