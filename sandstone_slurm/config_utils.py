@@ -16,18 +16,18 @@ class ConfigLoader:
         full_config = {}
         feat = form_config.get('features',[])
         gres = form_config.get('gres',[])
-        # Queues must be defined
-        queues = form_config.get('queues')
+        # profiles must be defined
+        profiles = form_config.get('profiles')
 
         full_config['features'] = feat
         full_config['gres'] = gres
-        full_config['queues'] = {}
+        full_config['profiles'] = {}
 
-        for k,v in queues.iteritems():
-            full_config['queues'][k] = {}
+        for k,v in profiles.iteritems():
+            full_config['profiles'][k] = {}
             temp = copy.deepcopy(base_schema)
             if 'defaults' in v:
-                full_config['queues'][k]['defaults'] = v['defaults']
+                full_config['profiles'][k]['defaults'] = v['defaults']
             if 'schema' in v:
                 try:
                     temp['required'] = v['schema']['required']
@@ -41,6 +41,6 @@ class ConfigLoader:
                     pass
 
             Draft4Validator.check_schema(temp)
-            full_config['queues'][k]['schema'] = temp
+            full_config['profiles'][k]['schema'] = temp
 
         return full_config

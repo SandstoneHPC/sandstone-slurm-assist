@@ -1,0 +1,36 @@
+<div
+  class="panel sa-assistform-panel">
+  <form>
+    <div class="form-group">
+      <label>Select Profile</label>
+      <div class="input-group">
+        <select
+          class="form-control"
+          ng-model="selectedProfile"
+          ng-required="true"
+          ng-change="selectProfile()"
+          ng-options="p for p in getProfiles()"></select>
+        <div class="input-group-addon">
+          <i class="fa fa-question-circle" aria-hidden="true"></i>
+        </div>
+      </div>
+    </div>
+    <div
+      class="form-group"
+      ng-show="selectedProfile!=''">
+      <label>Add Directives</label>
+      <input
+        type="text"
+        class="form-control"
+        ng-model="selected"
+        typeahead="p for p in getProperties() | filter:$viewValue">
+      <span class="pull-right help-block">Hit enter to add</span>
+    </div>
+      <div
+        class="input-group"
+        ng-repeat="field in fields track by $index"
+        ng-include="'/static/slurm/templates/fields/sa-field-' + field.type + '.html'">
+      </div>
+    </div>
+  </form>
+</div>

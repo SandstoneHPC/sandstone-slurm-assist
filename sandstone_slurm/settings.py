@@ -20,6 +20,7 @@ APP_SPECIFICATION = {
         'status.controller.js',
         'sa-assistform.directive.js',
         'sa-sbatchscript.directive.js',
+        'typeaheadfocus.directive.js',
         'bower_components/angular-sanitize/angular-sanitize.min.js',
         'bower_components/angular-smart-table/dist/smart-table.min.js',
 	    'bower_components/angular-mocks/angular-mocks.js',
@@ -63,6 +64,10 @@ BASE_CONFIG = {
                 "type": "string",
                 "pattern": "^(2[0-3]|[01][0-9]):[0-5][0-9]$",
                 'description': 'Specifies the interval between creating checkpoints of the job step. By default, the job step will have no checkpoints created. Acceptable time formats include "minutes", "minutes:seconds", "hours:minutes:seconds", "days-hours", "days-hours:minutes" and "days-hours:minutes:seconds".',
+            },
+            "cluster": {
+                "title": "cluster",
+                "type": "string",
             },
             "checkpoint-dir": {
                 "title": "checkpoint-dir",
@@ -217,7 +222,7 @@ FORM_CONFIG = {
     # [(<str: gname>, <str: type>, <int (optional): count>), ...]
     'gres': [],
     # Site-specific queue config
-    'queues': {
+    'profiles': {
         # Key off of <str: qos,partition>
         'janus-debug,': {
             # Form is prepopulated with these fields/values (can be None)

@@ -36,6 +36,16 @@
 }
 
 /*
+ * Schedule Styles
+  */
+.sched-col {
+  height: 76vh;
+}
+.sched-col.sched-col-right {
+  overflow-y: scroll;
+}
+
+/*
  * Script Editor Styles
   */
 .sa-script-panel {
@@ -62,3 +72,7 @@
   margin-bottom: 10px;
   height: 40vh;
 }
+
+/*
+ * Assist Form Styles
+ */
