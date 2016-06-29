@@ -24,6 +24,7 @@ class ConfigLoader:
         full_config['queues'] = {}
 
         for k,v in queues.iteritems():
+            full_config['queues'][k] = {}
             temp = copy.deepcopy(base_schema)
             if 'defaults' in v:
                 full_config['queues'][k]['defaults'] = v['defaults']
