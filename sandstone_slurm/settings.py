@@ -15,6 +15,7 @@ APP_SPECIFICATION = {
     ),
     'NG_MODULE_SCRIPTS': (
         'slurm.js',
+        'schedule.service.js',
         'schedule.controller.js',
         'status.controller.js',
         'sa-assistform.directive.js',
@@ -217,8 +218,8 @@ FORM_CONFIG = {
     'gres': [],
     # Site-specific queue config
     'queues': {
-        # Key off of (<str: qos>, <str: partition>)
-        ('janus-debug',None): {
+        # Key off of <str: qos,partition>
+        'janus-debug,': {
             # Form is prepopulated with these fields/values (can be None)
             'defaults': {
                 'nodes': 1,

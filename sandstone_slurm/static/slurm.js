@@ -12,12 +12,12 @@ angular.module('sandstone.slurm', ['ui.bootstrap','ui.ace','smart-table','ui.rou
       },
       'schedule@slurm': {
         templateUrl: '/static/slurm/templates/schedule.html',
-        controller: 'ScheduleCtrl as ctrl'
-        // resolve: {
-        //   config: function(FormService) {
-        //     return FormService.getFormSchema();
-        //   }
-        // }
+        controller: 'ScheduleCtrl as ctrl',
+        resolve: {
+          formConfig: function(ScheduleService) {
+            return ScheduleService.loadFormConfig();
+          }
+        }
       },
       'status@slurm': {
         templateUrl: '/static/slurm/templates/status.html',
