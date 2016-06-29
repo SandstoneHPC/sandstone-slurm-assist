@@ -1,36 +1,42 @@
 <div
   class="panel sa-assistform-panel">
   <form>
-    <div class="form-group">
-      <label>Select Profile</label>
-      <div class="input-group">
-        <select
-          class="form-control"
-          ng-model="selectedProfile"
-          ng-required="true"
-          ng-change="selectProfile()"
-          ng-options="p for p in getProfiles()"></select>
-        <div class="input-group-addon">
-          <i class="fa fa-question-circle" aria-hidden="true"></i>
+    <fieldset>
+      <div class="form-group">
+        <label>Select Profile</label>
+        <div class="input-group">
+          <select
+            class="form-control"
+            ng-model="selectedProfile"
+            ng-required="true"
+            ng-change="selectProfile()"
+            ng-options="p for p in getProfiles()"></select>
+          <div class="input-group-addon">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </div>
         </div>
       </div>
-    </div>
-    <div
-      class="form-group"
-      ng-show="selectedProfile!=''">
-      <label>Add Directives</label>
-      <input
-        type="text"
-        class="form-control"
-        ng-model="selected"
-        typeahead="p for p in getProperties() | filter:$viewValue">
-      <span class="pull-right help-block">Hit enter to add</span>
-    </div>
       <div
-        class="input-group"
+        class="form-group"
+        ng-show="selectedProfile!=''">
+        <label>Add Directives</label>
+        <input
+          typeahead-focus
+          type="text"
+          class="form-control"
+          ng-keypress="onTypeaheadKey($event)"
+          ng-model="selectedProp"
+          typeahead="p for p in getProperties() | filter:$viewValue:emptyOrMatch">
+        <span class="pull-right help-block">Hit enter to add</span>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>&nbsp;</legend>
+      <div
+        class="form-group"
         ng-repeat="field in fields track by $index"
         ng-include="'/static/slurm/templates/fields/sa-field-' + field.type + '.html'">
       </div>
-    </div>
+    </fieldset>
   </form>
 </div>

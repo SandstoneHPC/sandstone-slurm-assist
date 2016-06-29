@@ -1,0 +1,21 @@
+<label>{{field.title}}</label>
+<div class="input-group">
+  <select
+    class="form-control"
+    ng-if="field.hasOwnProperty('enum')"
+    ng-model="form[field.title]"
+    ng-required="true"
+    ng-options="o for o in field.enum"></select>
+  <input
+    class="form-control"
+    ng-if="!field.hasOwnProperty('enum')"
+    ng-model="form[field.title]"
+    ng-required="true"
+    ng-pattern="field.pattern">
+  <div class="input-group-addon">
+    <i class="fa fa-question-circle" aria-hidden="true"></i>
+  </div>
+  <div class="input-group-addon">
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </div>
+</div>

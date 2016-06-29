@@ -12,6 +12,23 @@ angular.module('sandstone.slurm')
     templateUrl: '/static/slurm/templates/sa-assistform.html',
     controller: function($scope,$element,$timeout) {
       $scope.selectedProfile = '';
+      $scope.fields = [];
+
+      $scope.onTypeaheadKey = function($event) {
+        if ($event.which===13){
+          var sel = $scope.selectedProp;
+          var propSchema;
+          try {
+            propSchema = $scope
+                .config.profiles[$scope.selectedProfile]
+                .schema.properties[sel];
+            $scope.fields.push(propSchema);
+            $scope.selectedProp = '';
+          } catch(err) {
+            return;
+          }
+        }
+      };
 
       $scope.getProperties = function() {
         var props = [];
