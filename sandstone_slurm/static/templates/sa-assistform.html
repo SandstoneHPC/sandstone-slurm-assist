@@ -1,13 +1,16 @@
 <div
   class="panel sa-assistform-panel">
-  <form>
+  <form name="form">
     <fieldset>
-      <div class="form-group">
+      <div
+        class="form-group"
+        ng-class="{'has-error':form.selectedProfile.$invalid}">
         <label>Select Profile</label>
         <div class="input-group">
           <select
             class="form-control"
-            ng-model="selectedProfile"
+            name="selectedProfile"
+            ng-model="sbatch.selectedProfile"
             ng-required="true"
             ng-change="selectProfile()"
             ng-options="p for p in getProfiles()"></select>
@@ -18,7 +21,7 @@
       </div>
       <div
         class="form-group"
-        ng-show="selectedProfile!=''">
+        ng-show="sbatch.selectedProfile!=''">
         <label>Add Directives</label>
         <input
           typeahead-focus
@@ -33,7 +36,6 @@
     <fieldset>
       <legend>&nbsp;</legend>
       <div
-        class="form-group"
         ng-repeat="field in fields track by $index"
         ng-include="'/static/slurm/templates/fields/sa-field-' + field.type + '.html'">
       </div>

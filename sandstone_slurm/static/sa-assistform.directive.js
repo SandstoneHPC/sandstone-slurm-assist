@@ -7,11 +7,11 @@ angular.module('sandstone.slurm')
     restrict: 'A',
     scope: {
       config: '=',
-      form: '='
+      sbatch: '='
     },
     templateUrl: '/static/slurm/templates/sa-assistform.html',
     controller: function($scope,$element,$timeout) {
-      $scope.selectedProfile = '';
+      $scope.sbatch.selectedProfile = '';
       $scope.fields = [];
 
       $scope.onTypeaheadKey = function($event) {
@@ -20,7 +20,7 @@ angular.module('sandstone.slurm')
           var propSchema;
           try {
             propSchema = $scope
-                .config.profiles[$scope.selectedProfile]
+                .config.profiles[$scope.sbatch.selectedProfile]
                 .schema.properties[sel];
             $scope.fields.push(propSchema);
             $scope.selectedProp = '';
@@ -33,7 +33,7 @@ angular.module('sandstone.slurm')
       $scope.getProperties = function() {
         var props = [];
         try {
-          for (var p in $scope.config.profiles[$scope.selectedProfile].schema.properties) props.push(p);
+          for (var p in $scope.config.profiles[$scope.sbatch.selectedProfile].schema.properties) props.push(p);
         } catch(err) {}
         return props;
       };

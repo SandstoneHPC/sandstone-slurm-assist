@@ -6,5 +6,5 @@ angular.module('sandstone.slurm')
   var self = this;
 
   self.formConfig = ScheduleService.getFormConfig();
-  self.form = {};
+  self.sbatch = {};
 }]);
