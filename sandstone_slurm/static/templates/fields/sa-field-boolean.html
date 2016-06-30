@@ -12,11 +12,19 @@
         ng-readonly="field.readonly">
         {{field.title}}
     </label>
-    <div class="sa-assist-help-btn pull-right">
-      <i class="fa fa-times" aria-hidden="true"></i>
+    <div
+      class="sa-assist-help-btn pull-right"
+      ng-hide="config.profiles[selectedProfile].schema.required.indexOf(title)>=0">
+      <button class="btn"><i class="fa fa-times" aria-hidden="true"></i></button>
     </div>
     <div class="sa-assist-help-btn pull-right">
-      <i class="fa fa-question-circle" aria-hidden="true"></i>
+      <button
+        class="btn"
+        popover-placement="left"
+        popover="{{title}}: {{field.description}}"
+        popover-title="{{title}}">
+        <i class="fa fa-question-circle" aria-hidden="true"></i>
+      </button>
     </div>
   </div>
 </div>

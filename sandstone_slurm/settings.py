@@ -293,6 +293,7 @@ FORM_CONFIG = {
                     'nodes',
                 ]
             }
-        }
+        },
+        'scavenger': {},
     },
 }
