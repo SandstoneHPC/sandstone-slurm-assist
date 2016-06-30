@@ -1,0 +1,22 @@
+<div
+  ng-init="title=field.title"
+  ng-class="{'has-error':form[title].$invalid}">
+  <div class="checkbox">
+    <label>
+      <input
+        type="checkbox"
+        name="{{title}}"
+        ng-model="sbatch[field.title]"
+        ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+        ng-pattern="field.pattern"
+        ng-readonly="field.readonly">
+        {{field.title}}
+    </label>
+    <div class="sa-assist-help-btn pull-right">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+    <div class="sa-assist-help-btn pull-right">
+      <i class="fa fa-question-circle" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>

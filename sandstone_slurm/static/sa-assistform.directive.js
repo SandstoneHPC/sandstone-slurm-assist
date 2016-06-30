@@ -11,7 +11,7 @@ angular.module('sandstone.slurm')
     },
     templateUrl: '/static/slurm/templates/sa-assistform.html',
     controller: function($scope,$element,$timeout) {
-      $scope.sbatch.selectedProfile = '';
+      $scope.selectedProfile = '';
       $scope.fields = [];
 
       $scope.onTypeaheadKey = function($event) {
@@ -20,7 +20,7 @@ angular.module('sandstone.slurm')
           var propSchema;
           try {
             propSchema = $scope
-                .config.profiles[$scope.sbatch.selectedProfile]
+                .config.profiles[$scope.selectedProfile]
                 .schema.properties[sel];
             $scope.fields.push(propSchema);
             $scope.selectedProp = '';
@@ -33,7 +33,11 @@ angular.module('sandstone.slurm')
       $scope.getProperties = function() {
         var props = [];
         try {
-          for (var p in $scope.config.profiles[$scope.sbatch.selectedProfile].schema.properties) props.push(p);
+          for (var p in $scope.config.profiles[$scope.selectedProfile].schema.properties) {
+            if (!$scope.form.hasOwnProperty(p)) {
+              props.push(p);
+            }
+          }
         } catch(err) {}
         return props;
       };
@@ -46,6 +50,21 @@ angular.module('sandstone.slurm')
 
       $scope.selectProfile = function() {
         // Update schema, transfer values
+        $scope.fields = [];
+
+        var prof = $scope.config.profiles[$scope.selectedProfile];
+        if (prof.schema.hasOwnProperty('required')) {
+          for (var i=0;i<prof.schema.required.length;i++) {
+            $scope.fields.push(prof.schema.properties[prof.schema.required[i]]);
+          }
+        }
+        if (prof.hasOwnProperty('initial')) {
+          for (var i=0;i<prof.initial.length;i++) {
+            if (prof.schema.required.lastIndexOf(prof.initial[i]) < 0) {
+              $scope.fields.push(prof.schema.properties[prof.initial[i]]);
+            }
+          }
+        }
       };
     }
   };

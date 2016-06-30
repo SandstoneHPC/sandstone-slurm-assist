@@ -1,0 +1,25 @@
+<div
+  class="form-group"
+  ng-init="title=field.title"
+  ng-class="{'has-error':form[title].$invalid}">
+  <label>{{field.title}}</label>
+  <div class="input-group">
+    <input
+      class="form-control"
+      type="number"
+      name="{{title}}"
+      min="{{field.minimum}}"
+      max="{{field.maximum}}"
+      step="1"
+      ng-model="sbatch[field.title]"
+      ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+      ng-readonly="field.readonly"
+      ng-required="true">
+    <div class="input-group-addon">
+      <i class="fa fa-question-circle" aria-hidden="true"></i>
+    </div>
+    <div class="input-group-addon">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+  </div>
+</div>

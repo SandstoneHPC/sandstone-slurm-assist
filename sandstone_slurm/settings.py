@@ -198,8 +198,11 @@ BASE_CONFIG = {
             "qos": {
                 "title": "qos",
                 "type": "string",
-                "pattern": "^(janus(-long|-debug)?|himem|crestone|gpu)$",
-                "readonly": True,
+                'description': '',
+            },
+            "partition": {
+                "title": "partition",
+                "type": "string",
                 'description': '',
             },
             "requeue": {
@@ -223,21 +226,70 @@ FORM_CONFIG = {
     'gres': [],
     # Site-specific queue config
     'profiles': {
-        # Key off of <str: qos,partition>
-        'janus-debug,': {
-            # Form is prepopulated with these fields/values (can be None)
-            'defaults': {
-                'nodes': 1,
-                'time': '00:01:00',
-            },
+        # Key off of <str: profile_name>
+        'janus-debug': {
+            # Form is prepopulated with these fields (can be None)
+            'initial': [
+                'nodes',
+                'time',
+            ],
             # Schema specified here will be used to patch base schema (can be None)
             'schema': {
                 "properties": {
+                    "qos": {
+                        "readonly": True,
+                        "default": "janus-debug",
+                    },
+                    "partition": {
+                        "readonly": True,
+                    },
+                    "cluster": {
+                        "readonly": True,
+                        "default": "janus",
+                    },
+                    "nodes": {
+                        "default": 1,
+                    },
                     "time": {
                         "pattern": "^(00\\-)?(((00):[0-5][0-9]:[0-5][0-9])|(01:00:00))$",
                     },
                 },
+                # Form must contain these fields (can be None)
                 'required': [
+                    'qos',
+                    'cluster',
+                    'nodes',
+                ]
+            }
+        },
+        'janus-long': {
+            # Form is prepopulated with these fields (can be None)
+            'initial': [
+                'nodes',
+                'time',
+            ],
+            # Schema specified here will be used to patch base schema (can be None)
+            'schema': {
+                "properties": {
+                    "qos": {
+                        "readonly": True,
+                        "default": "janus-long",
+                    },
+                    "partition": {
+                        "readonly": True,
+                    },
+                    "cluster": {
+                        "readonly": True,
+                        "default": "janus",
+                    },
+                    "nodes": {
+                        "default": 3,
+                    },
+                },
+                # Form must contain these fields (can be None)
+                'required': [
+                    'qos',
+                    'cluster',
                     'nodes',
                 ]
             }

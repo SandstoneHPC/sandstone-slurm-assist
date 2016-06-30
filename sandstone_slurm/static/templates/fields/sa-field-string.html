@@ -6,17 +6,22 @@
   <div class="input-group">
     <select
       class="form-control"
+      name="{{title}}"
       ng-if="field.hasOwnProperty('enum')"
-      ng-model="form[field.title]"
-      ng-required="true"
-      ng-options="o for o in field.enum"></select>
+      ng-model="sbatch[field.title]"
+      ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+      ng-options="o for o in field.enum"
+      ng-readonly="field.readonly"
+      ng-required="true"></select>
     <input
       class="form-control"
       name="{{title}}"
       ng-if="!field.hasOwnProperty('enum')"
       ng-model="sbatch[field.title]"
-      ng-required="true"
-      ng-pattern="field.pattern">
+      ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+      ng-pattern="field.pattern"
+      ng-readonly="field.readonly"
+      ng-required="true">
     <div class="input-group-addon">
       <i class="fa fa-question-circle" aria-hidden="true"></i>
     </div>

@@ -26,8 +26,8 @@ class ConfigLoader:
         for k,v in profiles.iteritems():
             full_config['profiles'][k] = {}
             temp = copy.deepcopy(base_schema)
-            if 'defaults' in v:
-                full_config['profiles'][k]['defaults'] = v['defaults']
+            if 'initial' in v:
+                full_config['profiles'][k]['initial'] = v['initial']
             if 'schema' in v:
                 try:
                     temp['required'] = v['schema']['required']

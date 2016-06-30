@@ -76,3 +76,22 @@
 /*
  * Assist Form Styles
  */
+#sa-assist-form .checkbox {
+  margin-bottom: 15px;
+}
+#sa-assist-form .checkbox > label {
+   margin-bottom: 10px;
+   margin-top: 15px;
+   font-weight: bold;
+}
+.sa-assist-help-btn {
+  padding: 15px 16px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #3e3f3a;
+  text-align: center;
+  background-color: #f8f5f0;
+  border: 1px solid #dfd7ca;
+  border-radius: 4px;
+}
