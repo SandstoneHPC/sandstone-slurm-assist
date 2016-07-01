@@ -17,6 +17,7 @@ APP_SPECIFICATION = {
         'slurm.js',
         'schedule.service.js',
         'schedule.controller.js',
+        'status.service.js',
         'status.controller.js',
         'sa-assistform.directive.js',
         'sa-sbatchscript.directive.js',
