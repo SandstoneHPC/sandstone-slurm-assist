@@ -12,7 +12,7 @@
       max="{{field.maximum}}"
       step="1"
       ng-model="sbatch[field.title]"
-      ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+      ng-init="sbatch[field.title]=field.default"
       ng-readonly="field.readonly"
       ng-required="true">
       <div class="input-group-addon sa-assist-help-btn">

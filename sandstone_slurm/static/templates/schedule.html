@@ -1,25 +1,52 @@
 <div class="row partial-fill">
   <div id="sched-col-left" class="col-md-6 main sched-col">
-    <div sa-sbatch-script sbatch="ctrl.sbatch"></div>
+    <div sa-sbatch-script sbatch="ctrl.sbatch" sbatch-script="ctrl.script"></div>
   </div>
   <div id="sched-col-right" class="col-md-6 main sched-col">
-    <div sa-assist-form config="ctrl.formConfig" sbatch="ctrl.sbatch"></div>
+    <div
+      sa-assist-form
+      config="ctrl.formConfig"
+      sbatch="ctrl.sbatch"
+      form="ctrl.form">
+    </div>
   </div>
 
   <div class="col-md-12">
     <div id="sched-button-panel" class="well well-lg">
       <div class="btn-group btn-group-justified" role="group">
         <div class="btn-group" role="group">
-          <button type="button" id="save-button" class="btn btn-default sched-button">Save Script for Later</button>
+          <button
+            id="save-button"
+            type="button"
+            class="btn btn-default sched-button">
+            Save Script for Later
+          </button>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" id="load-button" class="btn btn-default sched-button">Load Saved Script</button>
+          <button
+            id="load-button"
+            type="button"
+            class="btn btn-default sched-button">
+            Load Saved Script
+          </button>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" id="estimate-button" class="btn btn-default sched-button">Service Unit Estimate</button>
+          <button
+            id="estimate-button"
+            type="button"
+            class="btn btn-default sched-button">
+            Service Unit Estimate
+          </button>
         </div>
         <div class="btn-group" role="group">
-          <button type="button" id="submit-button" class="btn btn-success sched-button">Schedule Job</button>
+          <button
+            id="submit-button"
+            type="button"
+            class="btn btn-success sched-button"
+            ng-click="ctrl.saveScript()"
+            ng-disabled="ctrl.form.$invalid">
+            Schedule Job
+          </button>
         </div>
       </div>
     </div>

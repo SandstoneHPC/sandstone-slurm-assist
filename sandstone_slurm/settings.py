@@ -266,7 +266,6 @@ FORM_CONFIG = {
             # Form is prepopulated with these fields (can be None)
             'initial': [
                 'nodes',
-                'time',
             ],
             # Schema specified here will be used to patch base schema (can be None)
             'schema': {

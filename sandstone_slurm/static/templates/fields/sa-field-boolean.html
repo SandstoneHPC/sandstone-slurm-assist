@@ -7,7 +7,7 @@
         type="checkbox"
         name="{{title}}"
         ng-model="sbatch[field.title]"
-        ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+        ng-init="sbatch[field.title]=field.default"
         ng-pattern="field.pattern"
         ng-readonly="field.readonly">
         {{field.title}}

@@ -7,16 +7,13 @@ angular.module('sandstone.slurm')
     restrict: 'A',
     scope: {
       config: '=',
-      sbatch: '='
+      sbatch: '=',
+      form: '='
     },
     templateUrl: '/static/slurm/templates/sa-assistform.html',
     controller: function($scope,$element,$timeout) {
       $scope.selectedProfile = '';
       $scope.fields = [];
-
-      var addField = function(fieldName) {
-
-      };
 
       $scope.removeField = function(field) {
         var i;
@@ -62,19 +59,27 @@ angular.module('sandstone.slurm')
       };
 
       $scope.selectProfile = function() {
-        // Update schema, transfer values
+        var k;
         $scope.fields = [];
-
+        $scope.sbatch = {};
         var prof = $scope.config.profiles[$scope.selectedProfile];
         if (prof.schema.hasOwnProperty('required')) {
           for (var i=0;i<prof.schema.required.length;i++) {
-            $scope.fields.push(prof.schema.properties[prof.schema.required[i]]);
+            k = prof.schema.required[i];
+            $scope.fields.push(prof.schema.properties[k]);
+            if (prof.schema.properties[k].hasOwnProperty('default')) {
+              $scope.sbatch[k] = prof.schema.properties[k].default;
+            }
           }
         }
         if (prof.hasOwnProperty('initial')) {
           for (var i=0;i<prof.initial.length;i++) {
             if (prof.schema.required.lastIndexOf(prof.initial[i]) < 0) {
-              $scope.fields.push(prof.schema.properties[prof.initial[i]]);
+              k = prof.initial[i];
+              $scope.fields.push(prof.schema.properties[k]);
+              if (prof.schema.properties[k].hasOwnProperty('default')) {
+                $scope.sbatch[k] = prof.schema.properties[k].default;
+              }
             }
           }
         }

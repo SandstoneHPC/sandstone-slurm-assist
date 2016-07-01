@@ -9,7 +9,7 @@
       name="{{title}}"
       ng-if="field.hasOwnProperty('enum')"
       ng-model="sbatch[field.title]"
-      ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+      ng-init="sbatch[field.title]=field.default"
       ng-options="o for o in field.enum"
       ng-readonly="field.readonly"
       ng-required="true"></select>
@@ -18,7 +18,7 @@
       name="{{title}}"
       ng-if="!field.hasOwnProperty('enum')"
       ng-model="sbatch[field.title]"
-      ng-init="sbatch[field.title]=sbatch[field.title]||field.default"
+      ng-init="sbatch[field.title]=field.default"
       ng-pattern="field.pattern"
       ng-readonly="field.readonly"
       ng-required="true">

@@ -6,11 +6,13 @@ angular.module('sandstone.slurm')
   return {
     restrict: 'A',
     scope: {
-      sbatch: '='
+      sbatch: '=',
+      sbatchScript: '='
     },
     templateUrl: '/static/slurm/templates/sa-sbatchscript.html',
     controller: function($scope,$element,$timeout) {
       $scope.directives = '#!/bin/bash\n';
+      $scope.script = '# Add your script below\n# ex: "srun echo $(hostname)"\n'
 
       $scope.$watch('sbatch', function(newVal, oldVal) {
         var dirString = '#!/bin/bash\n';
@@ -24,6 +26,7 @@ angular.module('sandstone.slurm')
           }
         }
         $scope.directives = dirString;
+        $scope.sbatchScript = dirString + '\n' + $scope.script + '\n';
       }, true);
     }
   };
