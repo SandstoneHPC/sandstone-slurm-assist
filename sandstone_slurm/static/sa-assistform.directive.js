@@ -14,6 +14,19 @@ angular.module('sandstone.slurm')
       $scope.selectedProfile = '';
       $scope.fields = [];
 
+      var addField = function(fieldName) {
+
+      };
+
+      $scope.removeField = function(field) {
+        var i;
+        i = $scope.fields.indexOf(field);
+        if (i >= 0) {
+          delete $scope.sbatch[field.title];
+          $scope.fields.splice(i, 1);
+        }
+      };
+
       $scope.onTypeaheadKey = function($event) {
         if ($event.which===13){
           var sel = $scope.selectedProp;
