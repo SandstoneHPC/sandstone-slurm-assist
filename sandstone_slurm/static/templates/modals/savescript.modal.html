@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h3 class="modal-title">Save Script As</h3>
+  <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
   <div class="container-fluid">
@@ -37,7 +37,7 @@
     class="btn btn-success"
     ng-click="saveAs()"
     ng-disabled="invalidFilepath||form.$invalid">
-    Save File As
+    {{title}}
   </button>
   <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

@@ -18,7 +18,8 @@
           <button
             id="save-button"
             type="button"
-            class="btn btn-default sched-button">
+            class="btn btn-default sched-button"
+            ng-click="ctrl.saveScript()">
             Save Script for Later
           </button>
         </div>
@@ -34,8 +35,9 @@
           <button
             id="estimate-button"
             type="button"
-            class="btn btn-default sched-button">
-            Service Unit Estimate
+            class="btn btn-default sched-button"
+            ng-click="ctrl.getEstimate()">
+            Cost Estimate
           </button>
         </div>
         <div class="btn-group" role="group">
@@ -43,7 +45,7 @@
             id="submit-button"
             type="button"
             class="btn btn-success sched-button"
-            ng-click="ctrl.saveScript()"
+            ng-click="ctrl.submitScript()"
             ng-disabled="ctrl.form.$invalid">
             Schedule Job
           </button>

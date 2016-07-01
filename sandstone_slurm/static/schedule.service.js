@@ -17,8 +17,6 @@ angular.module('sandstone.slurm')
       return formConfig;
     },
     saveScript: function (filepath,content) {
-      $log.log(filepath);
-      $log.log(content);
       $http
         .get(
           '/filebrowser/a/fileutil',
@@ -61,6 +59,82 @@ angular.module('sandstone.slurm')
               })
               .success(function (data,status, headers, config) {
                 $log.debug('Saved file: ', filepath);
+              });
+            });
+          }
+        });
+    },
+    submitScript: function (filepath,content) {
+      $http
+        .get(
+          '/filebrowser/a/fileutil',
+          {
+            params: {
+              operation: 'CHECK_EXISTS',
+              filepath: filepath
+            }
+          }
+        )
+        .success(function (data, status, headers, config) {
+          if (data.result) {
+            $http({
+              url: '/filebrowser/localfiles'+filepath,
+              method: 'PUT',
+              params: {
+                _xsrf: getCookie('_xsrf')
+              },
+              data: {'content': content}
+            })
+            .success(function (data,status, headers, config) {
+              $log.debug('Saved file: ', filepath);
+              $http({
+                url: "/slurm/a/jobs",
+                method: "POST",
+                params: {_xsrf: getCookie('_xsrf')},
+                data:{'content': filepath}
+              })
+              .success(function(data, status, header, config) {
+                $log.debug('Submitted: ', filepath);
+                // Pop an alert here in the future
+              })
+              .error(function(data, status, header, config) {
+                $log.error("Submission failed:", data ,status, header, config);
+                // Pop an alert here in the future
+              });
+            });
+          } else {
+            $http({
+              url: '/filebrowser/localfiles'+filepath,
+              method: 'POST',
+              params: {
+                _xsrf: getCookie('_xsrf')
+              }
+            })
+            .success(function (data,status, headers, config) {
+              $http({
+                url: '/filebrowser/localfiles'+filepath,
+                method: 'PUT',
+                params: {
+                  _xsrf: getCookie('_xsrf')
+                },
+                data: {'content': content}
+              })
+              .success(function (data,status, headers, config) {
+                $log.debug('Saved file: ', filepath);
+                $http({
+                  url: "/slurm/a/jobs",
+                  method: "POST",
+                  params: {_xsrf: getCookie('_xsrf')},
+                  data:{'content': filepath}
+                })
+                .success(function(data, status, header, config) {
+                  $log.debug('Submitted: ', filepath);
+                  // Pop an alert here in the future
+                })
+                .error(function(data, status, header, config) {
+                  $log.error("Submission failed:", data ,status, header, config);
+                  // Pop an alert here in the future
+                });
               });
             });
           }

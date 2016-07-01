@@ -18,7 +18,12 @@ angular.module('sandstone.slurm')
       controllerAs: 'ctrl',
       backdrop: 'static',
       keyboard: false,
-      size: 'lg'
+      size: 'lg',
+      resolve: {
+        action: function () {
+          return 'save';
+        }
+      }
     });
     saveScriptModalInstance.result.then(
       function(filepath) {
@@ -29,8 +34,76 @@ angular.module('sandstone.slurm')
       }
     );
   };
+  self.submitScript = function() {
+    var contents = self.script;
+    var submitScriptModalInstance = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/savescript.modal.html',
+      controller: 'SaveScriptCtrl',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      resolve: {
+        action: function () {
+          return 'submit';
+        }
+      }
+    });
+    submitScriptModalInstance.result.then(
+      function(filepath) {
+        ScheduleService.submitScript(filepath,contents);
+      },
+      function(filepath) {
+        $log.debug('Modal dismissed at: ' + new Date());
+      }
+    );
+  };
+  self.getEstimate = function() {
+    var estimateModalInstance = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/estimate.modal.html',
+      controller: 'EstimateCtrl',
+      size: 'lg',
+      resolve: {
+        sbatch: function () {
+          return self.sbatch;
+        }
+      }
+    });
+  };
 }])
-.controller('SaveScriptCtrl', ['$scope','$modalInstance',function($scope,$modalInstance) {
+.controller('EstimateCtrl', ['$scope','$modalInstance','sbatch',function($scope,$modalInstance,sbatch) {
+  $scope.sbatch = sbatch;
+  // nodes * time (min) * 12 (no node sharing)
+  $scope.estimate = {
+    su: NaN,
+    reason: 'No node count specified.'
+  };
+
+  $scope.dismiss = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  if (sbatch.hasOwnProperty('nodes')) {
+    if (sbatch.hasOwnProperty('time')) {
+      var cmps = sbatch.time.split(/\:|\-/).reverse();
+      var mins = 0;
+      mins += parseInt(cmps[1],10);
+      mins += 3600 * parseInt(cmps[2],10);
+      if (cmps.length === 4) {
+        mins += (24 * 3600) * parseInt(cmps[3],10);
+      }
+      $scope.estimate.su = sbatch.nodes * mins * 12;
+      $scope.estimate.reason = undefined;
+    } else {
+      $scope.estimate.reason = 'No wall time specified.';
+    }
+  }
+}])
+.controller('SaveScriptCtrl', ['$scope','$modalInstance','action',function($scope,$modalInstance,action) {
+  if (action === 'save') {
+    $scope.title = "Save Script As";
+  } else if (action === 'submit') {
+    $scope.title = "Save & Schedule Script";
+  }
   $scope.treeData = {
     filetreeContents: [],
     selectedNodes: []
