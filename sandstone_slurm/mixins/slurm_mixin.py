@@ -2,7 +2,8 @@ import tornado.web
 import subprocess
 
 
-class SlurmCmdMixin(tornado.web.RequestHandler):
+
+class SlurmCmdMixin:
     # This class will contain any methods necessary
     # for running slurm commands and parsing output.
 
@@ -14,7 +15,8 @@ class SlurmCmdMixin(tornado.web.RequestHandler):
         options = ['-P','--format=ALL']
 
         cmd = ['sacct'] + options
-        cmd_out = subprocess.check_output(cmd).split('\n')[:-1] # [:-1] because the last element of the list is ""
+
+        cmd_out = subprocess.check_output(cmd).splitlines()
         field_names = cmd_out[0].split('|')
 
         # exclude the first row since it's name fields

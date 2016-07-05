@@ -1,23 +1,36 @@
-<div class="row partial-fill">
-  <table st-table="queueCollection" class="table table-striped">
+<div class="row partial-fill sa-status">
+  <table
+    ng-init="ctrl.updateCollection()"
+    st-table="ctrl.displayCollection"
+    st-safe-src="ctrl.queueCollection"
+    class="table table-striped">
     <thead>
     <tr>
-      <th st-sort="getters.State" st-sort-default="true" st-skip-natural="true">State</th>
-      <th "JobID">Job Name</th>
-      <th "Start">Start Time</th>
-      <th "End">End Time</th>
-      <th> <button type="button" class="btn btn-primary" ng-click="getJobList()">Update</button></th>
+      <th st-sort="self.getters.State" st-sort-default="true" st-skip-natural="true">State</th>
+      <th st-sort="JobID">Job ID</th>
+      <th st-sort="JobName">Job Name</th>
+      <th st-sort="Account">Account</th>
+      <th st-sort="CPUTime">CPU Time</th>
+      <th st-sort="Start">Start Time</th>
+      <th st-sort="End">End Time</th>
+      <th>
+        <button type="button" class="btn btn-success" ng-click="ctrl.updateCollection()"><i class="fa fa-refresh"></i> Refresh</button>
+      </th>
     </tr>
     </thead>
 
     <tbody>
-    <tr ng-repeat="row in displayCollection">
+    <tr ng-repeat="row in ctrl.displayCollection">
       <td>{{row.State}}</td>
       <td>{{row.JobID}}</td>
+      <td>{{row.JobName}}</td>
+      <td>{{row.Account}}</td>
+      <td>{{row.CPUTime}}</td>
       <td>{{row.Start}}</td>
       <td>{{row.End}}</td>
       <td>
-      <button type="button" class="btn" ng-click="getDetail(row)" >details</button>
+      <button type="button" class="btn" ng-click="ctrl.getDetails(row)">Details</button>
+      <button type="button" class="btn" disabled>Nodelist</button>
       </td>
     </tr>
     </tbody>

@@ -7,12 +7,16 @@ angular.module('sandstone.slurm')
     getJobList: function(callback) {
       $http
         .get('/slurm/a/jobs')
-        .success(callback(response));
+        .success(function(response) {
+          callback(response);
+        });
     },
     getJob: function(jobId,callback) {
       $http
         .get('/slurm/a/jobs/'+jobId)
-        .success(callback(response));
+        .success(function(response) {
+          callback(response);
+        });
     }
   };
 }]);

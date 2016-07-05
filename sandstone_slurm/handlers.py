@@ -49,7 +49,8 @@ class JobHandler(BaseHandler,SlurmCmdMixin):
     def get(self,jobid):
         # This method should retrieve sacct data
         # for the job specified by jobid
-        self.write(self.run_sacct(jobid=jobid))
+        sacct_out = self.run_sacct(jobid=jobid)
+        self.write(sacct_out)
 
     @sandstone.lib.decorators.authenticated
     def delete(self,jobid):

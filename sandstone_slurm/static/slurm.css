@@ -113,3 +113,11 @@
   background-color: transparent;
   font-size: initial;
 }
+
+/*
+ * Status Styles
+  */
+caption > i.fa-eye,
+caption > i.fa-eye-slash {
+  cursor: pointer;
+}
