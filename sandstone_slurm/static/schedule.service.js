@@ -16,6 +16,13 @@ angular.module('sandstone.slurm')
     getFormConfig: function() {
       return formConfig;
     },
+    loadScript: function(filepath,callback) {
+      $http
+        .get('/filebrowser/localfiles'+filepath)
+        .success(function(data, status, headers, config) {
+          callback(data);
+        });
+    },
     saveScript: function (filepath,content) {
       $http
         .get(

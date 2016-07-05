@@ -6,14 +6,56 @@ angular.module('sandstone.slurm')
   return {
     restrict: 'A',
     scope: {
-      config: '=',
+      config: '@',
       sbatch: '=',
       form: '='
     },
     templateUrl: '/static/slurm/templates/sa-assistform.html',
     controller: function($scope,$element,$timeout) {
       $scope.selectedProfile = '';
-      $scope.fields = [];
+
+      $scope.$watch(
+        function() {
+          return $scope.form.profile.$modelValue;
+        },
+        function(newVal) {
+          $scope.selectProfile();
+        }
+      );
+
+      $scope.getFields = function() {
+        var fieldNames = [];
+        var fields = [];
+        if (!$scope.selectedProfile) {
+          return fields;
+        }
+        var schema = $scope
+          .config
+          .profiles[$scope.selectedProfile]
+          .schema;
+          
+        for (var k in $scope.form) {
+          if ((!k.startsWith('$')) && (k !== 'profile')) {
+            var s = schema.properties[k];
+            fieldNames.push(k);
+            fields.push(s);
+          }
+        }
+
+        for (k in sbatch) {
+          if (fieldNames.indexOf(k) < 0) {
+            var s = schema.properties[k];
+            fieldNames.push(k);
+            fields.push(s);
+          }
+        }
+
+        return fields;
+      };
+
+      $scope.addField = function(prop) {
+
+      };
 
       $scope.removeField = function(field) {
         var i;
@@ -60,8 +102,11 @@ angular.module('sandstone.slurm')
 
       $scope.selectProfile = function() {
         var k;
-        $scope.fields = [];
-        $scope.sbatch = {};
+        // $scope.fields = [];
+        // $scope.sbatch = {};
+        if (!$scope.selectedProfile) {
+          return;
+        }
         var prof = $scope.config.profiles[$scope.selectedProfile];
         if (prof.schema.hasOwnProperty('required')) {
           for (var i=0;i<prof.schema.required.length;i++) {

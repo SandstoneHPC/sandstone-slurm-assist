@@ -69,6 +69,61 @@ angular.module('sandstone.slurm')
       }
     });
   };
+
+  self.loadScript = function() {
+    var loadScriptModalInstance = $modal.open({
+      templateUrl: '/static/slurm/templates/modals/loadscript.modal.html',
+      controller: 'LoadScriptCtrl',
+      size: 'lg'
+    });
+    loadScriptModalInstance.result.then(
+      function(filepath) {
+        ScheduleService.loadScript(filepath, function(response) {
+          var fullScript = response.content.split('\n');
+          var dirs = {}
+          var renderScript = ''
+          // Separate script components
+          for (var i=0;i<fullScript.length;i++) {
+            if (fullScript[i].startsWith('#!/bin/bash')) {
+              continue;
+            } else if (fullScript[i].startsWith('#SBATCH')) {
+              var cmp = fullScript[i].replace('#SBATCH --','').split('=');
+              dirs[cmp[0]] = cmp[1];
+            } else {
+              renderScript += fullScript[i] + '\n';
+            }
+          }
+          // Determine profile from directives
+          var qos = dirs.qos;
+          var partition = dirs.partition;
+          var matchedProfile;
+          for (var pname in self.formConfig.profiles) {
+            if (
+              (self.formConfig.profiles[pname].schema.properties.qos.default == qos)
+              &&
+              (self.formConfig.profiles[pname].schema.properties.partition.default == partition)
+            ) {
+              matchedProfile = pname;
+              break;
+            }
+          }
+          // Strip out conflisting directives
+          for (var d in dirs) {
+            if (self.formConfig.profiles[matchedProfile].schema.properties[d].readonly) {
+              delete dirs[d];
+            }
+          }
+          // Push to interface
+          self.form.profile.$modelValue = matchedProfile;
+          self.sbatch = dirs;
+          self.script = renderScript;
+        });
+      },
+      function(filepath) {
+        $log.debug('Modal dismissed at: ' + new Date());
+      }
+    );
+  };
 }])
 .controller('EstimateCtrl', ['$scope','$modalInstance','sbatch',function($scope,$modalInstance,sbatch) {
   $scope.sbatch = sbatch;
@@ -143,6 +198,36 @@ angular.module('sandstone.slurm')
     $modalInstance.close(filepath);
   };
 
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+}])
+.controller('LoadScriptCtrl', ['$scope','$modalInstance',function($scope,$modalInstance) {
+  $scope.treeData = {
+    filetreeContents: [],
+    selectedNodes: []
+  };
+
+  $scope.loadFile = {
+    filename: '',
+    filepath: '-/'
+  }
+  $scope.invalidFilepath = true;
+
+  $scope.$watch(function(){
+    return $scope.treeData.selectedNodes;
+  }, function(newValue){
+    if ((newValue.length > 0) && (newValue[0].type === 'file')) {
+      $scope.loadFile.filename = newValue[0].filename;
+      $scope.loadFile.filepath = newValue[0].filepath.replace(newValue[0].filename,'');
+      $scope.invalidFilepath = false;
+    }
+  });
+
+  $scope.loadScript = function () {
+    var filepath = $scope.loadFile.filepath + $scope.loadFile.filename;
+    $modalInstance.close(filepath);
+  };
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
