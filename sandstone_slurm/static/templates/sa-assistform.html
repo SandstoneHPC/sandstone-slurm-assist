@@ -12,15 +12,27 @@
             name="profile"
             ng-model="selectedProfile"
             ng-required="true"
-            ng-change="selectProfile()"
-            ng-options="p for p in getProfiles()"></select>
+            ng-options="p for p in getProfiles()">
+          </select>
             <div class="input-group-addon sa-assist-help-btn">
               <button
                 class="btn"
+                popover-trigger="mouseenter"
                 popover-placement="left"
                 popover="Select the profile that best describes the job being run."
                 popover-title="Select a profile to begin">
                 <i class="fa fa-question-circle" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="input-group-addon sa-assist-help-btn">
+              <button
+                class="btn"
+                tooltip-trigger="mouseenter"
+                tooltip-placement="left"
+                tooltip="Reset form to profile default."
+                ng-disabled="form.profile.$invalid"
+                ng-click="resetDefaults()">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
               </button>
             </div>
         </div>
@@ -42,7 +54,7 @@
     <fieldset>
       <legend>&nbsp;</legend>
       <div
-        ng-repeat="field in fields track by $index"
+        ng-repeat="field in getFields() track by $index"
         ng-include="'/static/slurm/templates/fields/sa-field-' + field.type + '.html'">
       </div>
     </fieldset>

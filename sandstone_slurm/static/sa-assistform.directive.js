@@ -8,34 +8,96 @@ angular.module('sandstone.slurm')
     scope: {
       config: '=',
       sbatch: '=',
-      form: '='
+      form: '=',
+      selectedProfile: '=profile'
     },
     templateUrl: '/static/slurm/templates/sa-assistform.html',
     controller: function($scope,$element,$timeout) {
       $scope.selectedProfile = '';
-      $scope.fields = [];
+      var fieldNames = [];
+
+      var updateFieldNames = function() {
+        // Add fields
+        for (var k in $scope.sbatch) {
+          if (fieldNames.indexOf(k) < 0) {
+            fieldNames.push(k);
+          }
+        }
+        // Remove fields
+        for (var i=fieldNames.length-1;i>=0;i--) {
+          if (!(fieldNames[i] in $scope.sbatch)) {
+            fieldNames.splice(i,1);
+          }
+        }
+      };
+
+      $scope.$watch(
+        function() {
+          return $scope.selectedProfile;
+        },
+        function(newVal) {
+          if (newVal) {
+            $scope.selectProfile();
+          } else {
+            $scope.selectedProfile = '';
+          }
+        }
+      );
+
+      $scope.$watch(
+        function() {
+          return $scope.sbatch;
+        },
+        function(newVal) {
+          updateFieldNames();
+        },
+        true
+      );
+
+      $scope.getFields = function() {
+        var fields = [];
+        if (!$scope.selectedProfile) {
+          return fields;
+        }
+        var schema = $scope
+          .config
+          .profiles[$scope.selectedProfile]
+          .schema;
+
+        for (var i=0;i<fieldNames.length;i++) {
+          var s = schema.properties[fieldNames[i]];
+          fields.push(s);
+        }
+
+        return fields;
+      };
+
+      $scope.addField = function(prop) {
+        fieldNames.push(prop);
+      };
 
       $scope.removeField = function(field) {
         var i;
-        i = $scope.fields.indexOf(field);
+        i = fieldNames.indexOf(field.title);
         if (i >= 0) {
           delete $scope.sbatch[field.title];
-          $scope.fields.splice(i, 1);
+          fieldNames.splice(i, 1);
         }
+      };
+
+      $scope.resetDefaults = function() {
+        $scope.fieldNames = [];
+        $scope.sbatch = {};
+        $scope.selectProfile();
       };
 
       $scope.onTypeaheadKey = function($event) {
         if ($event.which===13){
           var sel = $scope.selectedProp;
-          var propSchema;
-          try {
-            propSchema = $scope
-                .config.profiles[$scope.selectedProfile]
-                .schema.properties[sel];
-            $scope.fields.push(propSchema);
+          var props = $scope.getProperties();
+          if (props.indexOf(sel) >= 0) {
+            fieldNames.push(sel);
             $scope.selectedProp = '';
-          } catch(err) {
-            return;
           }
         }
       };
@@ -59,25 +121,35 @@ angular.module('sandstone.slurm')
       };
 
       $scope.selectProfile = function() {
-        var k;
-        $scope.fields = [];
-        $scope.sbatch = {};
+        var i, k;
+        updateFieldNames();
+        if (!$scope.selectedProfile) {
+          return;
+        }
         var prof = $scope.config.profiles[$scope.selectedProfile];
         if (prof.schema.hasOwnProperty('required')) {
-          for (var i=0;i<prof.schema.required.length;i++) {
+          for (i=0;i<prof.schema.required.length;i++) {
             k = prof.schema.required[i];
-            $scope.fields.push(prof.schema.properties[k]);
+            if (fieldNames.indexOf(k) < 0) {
+              fieldNames.push(k);
+            }
             if (prof.schema.properties[k].hasOwnProperty('default')) {
-              $scope.sbatch[k] = prof.schema.properties[k].default;
+              if (prof.schema.properties[k].readonly) {
+                $scope.sbatch[k] = prof.schema.properties[k].default;
+              } else if (!$scope.sbatch.hasOwnProperty(k)) {
+                $scope.sbatch[k] = prof.schema.properties[k].default;
+              }
             }
           }
         }
-        if (prof.hasOwnProperty('initial')) {
-          for (var i=0;i<prof.initial.length;i++) {
-            if (prof.schema.required.lastIndexOf(prof.initial[i]) < 0) {
-              k = prof.initial[i];
-              $scope.fields.push(prof.schema.properties[k]);
-              if (prof.schema.properties[k].hasOwnProperty('default')) {
+        if (prof.schema.hasOwnProperty('initial')) {
+          for (i=0;i<prof.schema.initial.length;i++) {
+            k = prof.schema.initial[i];
+            if (fieldNames.indexOf(k) < 0) {
+              fieldNames.push(k);
+            }
+            if (prof.schema.properties[k].hasOwnProperty('default')) {
+              if (!$scope.sbatch.hasOwnProperty(k)) {
                 $scope.sbatch[k] = prof.schema.properties[k].default;
               }
             }

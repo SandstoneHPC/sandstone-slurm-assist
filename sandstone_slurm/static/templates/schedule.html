@@ -1,13 +1,19 @@
 <div class="row partial-fill">
   <div id="sched-col-left" class="col-md-6 main sched-col">
-    <div sa-sbatch-script sbatch="ctrl.sbatch" sbatch-script="ctrl.script"></div>
+    <div
+      sa-sbatch-script
+      sbatch="ctrl.sbatch"
+      script="ctrl.script"
+      sbatch-script="ctrl.sbatchScript">
+    </div>
   </div>
   <div id="sched-col-right" class="col-md-6 main sched-col">
     <div
       sa-assist-form
       config="ctrl.formConfig"
       sbatch="ctrl.sbatch"
-      form="ctrl.form">
+      form="ctrl.form"
+      profile="ctrl.profile">
     </div>
   </div>
 
@@ -28,7 +34,7 @@
             id="load-button"
             type="button"
             class="btn btn-default sched-button"
-            disabled>
+            ng-click="ctrl.loadScript()">
             Load Saved Script
           </button>
         </div>
