@@ -108,10 +108,13 @@ angular.module('sandstone.slurm')
               break;
             }
           }
-          // Strip out conflicting directives
-          for (var d in dirs) {
-            if (self.formConfig.profiles[matchedProfile].schema.properties[d].readonly) {
-              delete dirs[d];
+          // Validate data types
+          var props = self.formConfig.profiles[matchedProfile].schema.properties;
+          for (var k in dirs) {
+            if ((props[k].type === 'integer') || (props[k].type === 'number')) {
+              if (typeof dirs[k] !== 'number') {
+                dirs[k] = Number(dirs[k]);
+              }
             }
           }
           // Push to interface

@@ -16,6 +16,21 @@ angular.module('sandstone.slurm')
       $scope.selectedProfile = '';
       var fieldNames = [];
 
+      var updateFieldNames = function() {
+        // Add fields
+        for (var k in $scope.sbatch) {
+          if (fieldNames.indexOf(k) < 0) {
+            fieldNames.push(k);
+          }
+        }
+        // Remove fields
+        for (var i=fieldNames.length-1;i>=0;i--) {
+          if (!(fieldNames[i] in $scope.sbatch)) {
+            fieldNames.splice(i,1);
+          }
+        }
+      };
+
       $scope.$watch(
         function() {
           return $scope.selectedProfile;
@@ -34,18 +49,7 @@ angular.module('sandstone.slurm')
           return $scope.sbatch;
         },
         function(newVal) {
-          // Add fields
-          for (var k in $scope.sbatch) {
-            if (fieldNames.indexOf(k) < 0) {
-              fieldNames.push(k);
-            }
-          }
-          // Remove fields
-          for (var i=fieldNames.length;i>=0;i--) {
-            if (!(fieldNames[i] in $scope.sbatch)) {
-              fieldNames.splice(i,1);
-            }
-          }
+          updateFieldNames();
         },
         true
       );
@@ -112,6 +116,7 @@ angular.module('sandstone.slurm')
 
       $scope.selectProfile = function() {
         var i, k;
+        updateFieldNames();
         if (!$scope.selectedProfile) {
           return;
         }
