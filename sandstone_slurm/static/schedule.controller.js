@@ -6,13 +6,14 @@ angular.module('sandstone.slurm')
   var self = this;
 
   self.sbatch = {};
-  self.script = '';
+  self.script = '# Add your script below\n# ex: "srun echo $(hostname)"\n';
+  self.sbatchScript = '';
   self.form = {};
   self.profile = '';
 
   self.formConfig = ScheduleService.getFormConfig();
   self.saveScript = function() {
-    var contents = self.script;
+    var contents = self.sbatchScript;
     var saveScriptModalInstance = $modal.open({
       templateUrl: '/static/slurm/templates/modals/savescript.modal.html',
       controller: 'SaveScriptCtrl',
@@ -36,7 +37,7 @@ angular.module('sandstone.slurm')
     );
   };
   self.submitScript = function() {
-    var contents = self.script;
+    var contents = self.sbatchScript;
     var submitScriptModalInstance = $modal.open({
       templateUrl: '/static/slurm/templates/modals/savescript.modal.html',
       controller: 'SaveScriptCtrl',
@@ -94,6 +95,9 @@ angular.module('sandstone.slurm')
               renderScript += fullScript[i] + '\n';
             }
           }
+          // Trim extra white space at tail
+          renderScript = renderScript.trim();
+          renderScript += '\n';
           // Determine profile from directives
           var qos = dirs.qos;
           var partition = dirs.partition;

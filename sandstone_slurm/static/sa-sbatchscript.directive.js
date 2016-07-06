@@ -7,6 +7,7 @@ angular.module('sandstone.slurm')
     restrict: 'A',
     scope: {
       sbatch: '=',
+      script: '=',
       sbatchScript: '='
     },
     templateUrl: '/static/slurm/templates/sa-sbatchscript.html',
@@ -26,7 +27,7 @@ angular.module('sandstone.slurm')
           }
         }
         $scope.directives = dirString;
-        $scope.sbatchScript = dirString + '\n' + $scope.script + '\n';
+        $scope.sbatchScript = dirString + $scope.script;
       }, true);
     }
   };
