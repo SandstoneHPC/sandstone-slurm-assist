@@ -85,6 +85,12 @@ angular.module('sandstone.slurm')
         }
       };
 
+      $scope.resetDefaults = function() {
+        $scope.fieldNames = [];
+        $scope.sbatch = {};
+        $scope.selectProfile();
+      };
+
       $scope.onTypeaheadKey = function($event) {
         if ($event.which===13){
           var sel = $scope.selectedProp;
