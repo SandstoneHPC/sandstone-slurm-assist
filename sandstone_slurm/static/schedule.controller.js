@@ -7,7 +7,8 @@ angular.module('sandstone.slurm')
 
   self.sbatch = {};
   self.script = '';
-  self.form = {}
+  self.form = {};
+  self.profile = '';
 
   self.formConfig = ScheduleService.getFormConfig();
   self.saveScript = function() {
@@ -107,14 +108,14 @@ angular.module('sandstone.slurm')
               break;
             }
           }
-          // Strip out conflisting directives
+          // Strip out conflicting directives
           for (var d in dirs) {
             if (self.formConfig.profiles[matchedProfile].schema.properties[d].readonly) {
               delete dirs[d];
             }
           }
           // Push to interface
-          self.form.profile.$modelValue = matchedProfile;
+          self.profile = matchedProfile;
           self.sbatch = dirs;
           self.script = renderScript;
         });

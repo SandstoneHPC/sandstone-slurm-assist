@@ -12,10 +12,12 @@
             name="profile"
             ng-model="selectedProfile"
             ng-required="true"
-            ng-options="p for p in getProfiles()"></select>
+            ng-options="p for p in getProfiles()">
+          </select>
             <div class="input-group-addon sa-assist-help-btn">
               <button
                 class="btn"
+                popover-trigger="mouseenter"
                 popover-placement="left"
                 popover="Select the profile that best describes the job being run."
                 popover-title="Select a profile to begin">
