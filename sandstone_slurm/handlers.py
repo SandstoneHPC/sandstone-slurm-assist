@@ -13,9 +13,9 @@ class FormConfigHandler(BaseHandler):
 
     @sandstone.lib.decorators.authenticated
     def get(self):
-        schema = ConfigLoader.getFormConfigs()
+        form_config = ConfigLoader.getFormConfig()
         ctx = {
-            'formSchema': schema
+            'formConfig': form_config
             }
         self.write(ctx)
 
@@ -49,7 +49,8 @@ class JobHandler(BaseHandler,SlurmCmdMixin):
     def get(self,jobid):
         # This method should retrieve sacct data
         # for the job specified by jobid
-        self.write(self.run_sacct(jobid=jobid))
+        sacct_out = self.run_sacct(jobid=jobid)
+        self.write(sacct_out)
 
     @sandstone.lib.decorators.authenticated
     def delete(self,jobid):

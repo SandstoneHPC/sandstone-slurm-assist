@@ -1,0 +1,27 @@
+<div
+  class="panel sa-script-panel">
+  <div class="row">
+    <div class="col-sm-2 col-md-1">
+      <h5 class="sa-script-label">Directives</h5>
+    </div>
+    <div class="col-sm-10 col-md-11">
+      <pre
+        class="sa-directives"
+        ng-bind="directives"></pre>
+    </div>
+    <div class="col-sm-2 col-md-1">
+      <h5 class="sa-script-label">Script</h5>
+    </div>
+    <div class="col-sm-10 col-md-11">
+      <div
+        class="sa-script-editor"
+        ui-ace="{
+          mode: 'sh',
+          rendererOptions: {
+            fontSize: '11pt',
+            maxLines: Infinity
+          }
+        }"
+        ng-model="script"></div>
+    </div>
+  </div>

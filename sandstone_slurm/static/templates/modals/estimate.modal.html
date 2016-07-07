@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h3 class="modal-title">Cost Estimate</h3>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <table class="table">
+      <caption>Cost estimate breakdown</caption>
+      <thead>
+        <tr>
+          <th>Directive</th>
+          <th>Amount</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nodes</td>
+          <td ng-bind="sbatch.nodes"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Time</td>
+          <td ng-bind="sbatch.time"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Node Sharing Off</td>
+          <td>x12</td>
+          <td></td>
+        </tr>
+        <tr>
+          <th>Total Cost <i>(CPU mins)</i></th>
+          <td></td>
+          <td ng-if="estimate.reason">No estimate <i>({{estimate.reason}})</i></td>
+          <td ng-if="!estimate.reason" ng-bind="estimate.su"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="dismiss()">Okay</button>
+</div>

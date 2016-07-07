@@ -1,57 +1,123 @@
-.partial-fill {
-  height: 98%;
+/*
+ * Main content
+ */
+
+/*.main {
+  padding: 20px;
 }
-.ace-schedule {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  height: 90%;
+@media (min-width: 768px) {
+  .main {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
 }
-.assist-col {
-  height: 90%
+.main .page-header {
+  margin-top: 0;
+}*/
+
+.viewpane {
+  width: 100%;
+  padding: 10px;
 }
-.popover {
-  max-height: 20vh;
+
+#slurm-main .nav-pills > li.active > a {
+  border-color: #93c54b;
+  color: #93c54b;
+  background-color: white;
+}
+
+.viewpane.schedule-view {
+  height: 88vh;
+}
+
+.viewpane.status-view {
+  height: 88vh;
+  /*overflow-y: auto;*/
+}
+
+/*
+ * Schedule Styles
+  */
+.sched-col {
+  height: 76vh;
+}
+.sched-col.sched-col-right {
   overflow-y: scroll;
-  overflow-x: hidden;
-  width: 200px;
-  margin-top: 1%;
-}
-.control-label {
-  font-weight: normal !important;
 }
 
-.tabset, .tab-content, .tab-pane, .tabbable {
-  height: 90vh;
-}
-.tab-content {
-  padding-left: 30px;
-  padding-right: 30px;
-}
+/*
+ * Script Editor Styles
+  */
+.sa-script-panel {
 
-.spacer {
-  height: 15px;
 }
-
-#assist-button-panel {
-  margin-left: 25px;
-  margin-right: 25px;
+.sa-script-label {
+  color: #888888;
 }
-#builder-form-container {
-  height: 90% !important;
-  overflow-y: scroll;
+.sa-directives {
+  height: 30vh;
+  overflow-y: auto;
+  border-bottom-color: transparent;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-bottom: 0px;
 }
-#qos-select {
-  margin-bottom: 20px;
-}
-#directive-section {
-  height: 46%;
+.sa-script-editor {
+  border: 1px solid #cccccc;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin-top: 0px;
   margin-bottom: 10px;
+  height: 40vh;
 }
-#script-section {
-  height: 46%;
-  margin-top: 20px;
+
+/*
+ * Assist Form Styles
+ */
+#sa-assist-form .input-group-addon.sa-assist-help-btn {
+  padding: 0px;
 }
-#top-drop-down .dropdown-menu{
-  max-height: 40vh;
+#sa-assist-form .input-group-addon.sa-assist-help-btn > button {
+  height: 42px;
+  background-color: transparent;
+  font-size: initial;
+}
+#sa-assist-form .popover-content {
+  max-height: 250px;
   overflow-y: scroll;
+}
+#sa-assist-form .checkbox {
+  margin-bottom: 15px;
+}
+#sa-assist-form .checkbox > label {
+   margin-bottom: 10px;
+   margin-top: 15px;
+   font-weight: bold;
+}
+#sa-assist-form .checkbox > .sa-assist-help-btn {
+  padding: 0px;
+  /*padding: 15px 16px;*/
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  color: #3e3f3a;
+  text-align: center;
+  background-color: #f8f5f0;
+  border: 1px solid #dfd7ca;
+  border-radius: 4px;
+}
+#sa-assist-form .checkbox > .sa-assist-help-btn > button {
+  height: 42px;
+  background-color: transparent;
+  font-size: initial;
+}
+
+/*
+ * Status Styles
+  */
+caption > i.fa-eye,
+caption > i.fa-eye-slash {
+  cursor: pointer;
 }

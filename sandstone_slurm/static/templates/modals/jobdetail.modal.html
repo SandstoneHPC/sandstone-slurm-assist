@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h3 class="modal-title">Job Details</h3>
+</div>
+<div class="modal-body">
+  <div class="container-fluid">
+    <table class="table">
+      <caption ng-if="!showAll">Show all attributes&nbsp;
+        <i
+          class="fa fa-eye"
+          ng-click="toggleShowAll()">
+        </i>
+      </caption>
+      <caption ng-if="showAll">Show fewer attributes&nbsp;
+        <i
+          class="fa fa-eye-slash"
+          ng-click="toggleShowAll()">
+        </i>
+      </caption>
+      <tbody>
+        <tr ng-repeat="attr in attrList">
+          <th scope="row">{{attr}}&nbsp;
+            <!-- <i
+              class="fa fa-question-circle attr-help"
+              popover-placement="right"
+              popover="Help text"
+              popover-title="{{attr}}">
+            </i> -->
+          </th>
+          <td>{{job[attr]}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-success" ng-click="dismiss()">Okay</button>
+</div>
