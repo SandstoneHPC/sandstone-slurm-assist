@@ -1,4 +1,4 @@
-OIDE Slurm Assist
+Sandstone Slurm Assist
 =======================
 
-Full documentation can be found on the oide-slurm-assist GitHub page: https://github.com/ResearchComputing/oide-slurm-assist
+Full documentation can be found on the sandstone-slurm-assist GitHub page: https://github.com/SandstoneHPC/sandstone-slurm-assist

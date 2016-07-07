@@ -36,7 +36,7 @@ try:
         	                shell=True,
         	                ).split()
 except:
-	user_accounts = ["dummy account"]
+	user_accounts = ["example account"]
 
 BASE_CONFIG = {
         "type": "object",
