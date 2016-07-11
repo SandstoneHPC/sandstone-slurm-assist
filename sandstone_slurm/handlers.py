@@ -2,10 +2,10 @@ import tornado.web
 import json
 
 import sandstone.lib.decorators
-import sandstone_slurm.settings as app_settings
 from sandstone_slurm.mixins.slurm_mixin import SlurmCmdMixin
 from sandstone.lib.handlers.base import BaseHandler
 from sandstone_slurm.config_utils import ConfigLoader
+from sandstone import settings
 
 
 

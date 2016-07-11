@@ -1,7 +1,7 @@
-import sandstone_slurm.settings as app_settings
 import copy
 import json
 from jsonschema import Draft4Validator
+from sandstone import settings
 
 
 
@@ -9,9 +9,9 @@ class ConfigLoader:
 
     @staticmethod
     def getFormConfig():
-        base_schema = app_settings.BASE_CONFIG
+        base_schema = settings.BASE_CONFIG
         Draft4Validator.check_schema(base_schema)
-        form_config = app_settings.FORM_CONFIG
+        form_config = settings.FORM_CONFIG
 
         full_config = {}
         feat = form_config.get('features',[])
