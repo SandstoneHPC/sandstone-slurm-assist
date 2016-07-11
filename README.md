@@ -1,5 +1,5 @@
 # sandstone-slurm-assist
-Slurm scheduler assist app for Sandstone HPC. Currently, this app is set up to handle the particular Slurm configuration employed by Research Computing. Generalization is a work-in-progress.
+Slurm scheduler assist app for Sandstone HPC.
 
 ## Installing Sandstone HPC Slurm Assist using PIP
 
