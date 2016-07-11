@@ -15,6 +15,10 @@
   margin-top: 0;
 }*/
 
+.main {
+  overflow: auto;
+}
+
 .viewpane {
   width: 100%;
   padding: 10px;
@@ -41,8 +45,11 @@
 .sched-col {
   height: 76vh;
 }
-.sched-col.sched-col-right {
-  overflow-y: scroll;
+#sched-col-left {
+  overflow: hidden;
+}
+#sched-col-right {
+  overflow-y: auto;
 }
 
 /*
