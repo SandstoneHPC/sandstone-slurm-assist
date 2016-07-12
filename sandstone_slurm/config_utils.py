@@ -18,6 +18,12 @@ class ConfigLoader:
         gres = form_config.get('gres',[])
         # profiles must be defined
         profiles = form_config.get('profiles')
+        profiles.update({
+            'custom': {
+                'initial': [],
+                'schema': {},
+            }
+        })
 
         full_config['features'] = feat
         full_config['gres'] = gres

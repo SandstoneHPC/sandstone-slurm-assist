@@ -112,6 +112,10 @@ angular.module('sandstone.slurm')
               break;
             }
           }
+          // Default to custom profile if none matched
+          if (!matchedProfile) {
+            matchedProfile = 'custom';
+          }
           // Validate data types
           var props = self.formConfig.profiles[matchedProfile].schema.properties;
           for (var k in dirs) {

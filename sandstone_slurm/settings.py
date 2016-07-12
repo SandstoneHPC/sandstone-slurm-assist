@@ -292,6 +292,9 @@ FORM_CONFIG = {
                 ]
             }
         },
-        'scavenger': {},
+        'scavenger': {
+            'initial': [],
+            'schema': {},
+        },
     },
 }
