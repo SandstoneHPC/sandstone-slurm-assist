@@ -1,0 +1,36 @@
+<div
+  class="form-group"
+  ng-init="title=field.title"
+  ng-class="{'has-error':form[title].$invalid}">
+  <label>{{field.title}}</label>
+  <div class="input-group">
+    <input
+      class="form-control"
+      name="{{title}}"
+      sa-duration
+      min-duration="field.minDuration"
+      max-duration="field.maxDuration"
+      ng-model="sbatch[field.title]"
+      ng-pattern="field.pattern"
+      ng-readonly="field.readonly"
+      ng-required="true">
+    <div class="input-group-addon sa-assist-help-btn">
+      <button
+        class="btn"
+        popover-placement="left"
+        popover="{{title}}: {{field.description}}"
+        popover-title="{{title}}">
+        <i class="fa fa-question-circle" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div
+      class="input-group-addon sa-assist-help-btn"
+      ng-hide="config.profiles[selectedProfile].schema.required.indexOf(title)>=0">
+      <button
+        class="btn"
+        ng-click="removeField(field)">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</div>
