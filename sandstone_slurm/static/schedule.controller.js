@@ -55,14 +55,17 @@ angular.module('sandstone.slurm')
         ScheduleService.submitScript(
           filepath,
           contents,
-          function(res) {
+          function(data, status) {
             var submitStatusModalInstance = $modal.open({
               templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
               controller: 'SubmitStatusCtrl',
-              size: 'lg',
+              // size: 'lg',
               resolve: {
-                reason: function () {
-                  return res;
+                data: function () {
+                  return data;
+                },
+                status: function() {
+                  return status;
                 }
               }
             });
