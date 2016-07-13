@@ -36,12 +36,11 @@ class JobListHandler(BaseHandler,SlurmCmdMixin):
         # sbatch file as an argument, and then schedule
         # a job with the indicated file using sbatch.
         # The jobid of the scheduled job should be returned.
-        return_code,output = self.job_submit(filepath=json.loads(self.request.body)['content'])
-	if return_code != 0:
-	    self.set_status(500)
-	    self.write(output)
-	else:
-	    self.write("Successful Submission")
+        return_code, output = self.job_submit(filepath=json.loads(self.request.body)['content'])
+        res = {'output': output}
+    	if return_code != 0:
+    	    self.set_status(500)
+        self.write(res)
 
 class JobHandler(BaseHandler,SlurmCmdMixin):
 

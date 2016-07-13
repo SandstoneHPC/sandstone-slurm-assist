@@ -33,9 +33,11 @@ class SlurmCmdMixin:
 
         filepath = kwargs.get('filepath')
 
-        cmd = ['sbatch'] + [filepath]
+        cmd = ['sbatch',filepath]
         try:
             cmd_out = subprocess.check_output(cmd,stderr=subprocess.STDOUT)
-            return (0,cmd_out)
+            return (0, cmd_out)
+        except OSError:
+            return (1, "Slurm is temporarily down")
         except subprocess.CalledProcessError as e:
-            return (e.returncode,e.output)
+            return (e.returncode, e.output)

@@ -51,7 +51,9 @@
 #sched-col-right {
   overflow-y: auto;
 }
-
+.subtext {
+  color: #98978b;
+}
 /*
  * Script Editor Styles
   */

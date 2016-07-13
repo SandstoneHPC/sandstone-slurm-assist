@@ -71,7 +71,7 @@ angular.module('sandstone.slurm')
           }
         });
     },
-    submitScript: function (filepath,content) {
+    submitScript: function (filepath,content,successCb,errorCb) {
       $http
         .get(
           '/filebrowser/a/fileutil',
@@ -102,11 +102,11 @@ angular.module('sandstone.slurm')
               })
               .success(function(data, status, header, config) {
                 $log.debug('Submitted: ', filepath);
-                // Pop an alert here in the future
+                successCb(data, status);
               })
               .error(function(data, status, header, config) {
                 $log.error("Submission failed:", data ,status, header, config);
-                // Pop an alert here in the future
+                errorCb(data, status);
               });
             });
           } else {
@@ -136,11 +136,11 @@ angular.module('sandstone.slurm')
                 })
                 .success(function(data, status, header, config) {
                   $log.debug('Submitted: ', filepath);
-                  // Pop an alert here in the future
+                  successCb(data, status);
                 })
                 .error(function(data, status, header, config) {
                   $log.error("Submission failed:", data ,status, header, config);
-                  // Pop an alert here in the future
+                  errorCb(data, status);
                 });
               });
             });

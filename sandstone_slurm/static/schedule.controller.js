@@ -52,7 +52,37 @@ angular.module('sandstone.slurm')
     });
     submitScriptModalInstance.result.then(
       function(filepath) {
-        ScheduleService.submitScript(filepath,contents);
+        ScheduleService.submitScript(
+          filepath,
+          contents,
+          function(res) {
+            var submitStatusModalInstance = $modal.open({
+              templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
+              controller: 'SubmitStatusCtrl',
+              size: 'lg',
+              resolve: {
+                reason: function () {
+                  return res;
+                }
+              }
+            });
+          },
+          function(data, status) {
+            var submitStatusModalInstance = $modal.open({
+              templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
+              controller: 'SubmitStatusCtrl',
+              // size: 'lg',
+              resolve: {
+                data: function () {
+                  return data;
+                },
+                status: function() {
+                  return status;
+                }
+              }
+            });
+          }
+        );
       },
       function(filepath) {
         $log.debug('Modal dismissed at: ' + new Date());
@@ -135,6 +165,13 @@ angular.module('sandstone.slurm')
         $log.debug('Modal dismissed at: ' + new Date());
       }
     );
+  };
+}])
+.controller('SubmitStatusCtrl', ['$scope','$modalInstance','data','status',function($scope,$modalInstance,data,status) {
+  $scope.successful = status === 200;
+  $scope.output = data.output;
+  $scope.dismiss = function () {
+    $modalInstance.dismiss('dismiss');
   };
 }])
 .controller('EstimateCtrl', ['$scope','$modalInstance','sbatch',function($scope,$modalInstance,sbatch) {
