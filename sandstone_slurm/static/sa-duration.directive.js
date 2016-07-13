@@ -14,23 +14,25 @@ angular.module('sandstone.slurm')
       var isValid = function(duration) {
         var min = parseInt($scope.minDuration, 10);
         var max = parseInt($scope.maxDuration, 10);
-        var valid, validMin, validMax = false;
+        var valid, validMin, validMax;
+        valid = validMin = validMax = false;
         var cmps = duration.split(/\:|\-/).reverse();
-        var secs = 0;
         var mins = 0;
+        var secs = parseFloat(cmps[0]) / 60.0;
+        mins += parseInt(secs);
         mins += parseInt(cmps[1],10);
-        mins += 3600 * parseInt(cmps[2],10);
+        mins += 60 * parseInt(cmps[2],10);
         if (cmps.length === 4) {
-          mins += (24 * 3600) * parseInt(cmps[3],10);
+          mins += 1440 * parseInt(cmps[3],10);
         }
-        secs = mins * 60;
-        if (min) {
-          validMin = min <= secs;
+        // secs = mins * 60;
+        if (typeof min !== 'undefined') {
+          validMin = min <= mins;
         } else {
           validMin = true;
         }
-        if (max) {
-          validMax = secs <= max;
+        if (typeof max !== 'undefined') {
+          validMax = mins <= max;
         } else {
           validMax = true;
         }
