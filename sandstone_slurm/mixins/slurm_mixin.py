@@ -12,7 +12,7 @@ class SlurmCmdMixin:
         # corresponding options for sacct via subprocess
 
         output = []
-        options = ['-P','--format=ALL']
+        options = ['-X','-P','--format=ALL']
 
         cmd = ['sacct'] + options
 
