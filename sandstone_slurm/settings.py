@@ -14,18 +14,17 @@ APP_SPECIFICATION = {
         'slurm.css',
     ),
     'NG_MODULE_SCRIPTS': (
+        'bower_components/angular-sanitize/angular-sanitize.min.js',
+        'bower_components/angular-smart-table/dist/smart-table.min.js',
         'slurm.js',
         'schedule.service.js',
         'schedule.controller.js',
         'status.service.js',
         'status.controller.js',
         'sa-duration.directive.js',
-        'sa-assistform.directive.js',
+        'sa-assistform/sa-assistform.directive.js',
         'sa-sbatchscript.directive.js',
         'typeaheadfocus.directive.js',
-        'bower_components/angular-sanitize/angular-sanitize.min.js',
-        'bower_components/angular-smart-table/dist/smart-table.min.js',
-	    'bower_components/angular-mocks/angular-mocks.js',
     ),
 }
 
