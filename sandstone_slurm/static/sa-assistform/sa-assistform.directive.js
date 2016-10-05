@@ -68,12 +68,6 @@ angular.module('sandstone.slurm')
         return fields;
       };
 
-      $scope.addField = function(prop) {
-        if (prop) {
-          $scope.fieldNames.push(prop);
-        }
-      };
-
       /**
         * @function removeField
         * @param {object} field The JSON schema property object corresponding to the
@@ -115,19 +109,38 @@ angular.module('sandstone.slurm')
       };
 
       /**
-        * @function onTypeaheadKey
-        * This is the event handler bound to the typeahead field, called
-        * when the user hits enter.
+        * @function addField
+        * This is the function bound to the add field button and the typeahead onSelect
         */
-      $scope.onTypeaheadKey = function($event) {
-        if ($event.which===13){
-          var sel = $scope.selectedProp;
-          var props = $scope.getProperties();
-          if (props.indexOf(sel) >= 0) {
-            $scope.fieldNames.push(sel);
-            $scope.selectedProp = '';
-          }
+      $scope.addField = function() {
+        var sel = $scope.selectedProp;
+        var props = $scope.getProperties();
+        if (props.indexOf(sel) >= 0) {
+          $scope.fieldNames.push(sel);
+          $scope.selectedProp = '';
         }
+      };
+
+      /**
+        * @function propValid
+        * @returns {boolean} isValid Whether or not $scope.selectedProp is valid
+        */
+      $scope.propValid = function() {
+        var prop = $scope.selectedProp;
+
+        // field name unspecified
+        if (!prop) {
+          return false;
+        }
+        // field exists
+        if ($scope.fieldNames.indexOf(prop) >= 0) {
+          return false;
+        }
+        // field name invalid
+        if (!(prop in $scope.config.profiles[$scope.selectedProfile].schema.properties)) {
+          return false;
+        }
+        return true;
       };
 
       /**
