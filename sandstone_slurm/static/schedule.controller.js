@@ -230,6 +230,9 @@ angular.module('sandstone.slurm')
         $scope.newFile.filepath = newValue[0].filepath.replace(newValue[0].filename,'');
       } else {
         $scope.newFile.filepath = newValue[0].filepath;
+        if (newValue[0].filepath.substr(newValue[0].filepath.length-1) !== '/') {
+          $scope.newFile.filepath = $scope.newFile.filepath + '/';
+        }
       }
     }
     $scope.updateSaveName();
