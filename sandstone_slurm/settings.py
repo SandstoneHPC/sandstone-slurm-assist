@@ -23,6 +23,7 @@ APP_SPECIFICATION = {
         'status.controller.js',
         'sa-duration.directive.js',
         'sa-assistform/sa-assistform.directive.js',
+        'sa-assistform/filepathselect.controller.js',
         'sa-sbatchscript/sa-sbatchscript.directive.js',
         'typeaheadfocus.directive.js',
     ),
@@ -79,6 +80,8 @@ BASE_CONFIG = {
             "checkpoint-dir": {
                 "title": "checkpoint-dir",
                 "type": "string",
+                "subtype": "filepath",
+                "dironly": True,
                 "pattern": "^(\/.*\/)*(.*)(\/)?$",
                 'description': 'Specifies the directory into which the job or job step\'s checkpoint should be written (used by the checkpoint/blcrm and checkpoint/xlch plugins only). The default value is the current working directory. Checkpoint files will be of the form "<job_id>.ckpt" for jobs and "<job_id>.<step_id>.ckpt" for job steps.',
             },
@@ -137,6 +140,7 @@ BASE_CONFIG = {
             "error": {
                 "title": "error",
                 "type": "string",
+                "subtype": "filepath",
                 'description': 'Instruct SLURM to connect the batch script\'s standard error directly to the file name specified in the "filename pattern". By default both standard output and standard error are directed to the same file. For job arrays, the default file name is "slurm-%A_%a.out", "%A" is replaced by the job ID and "%a" with the array index. For other jobs, the default file name is "slurm-%j.out", where the "%j" is replaced by the job ID. See the --input option for filename specification options.',
             },
             "exclusive": {
@@ -159,6 +163,7 @@ BASE_CONFIG = {
             "export-file": {
                 "title": "export-file",
                 "type": "string",
+                "subtype": "filepath",
                 'description': 'If a number between 3 and OPEN_MAX is specified as the argument to this option, a readable file descriptor will be assumed (STDIN and STDOUT are not supported as valid arguments). Otherwise a filename is assumed. Export environment variables defined in <filename> or read from <fd> to the job\'s execution environment. The content is one or more environment variable definitions of the form NAME=value, each separated by a null character. This allows the use of special characters in environment definitions.',
             },
             "extra-node-info": {
@@ -211,6 +216,7 @@ BASE_CONFIG = {
             "input": {
                 "title": "input",
                 "type": "string",
+                "subtype": "filepath",
                 'description': 'Instruct SLURM to connect the batch script\'s standard input directly to the file name specified in the "filename pattern". By default, "/dev/null" is open on the batch script\'s standard input and both standard output and standard error are directed to a file of the name "slurm-%j.out", where the "%j" is replaced with the job allocation number, as described below. The filename pattern may contain one or more replacement symbols, which are a percent sign "%" followed by a letter (e.g. %j). Supported replacement symbols are: %A:Job array\'s master job allocation number. %a:Job array ID (index) number. %j:Job allocation number.%N:Node name. Only one file is created, so %N will be replaced by the name of the first node in the job, which is the one that runs the script.%u:User name.',
             },
             "job-name": {
@@ -288,6 +294,7 @@ BASE_CONFIG = {
             "nodefile": {
                 "title": "nodefile",
                 "type": "string",
+                "subtype": "filepath",
                 "pattern": "^(\/.*\/)*(.*)(\/)?$",
                 'description': 'Much like --nodelist, but the list is contained in a file of name node file. The node names of the list may also span multiple lines in the file. Duplicate node names in the file will be ignored. The order of the node names in the list is not important; the node names will be sorted by SLURM.',
             },
@@ -345,6 +352,7 @@ BASE_CONFIG = {
             "output": {
                 "title": "output",
                 "type": "string",
+                "subtype": "filepath",
                 "pattern": "^(\/.*\/)*(.*)(\/)?$",
                 'description': 'Instruct SLURM to connect the batch script\'s standard output directly to the file name specified in the "filename pattern". By default both standard output and standard error are directed to the same file. For job arrays, the default file name is "slurm-%A_%a.out", "%A" is replaced by the job ID and "%a" with the array index. For other jobs, the default file name is "slurm-%j.out", where the "%j" is replaced by the job ID. See the --input option for filename specification options.',
             },
@@ -479,6 +487,8 @@ BASE_CONFIG = {
             "workdir": {
                 "title": "workdir",
                 "type": "string",
+                "subtype": "filepath",
+                "dironly": True,
                 "pattern": "^(\/)?(.*\/)*(.*)(\/)?$",
                 'description': 'Set the working directory of the batch script to directory before it is executed. The path can be specified as full path or relative path to the directory where the command is executed.',
             },
