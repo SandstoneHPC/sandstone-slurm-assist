@@ -239,7 +239,7 @@ angular.module('sandstone.slurm')
   });
 
   $scope.updateSaveName = function () {
-    if (($scope.newFile.filepath.substr(0,1) !== '-') && (typeof $scope.newFile.filename !== 'undefined')) {
+    if (($scope.newFile.filepath.substr(0,1) !== '-') && $scope.newFile.filename) {
       $scope.invalidFilepath = false;
     }
   };
