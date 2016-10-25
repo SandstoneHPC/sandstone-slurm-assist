@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='sandstone-slurm-assist',
-    version='0.9.3',
+    version='0.9.5',
     author=u'Zebula Sampedro',
     author_email='sampedro@colorado.edu',
     packages=find_packages(),
@@ -15,7 +15,7 @@ setup(
     long_description=open('DESCRIPTION.rst').read(),
     zip_safe=False,
     install_requires=[
-        'sandstone==0.12.5',
+        'sandstone>=0.12.5',
         'jsonschema>=2.5.1',
     ],
     classifiers=[
