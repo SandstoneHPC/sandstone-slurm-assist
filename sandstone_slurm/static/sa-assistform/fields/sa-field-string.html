@@ -11,7 +11,8 @@
       ng-model="sbatch[field.title]"
       ng-options="o for o in field.enum"
       ng-readonly="field.readonly"
-      ng-required="true"></select>
+      ng-required="true"
+      data-telemetry-id="sa-field-string-select-title"></select>
     <input
       class="form-control"
       name="{{title}}"
@@ -19,13 +20,15 @@
       ng-model="sbatch[field.title]"
       ng-pattern="field.pattern"
       ng-readonly="field.readonly"
-      ng-required="true">
+      ng-required="true"
+      data-telemetry-id="sa-field-string-input-title">
     <div class="input-group-addon sa-assist-help-btn">
       <button
         class="btn"
         popover-placement="left"
         popover="{{title}}: {{field.description}}"
-        popover-title="{{title}}">
+        popover-title="{{title}}"
+        data-telemetry-id="sa-field-string-tooltip">
         <i class="fa fa-question-circle" aria-hidden="true"></i>
       </button>
     </div>
@@ -34,7 +37,8 @@
       ng-hide="config.profiles[selectedProfile].schema.required.indexOf(title)>=0">
       <button
         class="btn"
-        ng-click="removeField(field)">
+        ng-click="removeField(field)"
+        data-telemetry-id="sa-field-string-remove-field">
         <i class="fa fa-times" aria-hidden="true"></i>
       </button>
     </div>

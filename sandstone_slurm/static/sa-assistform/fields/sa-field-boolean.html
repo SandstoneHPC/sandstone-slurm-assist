@@ -8,7 +8,8 @@
         name="{{title}}"
         ng-model="sbatch[field.title]"
         ng-pattern="field.pattern"
-        ng-readonly="field.readonly">
+        ng-readonly="field.readonly"
+        data-telemetry-id="sa-field-boolean-title">
         {{field.title}}
     </label>
     <div
@@ -16,7 +17,8 @@
       ng-hide="config.profiles[selectedProfile].schema.required.indexOf(title)>=0">
       <button
         class="btn"
-        ng-click="removeField(field)">
+        ng-click="removeField(field)"
+        data-telemetry-id="sa-field-boolean-remove-field">
         <i class="fa fa-times" aria-hidden="true"></i>
       </button>
     </div>
@@ -25,7 +27,8 @@
         class="btn"
         popover-placement="left"
         popover="{{title}}: {{field.description}}"
-        popover-title="{{title}}">
+        popover-title="{{title}}"
+        data-telemetry-id="sa-field-boolean-tooltip">
         <i class="fa fa-question-circle" aria-hidden="true"></i>
       </button>
     </div>
