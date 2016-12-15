@@ -12,7 +12,8 @@
             name="profile"
             ng-model="selectedProfile"
             ng-required="true"
-            ng-options="p for p in getProfiles()">
+            ng-options="p for p in getProfiles()"
+            data-telemetry-id="sa-assistform-selected-profile">
           </select>
             <div class="input-group-addon sa-assist-help-btn">
               <button
@@ -20,7 +21,8 @@
                 popover-trigger="mouseenter"
                 popover-placement="left"
                 popover="Select the profile that best describes the job being run."
-                popover-title="Select a profile to begin">
+                popover-title="Select a profile to begin"
+                data-telemetry-id="sa-assistform-select-profile">
                 <i class="fa fa-question-circle" aria-hidden="true"></i>
               </button>
             </div>
@@ -31,7 +33,8 @@
                 tooltip-placement="left"
                 tooltip="Reset form to profile default."
                 ng-disabled="form.profile.$invalid"
-                ng-click="resetDefaults()">
+                ng-click="resetDefaults()"
+                data-telemetry-id="sa-assistform-reset-profile">
                 <i class="fa fa-refresh" aria-hidden="true"></i>
               </button>
             </div>
@@ -49,14 +52,16 @@
             type="text"
             class="form-control"
             ng-model="selectedProp"
-            typeahead="p for p in getProperties() | filter:$viewValue:emptyOrMatch">
+            typeahead="p for p in getProperties() | filter:$viewValue:emptyOrMatch"
+            data-telemetry-id="sa-assistform-selected-prop">
           <div class="input-group-addon sa-assist-help-btn">
             <button
               class="btn"
               tooltip-placement="left"
               tooltip="Add a new directive"
               ng-click="addField()"
-              ng-disabled="!propValid()">
+              ng-disabled="!propValid()"
+              data-telemetry-id="sa-assistform-add-field">
               <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
           </div>
