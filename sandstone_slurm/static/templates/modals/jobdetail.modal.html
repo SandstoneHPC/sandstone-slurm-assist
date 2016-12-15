@@ -3,17 +3,17 @@
 </div>
 <div class="modal-body">
   <div class="container-fluid">
-    <table class="table">
+    <table class="table" data-telemetry-id="sa-jobdetail-modal-table">
       <caption ng-if="!showAll">Show all attributes&nbsp;
         <i
           class="fa fa-eye"
-          ng-click="toggleShowAll()">
+          ng-click="toggleShowAll()" data-telemetry-id="sa-jobdetail-modal-show-all">
         </i>
       </caption>
       <caption ng-if="showAll">Show fewer attributes&nbsp;
         <i
           class="fa fa-eye-slash"
-          ng-click="toggleShowAll()">
+          ng-click="toggleShowAll()" data-telemetry-id="sa-jobdetail-modal-show-fewer">
         </i>
       </caption>
       <tbody>
@@ -33,5 +33,5 @@
   </div>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-success" ng-click="dismiss()">Okay</button>
+  <button data-telemetry-id="sa-jobdetail-modal-dismiss" class="btn btn-success" ng-click="dismiss()">Okay</button>
 </div>

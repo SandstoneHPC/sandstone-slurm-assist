@@ -7,13 +7,13 @@
       <div class="form-group form-group-sm">
         <label class="col-sm-3 control-label">File Name</label>
         <div class="col-sm-6">
-          <input class="form-control" type="text" ng-model="loadFile.filename" ng-disabled="true">
+          <input data-telemetry-id="sa-load-script-modal-filename" class="form-control" type="text" ng-model="loadFile.filename" ng-disabled="true">
         </div>
       </div>
       <div class="form-group form-group-sm">
         <label class="col-sm-3 control-label">Directory</label>
         <div class="col-sm-6">
-          <input class="form-control" type="text" ng-model="loadFile.filepath" ng-disabled="true">
+          <input data-telemetry-id="sa-load-script-modal-filepath" class="form-control" type="text" ng-model="loadFile.filepath" ng-disabled="true">
           <!-- <span class="modal-body-message">{{loadFilePath}}{{loadFileName}}</span> -->
         </div>
       </div>
@@ -31,7 +31,7 @@
         {{node.filename}}
         <span class="filetree-permissions">{{node.permissions}}</span>
       </treecontrol> -->
-      <div sandstone-filetree tree-data="treeData" leaf-level="file" selection-desc="sd"></div>      
+      <div sandstone-filetree tree-data="treeData" leaf-level="file" selection-desc="sd"></div>
     </div>
   </div>
 </div>
@@ -39,8 +39,9 @@
   <button
     class="btn btn-success"
     ng-click="load()"
-    ng-disabled="invalidFilepath">
+    ng-disabled="invalidFilepath"
+    data-telemetry-id="sa-load-script-modal-invalid-filepath">
     Load File
   </button>
-  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  <button data-telemetry-id="sa-load-script-modal-cancel" class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

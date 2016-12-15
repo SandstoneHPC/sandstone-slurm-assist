@@ -12,13 +12,14 @@
             type="text"
             ng-required="true"
             ng-model="newFile.filename"
-            ng-change="updateSaveName()">
+            ng-change="updateSaveName()"
+            data-telemetry-id="sa-savescript-modal-update-filename">
         </div>
       </div>
       <div class="form-group form-group-sm">
         <label class="col-sm-3 control-label">Save Directory</label>
         <div class="col-sm-6">
-          <input class="form-control" type="text" ng-model="newFile.filepath" ng-disabled="true">
+          <input class="form-control" type="text" ng-model="newFile.filepath" ng-disabled="true" data-telemetry-id="sa-savescript-modal-update-filepath">
         </div>
       </div>
     </form>
@@ -36,8 +37,9 @@
   <button
     class="btn btn-success"
     ng-click="saveAs()"
-    ng-disabled="invalidFilepath||form.$invalid">
+    ng-disabled="invalidFilepath||form.$invalid"
+    data-telemetry-id="sa-savescript-modal-save-as">
     {{title}}
   </button>
-  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  <button data-telemetry-id="sa-savescript-modal-cancel" class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>
