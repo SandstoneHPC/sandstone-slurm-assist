@@ -3,7 +3,8 @@
     ng-init="ctrl.updateCollection()"
     st-table="ctrl.displayCollection"
     st-safe-src="ctrl.queueCollection"
-    class="table table-striped">
+    class="table table-striped"
+    data-telemetry-id="sa-status-table">
     <thead>
     <tr>
       <th st-sort="self.getters.State" st-sort-default="true" st-skip-natural="true">State</th>
@@ -14,7 +15,7 @@
       <th st-sort="Start" st-sort-default="reverse">Start Time</th>
       <th st-sort="End">End Time</th>
       <th>
-        <button type="button" class="btn btn-success" ng-click="ctrl.updateCollection()"><i class="fa fa-refresh"></i> Refresh</button>
+        <button type="button" class="btn btn-success" ng-click="ctrl.updateCollection()" data-telemetry-id="sa-status-update-collection"><i class="fa fa-refresh"></i> Refresh</button>
       </th>
     </tr>
     </thead>
@@ -29,8 +30,8 @@
       <td>{{row.Start}}</td>
       <td>{{row.End}}</td>
       <td>
-      <button type="button" class="btn" ng-click="ctrl.getDetails(row)">Details</button>
-      <button type="button" class="btn" disabled>Nodelist</button>
+      <button data-telemetry-id="sa-status-get-details" type="button" class="btn" ng-click="ctrl.getDetails(row)">Details</button>
+      <button data-telemetry-id="sa-status-node-list" type="button" class="btn" disabled>Nodelist</button>
       </td>
     </tr>
     </tbody>

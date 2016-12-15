@@ -25,7 +25,8 @@
             id="save-button"
             type="button"
             class="btn btn-default sched-button"
-            ng-click="ctrl.saveScript()">
+            ng-click="ctrl.saveScript()"
+            data-telemetry-id="sa-schedule-save-for-later">
             Save Script for Later
           </button>
         </div>
@@ -34,7 +35,8 @@
             id="load-button"
             type="button"
             class="btn btn-default sched-button"
-            ng-click="ctrl.loadScript()">
+            ng-click="ctrl.loadScript()"
+            data-telemetry-id="sa-schedule-load-script">
             Load Saved Script
           </button>
         </div>
@@ -43,7 +45,8 @@
             id="estimate-button"
             type="button"
             class="btn btn-default sched-button"
-            ng-click="ctrl.getEstimate()">
+            ng-click="ctrl.getEstimate()"
+            data-telemetry-id="sa-schedule-get-estimate">
             Cost Estimate
           </button>
         </div>
@@ -53,7 +56,8 @@
             type="button"
             class="btn btn-success sched-button"
             ng-click="ctrl.submitScript()"
-            ng-disabled="ctrl.form.$invalid">
+            ng-disabled="ctrl.form.$invalid"
+            data-telemetry-id="sa-schedule-submit-script">
             Schedule Job
           </button>
         </div>
