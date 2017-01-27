@@ -39,9 +39,6 @@ angular.module('sandstone.slurm')
             $http({
               url: '/filebrowser/localfiles'+filepath,
               method: 'PUT',
-              params: {
-                _xsrf: getCookie('_xsrf')
-              },
               data: {'content': content}
             })
             .success(function (data,status, headers, config) {
@@ -50,18 +47,12 @@ angular.module('sandstone.slurm')
           } else {
             $http({
               url: '/filebrowser/localfiles'+filepath,
-              method: 'POST',
-              params: {
-                _xsrf: getCookie('_xsrf')
-              }
+              method: 'POST'
             })
             .success(function (data,status, headers, config) {
               $http({
                 url: '/filebrowser/localfiles'+filepath,
                 method: 'PUT',
-                params: {
-                  _xsrf: getCookie('_xsrf')
-                },
                 data: {'content': content}
               })
               .success(function (data,status, headers, config) {
@@ -87,9 +78,6 @@ angular.module('sandstone.slurm')
             $http({
               url: '/filebrowser/localfiles'+filepath,
               method: 'PUT',
-              params: {
-                _xsrf: getCookie('_xsrf')
-              },
               data: {'content': content}
             })
             .success(function (data,status, headers, config) {
@@ -97,7 +85,6 @@ angular.module('sandstone.slurm')
               $http({
                 url: "/slurm/a/jobs",
                 method: "POST",
-                params: {_xsrf: getCookie('_xsrf')},
                 data:{'content': filepath}
               })
               .success(function(data, status, header, config) {
@@ -112,18 +99,12 @@ angular.module('sandstone.slurm')
           } else {
             $http({
               url: '/filebrowser/localfiles'+filepath,
-              method: 'POST',
-              params: {
-                _xsrf: getCookie('_xsrf')
-              }
+              method: 'POST'
             })
             .success(function (data,status, headers, config) {
               $http({
                 url: '/filebrowser/localfiles'+filepath,
                 method: 'PUT',
-                params: {
-                  _xsrf: getCookie('_xsrf')
-                },
                 data: {'content': content}
               })
               .success(function (data,status, headers, config) {
@@ -131,7 +112,6 @@ angular.module('sandstone.slurm')
                 $http({
                   url: "/slurm/a/jobs",
                   method: "POST",
-                  params: {_xsrf: getCookie('_xsrf')},
                   data:{'content': filepath}
                 })
                 .success(function(data, status, header, config) {
