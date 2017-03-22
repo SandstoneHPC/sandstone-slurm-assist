@@ -5,7 +5,7 @@
   "license": "AGPLv3",
   "private": true,
   "dependencies": {
-	"angular-sanitize":"",
-	"angular-smart-table":""
+	"angular-sanitize":"1.5.x",
+	"angular-smart-table":"2.1.x"
   }
 }
