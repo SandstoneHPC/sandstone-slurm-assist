@@ -2,7 +2,7 @@
 
 angular.module('sandstone.slurm')
 
-.controller('ScheduleCtrl', ['$log','$modal','$rootScope','ScheduleService',function($log,$modal,$rootScope,ScheduleService) {
+.controller('ScheduleCtrl', ['$log','$modal','$rootScope','ScheduleService','AlertService',function($log,$modal,$rootScope,ScheduleService,AlertService) {
   var self = this;
 
   self.sbatch = {};
@@ -22,6 +22,13 @@ angular.module('sandstone.slurm')
       keyboard: false,
       size: 'lg',
       resolve: {
+        file: function () {
+          var file = {
+            name: '',
+            dirpath: ''
+          };
+          return file;
+        },
         action: function () {
           return 'save';
         }
@@ -29,22 +36,32 @@ angular.module('sandstone.slurm')
     });
     saveScriptModalInstance.result.then(
       function(filepath) {
-        ScheduleService.saveScript(filepath,contents);
-      },
-      function(filepath) {
-        $log.debug('Modal dismissed at: ' + new Date());
-      }
-    );
+        var deferredSaveScript = ScheduleService.saveScript(filepath,contents);
+        deferredSaveScript.then(function() {},function() {
+          AlertService.addAlert({
+            type: 'danger',
+            message: 'Failed to save script ' + filepath
+          });
+        });
+      });
   };
   self.submitScript = function() {
     var contents = self.sbatchScript;
     var submitScriptModalInstance = $modal.open({
       templateUrl: '/static/slurm/templates/modals/savescript.modal.html',
       controller: 'SaveScriptCtrl',
+      controllerAs: 'ctrl',
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
       resolve: {
+        file: function () {
+          var file = {
+            name: '',
+            dirpath: ''
+          };
+          return file;
+        },
         action: function () {
           return 'submit';
         }
@@ -52,45 +69,28 @@ angular.module('sandstone.slurm')
     });
     submitScriptModalInstance.result.then(
       function(filepath) {
-        ScheduleService.submitScript(
-          filepath,
-          contents,
-          function(data, status) {
-            var submitStatusModalInstance = $modal.open({
-              templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
-              controller: 'SubmitStatusCtrl',
-              // size: 'lg',
-              resolve: {
-                data: function () {
-                  return data;
-                },
-                status: function() {
-                  return status;
-                }
+        var deferredSubmitScript = ScheduleService.submitScript(filepath,contents);
+        deferredSubmitScript.then(function() {
+          var submitStatusModalInstance = $modal.open({
+            templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
+            controller: 'SubmitStatusCtrl',
+            // size: 'lg',
+            resolve: {
+              data: function () {
+                return data;
+              },
+              status: function() {
+                return status;
               }
-            });
-          },
-          function(data, status) {
-            var submitStatusModalInstance = $modal.open({
-              templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
-              controller: 'SubmitStatusCtrl',
-              // size: 'lg',
-              resolve: {
-                data: function () {
-                  return data;
-                },
-                status: function() {
-                  return status;
-                }
-              }
-            });
-          }
-        );
-      },
-      function(filepath) {
-        $log.debug('Modal dismissed at: ' + new Date());
-      }
-    );
+            }
+          });
+        },function() {
+          AlertService.addAlert({
+            type: 'danger',
+            message: 'Failed to submit job.'
+          });
+        });
+      });
   };
   self.getEstimate = function() {
     var estimateModalInstance = $modal.open({
@@ -109,12 +109,14 @@ angular.module('sandstone.slurm')
     var loadScriptModalInstance = $modal.open({
       templateUrl: '/static/slurm/templates/modals/loadscript.modal.html',
       controller: 'LoadScriptCtrl',
+      controllerAs: 'ctrl',
       size: 'lg'
     });
     loadScriptModalInstance.result.then(
       function(filepath) {
-        ScheduleService.loadScript(filepath, function(response) {
-          var fullScript = response.content.split('\n');
+
+        var onScriptLoad = function(contents) {
+          var fullScript = contents.split('\n');
           var dirs = {}
           var renderScript = ''
           // Separate script components
@@ -161,12 +163,16 @@ angular.module('sandstone.slurm')
           // Push to interface
           $rootScope.$emit('sa:set-form-contents', matchedProfile, dirs);
           self.script = renderScript;
+        };
+
+        var deferredLoadScript = ScheduleService.loadScript(filepath);
+        deferredLoadScript.then(onScriptLoad,function() {
+          AlertService.addAlert({
+            type: 'danger',
+            message: 'Failed to load script ' + filepath
+          });
         });
-      },
-      function(filepath) {
-        $log.debug('Modal dismissed at: ' + new Date());
-      }
-    );
+      });
   };
 }])
 .controller('SubmitStatusCtrl', ['$scope','$modalInstance','data','status',function($scope,$modalInstance,data,status) {
@@ -204,85 +210,93 @@ angular.module('sandstone.slurm')
     }
   }
 }])
-.controller('SaveScriptCtrl', ['$scope','$modalInstance','action',function($scope,$modalInstance,action) {
+.controller('SaveScriptCtrl', ['$scope','$modalInstance','file','action', 'FilesystemService',function($scope,$modalInstance,file,action,FilesystemService) {
+  var self = this;
+
   if (action === 'save') {
-    $scope.title = "Save Script As";
+    self.title = "Save Script As";
   } else if (action === 'submit') {
-    $scope.title = "Save & Schedule Script";
+    self.title = "Save & Schedule Script";
   }
-  $scope.treeData = {
-    filetreeContents: [],
-    selectedNodes: []
+
+  self.treeData = {
+    contents: [],
+    selected: [],
+    expanded: []
   };
 
-  $scope.newFile = {
-    filename: '',
-    filepath: '-/'
-  }
-  $scope.invalidFilepath = true;
-
-  $scope.$watch(function(){
-    return $scope.treeData.selectedNodes;
-  }, function(newValue){
-    if(newValue.length > 0) {
-      if (newValue[0].type === 'file') {
-        $scope.newFile.filename = newValue[0].filename;
-        $scope.newFile.filepath = newValue[0].filepath.replace(newValue[0].filename,'');
+  self.filetreeOnSelect = function(node,selected) {
+    if (selected) {
+      if ( (node.type === 'directory') || (node.type === 'volume') ) {
+        self.newFile.dirpath = node.filepath;
       } else {
-        $scope.newFile.filepath = newValue[0].filepath;
-        if (newValue[0].filepath.substr(newValue[0].filepath.length-1) !== '/') {
-          $scope.newFile.filepath = $scope.newFile.filepath + '/';
-        }
+        self.newFile.dirpath = node.dirpath;
+        self.newFile.name = node.name;
       }
     }
-    $scope.updateSaveName();
-  });
-
-  $scope.updateSaveName = function () {
-    if (($scope.newFile.filepath.substr(0,1) !== '-') && $scope.newFile.filename) {
-      $scope.invalidFilepath = false;
-    }
   };
 
-  $scope.saveAs = function () {
-    var filepath = $scope.newFile.filepath + $scope.newFile.filename;
+  self.newFile = {
+    name: file.name,
+    dirpath: file.dirpath
+  };
+
+  self.validFilepath = function() {
+    var valid = (self.newFile.name.length && self.newFile.dirpath.length);
+    valid = valid && (FilesystemService.isAbsolute(self.newFile.dirpath));
+    return valid;
+  };
+
+  self.saveAs = function () {
+    var filepath;
+    var dirpath = FilesystemService.normalize(self.newFile.dirpath);
+    filepath = FilesystemService.join(dirpath,self.newFile.name);
+
     if (filepath.substr(filepath.length-3) !== '.sh') {
       filepath += '.sh';
     }
+
     $modalInstance.close(filepath);
   };
 
-  $scope.cancel = function () {
+  self.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
 }])
-.controller('LoadScriptCtrl', ['$scope','$modalInstance',function($scope,$modalInstance) {
-  $scope.treeData = {
-    filetreeContents: [],
-    selectedNodes: []
+.controller('LoadScriptCtrl', ['$scope','$modalInstance','FilesystemService',function($scope,$modalInstance,FilesystemService) {
+  var self = this;
+
+  self.treeData = {
+    contents: [],
+    selected: [],
+    expanded: []
   };
 
-  $scope.loadFile = {
-    filename: '',
-    filepath: '-/'
-  }
-  $scope.invalidFilepath = true;
+  var valid = false;
 
-  $scope.$watch(function(){
-    return $scope.treeData.selectedNodes;
-  }, function(newValue){
-    if ((newValue.length > 0) && (newValue[0].type === 'file')) {
-      $scope.loadFile.filename = newValue[0].filename;
-      $scope.loadFile.filepath = newValue[0].filepath.replace(newValue[0].filename,'');
-      $scope.invalidFilepath = false;
+  self.filetreeOnSelect = function(node,selected) {
+    if (selected) {
+      if (node.type === 'file') {
+        self.loadFile.filepath = node.filepath;
+        valid = true;
+      }
     }
-  });
+  };
 
-  $scope.loadScript = function () {
-    var filepath = $scope.loadFile.filepath + $scope.loadFile.filename;
+  self.loadFile = {
+    filepath: ''
+  };
+
+  self.validFilepath = function() {
+    return valid;
+  };
+
+  self.loadScript = function () {
+    var filepath;
+    var filepath = FilesystemService.normalize(self.loadFile.filepath);
     $modalInstance.close(filepath);
   };
-  $scope.cancel = function () {
+  self.cancel = function () {
     $modalInstance.dismiss('cancel');
   };
 }]);
