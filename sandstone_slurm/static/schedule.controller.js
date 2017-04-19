@@ -112,63 +112,17 @@ angular.module('sandstone.slurm')
     loadScriptModalInstance.result.then(
       function(filepath) {
 
-        var onScriptLoad = function(contents) {
-          var fullScript = contents.split('\n');
-          var dirs = {}
-          var renderScript = ''
-          // Separate script components
-          for (var i=0;i<fullScript.length;i++) {
-            if (fullScript[i].startsWith('#!/bin/bash')) {
-              continue;
-            } else if (fullScript[i].startsWith('#SBATCH')) {
-              var cmp = fullScript[i].replace('#SBATCH --','').split('=');
-              dirs[cmp[0]] = cmp[1];
-            } else {
-              renderScript += fullScript[i] + '\n';
-            }
-          }
-          // Trim extra white space at tail
-          renderScript = renderScript.trim();
-          renderScript += '\n';
-          // Determine profile from directives
-          var qos = dirs.qos;
-          var partition = dirs.partition;
-          var matchedProfile;
-          for (var pname in self.formConfig.profiles) {
-            if (
-              (self.formConfig.profiles[pname].schema.properties.qos.default == qos)
-              &&
-              (self.formConfig.profiles[pname].schema.properties.partition.default == partition)
-            ) {
-              matchedProfile = pname;
-              break;
-            }
-          }
-          // Default to custom profile if none matched
-          if (!matchedProfile) {
-            matchedProfile = 'custom';
-          }
-          // Validate data types
-          var props = self.formConfig.profiles[matchedProfile].schema.properties;
-          for (var k in dirs) {
-            if ((props[k].type === 'integer') || (props[k].type === 'number')) {
-              if (typeof dirs[k] !== 'number') {
-                dirs[k] = Number(dirs[k]);
-              }
-            }
-          }
-          // Push to interface
-          $rootScope.$emit('sa:set-form-contents', matchedProfile, dirs);
-          self.script = renderScript;
-        };
-
         var deferredLoadScript = ScheduleService.loadScript(filepath);
-        deferredLoadScript.then(onScriptLoad,function() {
+        deferredLoadScript.then(function(contents) {
+          var parsedScript = ScheduleService.parseScriptContents(contents);
+          self.script = parsedScript.script;
+        },function() {
           AlertService.addAlert({
             type: 'danger',
             message: 'Failed to load script ' + filepath
           });
         });
+
       });
   };
 }])

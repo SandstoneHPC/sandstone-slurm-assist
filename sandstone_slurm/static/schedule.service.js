@@ -2,7 +2,7 @@
 
 angular.module('sandstone.slurm')
 
-.factory('ScheduleService', ['$http','$log','$q','FilesystemService','AlertService',function($http,$log,$q,FilesystemService,AlertService) {
+.factory('ScheduleService', ['$http','$log','$q','$rootScope','FilesystemService','AlertService',function($http,$log,$q,$rootScope,FilesystemService,AlertService) {
   var formConfig;
 
   var saveScript = function (filepath,content) {
@@ -38,6 +38,61 @@ angular.module('sandstone.slurm')
 
     return deferred.promise;
   };
+
+  var parseScriptContents = function(contents) {
+    // Returns directives object, and script string
+    // All scripts assumed to be BASH
+    var fullScript = contents.split('\n');
+    var dirs = {}
+    var renderScript = ''
+    // Separate script components
+    for (var i=0;i<fullScript.length;i++) {
+      if (fullScript[i].startsWith('#!/bin/bash')) {
+        continue;
+      } else if (fullScript[i].startsWith('#SBATCH')) {
+        var cmp = fullScript[i].replace('#SBATCH --','').split('=');
+        dirs[cmp[0]] = cmp[1];
+      } else {
+        renderScript += fullScript[i] + '\n';
+      }
+    }
+    // Trim extra white space at tail
+    renderScript = renderScript.trim();
+    renderScript += '\n';
+    // Determine profile from directives
+    var qos = dirs.qos;
+    var partition = dirs.partition;
+    var matchedProfile;
+    for (var pname in formConfig.profiles) {
+      if (
+        (formConfig.profiles[pname].schema.properties.qos.default == qos)
+        &&
+        (formConfig.profiles[pname].schema.properties.partition.default == partition)
+      ) {
+        matchedProfile = pname;
+        break;
+      }
+    }
+    // Default to custom profile if none matched
+    if (!matchedProfile) {
+      matchedProfile = 'custom';
+    }
+    // Validate data types
+    var props = formConfig.profiles[matchedProfile].schema.properties;
+    for (var k in dirs) {
+      if ((props[k].type === 'integer') || (props[k].type === 'number')) {
+        if (typeof dirs[k] !== 'number') {
+          dirs[k] = Number(dirs[k]);
+        }
+      }
+    }
+    // Push to interface
+    $rootScope.$emit('sa:set-form-contents', matchedProfile, dirs);
+    return {
+      directives: dirs,
+      script: renderScript
+    };
+  }
 
   return {
     loadFormConfig: function() {
@@ -85,6 +140,7 @@ angular.module('sandstone.slurm')
       });
 
       return deferred.promise;
-    }
+    },
+    parseScriptContents: parseScriptContents
   };
 }]);
