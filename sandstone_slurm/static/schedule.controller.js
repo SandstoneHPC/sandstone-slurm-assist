@@ -94,6 +94,7 @@ angular.module('sandstone.slurm')
       templateUrl: '/static/slurm/templates/modals/estimate.modal.html',
       controller: 'EstimateCtrl',
       size: 'lg',
+      backdropClass: 'sandstone-modal-backdrop',
       resolve: {
         sbatch: function () {
           return self.sbatch;
