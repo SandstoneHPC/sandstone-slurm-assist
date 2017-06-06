@@ -15,7 +15,7 @@ setup(
     long_description=open('DESCRIPTION.rst').read(),
     zip_safe=False,
     install_requires=[
-        'sandstone>=1.0.0',
+        'sandstone>=1.1.0',
         'jsonschema>=2.5.1',
     ],
     classifiers=[
