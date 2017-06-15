@@ -2,7 +2,7 @@
 
 angular.module('sandstone.slurm')
 
-.controller('StatusCtrl', ['$log','$uibModal','StatusService',function($log,$uibModal,StatusService) {
+.controller('StatusCtrl', ['$log','$uibModal','StatusService','ScheduleService',function($log,$uibModal,StatusService,ScheduleService) {
   var self = this;
 
   self.queueCollection = [];
@@ -32,6 +32,20 @@ angular.module('sandstone.slurm')
       resolve: {
         job: function() {
           return row;
+        }
+      }
+    });
+  };
+
+  self.scheduleJob = function(row) {
+    var scheduleModalInstance = $uibModal.open({
+      templateUrl: '/static/slurm/templates/modals/schedule.modal.html',
+      controller: 'ScheduleModalCtrl',
+      size: 'lg',
+      windowClass: 'schedule-modal',
+      resolve: {
+        formConfig: function(ScheduleService) {
+          return ScheduleService.loadFormConfig();
         }
       }
     });
@@ -76,6 +90,13 @@ angular.module('sandstone.slurm')
     }
     $scope.showAll = !$scope.showAll;
   };
+
+  $scope.dismiss = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+}])
+.controller('ScheduleModalCtrl', ['$scope','$log','$uibModalInstance','formConfig','ScheduleService',function($scope,$log,$uibModalInstance,formConfig,ScheduleService) {
+  $scope.formConfig = formConfig;
 
   $scope.dismiss = function () {
     $uibModalInstance.dismiss('cancel');

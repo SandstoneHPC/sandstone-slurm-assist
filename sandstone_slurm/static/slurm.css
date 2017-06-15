@@ -136,3 +136,13 @@ caption > i.fa-eye,
 caption > i.fa-eye-slash {
   cursor: pointer;
 }
+
+/*
+ * Schedule modal styles
+ */
+.schedule-modal > div.modal-dialog {
+  width: 80vw;
+}
+.schedule-modal .modal-body {
+  height: 60vh;
+}
