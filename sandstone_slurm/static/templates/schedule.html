@@ -25,7 +25,7 @@
             id="save-button"
             type="button"
             class="btn btn-default sched-button"
-            ng-click="ctrl.saveScript()">
+            ng-click="ctrl.saveScriptAs()">
             Save Script for Later
           </button>
         </div>
@@ -52,7 +52,7 @@
             id="submit-button"
             type="button"
             class="btn btn-success sched-button"
-            ng-click="ctrl.submitScript()"
+            ng-click="ctrl.scheduleScript()"
             ng-disabled="ctrl.form.$invalid">
             Schedule Job
           </button>
