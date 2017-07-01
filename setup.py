@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='sandstone-slurm-assist',
-    version='0.11.0',
+    version='0.12.0',
     author=u'Zebula Sampedro',
     author_email='sampedro@colorado.edu',
     packages=find_packages(),
@@ -19,7 +19,7 @@ setup(
         'jsonschema>=2.5.1',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Operating System :: Unix',
