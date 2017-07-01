@@ -2,7 +2,7 @@
 
 angular.module('sandstone.slurm')
 
-.controller('ScheduleCtrl', ['$log','$uibModal','$rootScope','ScheduleService','AlertService',function($log,$uibModal,$rootScope,ScheduleService,AlertService) {
+.controller('ScheduleCtrl', ['$log','$uibModal','$rootScope','$q','ScheduleService','AlertService',function($log,$uibModal,$rootScope,$q,ScheduleService,AlertService) {
   var self = this;
 
   self.sbatch = {};
@@ -11,12 +11,34 @@ angular.module('sandstone.slurm')
   self.form = {};
   self.profile = '';
 
+  // Clear active file on load.
+  ScheduleService.setActiveFile();
+
   self.formConfig = ScheduleService.getFormConfig();
-  self.saveScript = function() {
+
+  self.confirmOverwrite = function(filepath) {
+    var confirmOverwriteModalInstance = $uibModal.open({
+      templateUrl: '/static/slurm/templates/modals/confirmoverwrite.modal.html',
+      controller: 'ConfirmOverwriteCtrl',
+      controllerAs: 'ctrl',
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+      resolve: {
+        filepath: function () {
+          return filepath;
+        }
+      }
+    });
+    return confirmOverwriteModalInstance.result;
+  };
+
+  self.saveScriptAs = function() {
+    var deferredModal = $q.defer();
     var contents = self.sbatchScript;
     var saveScriptModalInstance = $uibModal.open({
-      templateUrl: '/static/slurm/templates/modals/savescript.modal.html',
-      controller: 'SaveScriptCtrl',
+      templateUrl: '/static/slurm/templates/modals/saveas.modal.html',
+      controller: 'SaveAsCtrl',
       controllerAs: 'ctrl',
       backdrop: 'static',
       keyboard: false,
@@ -36,59 +58,87 @@ angular.module('sandstone.slurm')
     });
     saveScriptModalInstance.result.then(
       function(filepath) {
-        var deferredSaveScript = ScheduleService.saveScript(filepath,contents);
-        deferredSaveScript.then(function() {},function() {
+        var scriptSaved = ScheduleService.saveScript(filepath,contents);
+        scriptSaved.then(function() {
+          ScheduleService.setActiveFile(filepath);
+          deferredModal.resolve(filepath);
+        },function() {
           AlertService.addAlert({
             type: 'danger',
             message: 'Failed to save script ' + filepath
           });
+          deferredModal.reject();
         });
       });
+    return deferredModal.promise;
   };
-  self.submitScript = function() {
-    var contents = self.sbatchScript;
-    var submitScriptModalInstance = $uibModal.open({
-      templateUrl: '/static/slurm/templates/modals/savescript.modal.html',
-      controller: 'SaveScriptCtrl',
-      controllerAs: 'ctrl',
-      backdrop: 'static',
-      keyboard: false,
-      size: 'lg',
-      resolve: {
-        file: function () {
-          var file = {
-            name: '',
-            dirpath: ''
-          };
-          return file;
-        },
-        action: function () {
-          return 'submit';
-        }
-      }
-    });
-    submitScriptModalInstance.result.then(
-      function(filepath) {
-        var deferredSubmitScript = ScheduleService.submitScript(filepath,contents);
-        deferredSubmitScript.then(function(data) {
-          var submitStatusModalInstance = $uibModal.open({
-            templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
-            controller: 'SubmitStatusCtrl',
-            // size: 'lg',
-            resolve: {
-              data: function () {
-                return data;
-              }
+
+  self.submitScript = function(filepath) {
+    var deferredSubmitScript = $q.defer();
+    var scriptScheduled = ScheduleService.submitScript(filepath);
+    scriptScheduled.then(
+      function(data) {
+        var submitStatusModalInstance = $uibModal.open({
+          templateUrl: '/static/slurm/templates/modals/submitstatus.modal.html',
+          controller: 'SubmitStatusCtrl',
+          resolve: {
+            data: function () {
+              return data;
             }
-          });
-        },function() {
-          AlertService.addAlert({
-            type: 'danger',
-            message: 'Failed to submit job.'
-          });
+          }
         });
-      });
+        deferredSubmitScript.resolve();
+      },
+      function(err) {
+        AlertService.addAlert({
+          type: 'danger',
+          message: 'Failed to submit job. ' + err.data.output
+        });
+        deferredSubmitScript.reject();
+      }
+    );
+    return deferredSubmitScript.promise;
   };
+
+  self.scheduleScript = function() {
+    // var deferredSaveSubmitScript = $q.defer();
+    var contents = self.sbatchScript;
+    var activeFile = ScheduleService.getActiveFile();
+
+    var saveAs = function() {
+      var scriptSavedAs = self.saveScriptAs();
+      scriptSavedAs.then(self.submitScript);
+    };
+
+    if(!!activeFile) {
+
+      var overwriteConfirmed = self.confirmOverwrite(activeFile);
+      overwriteConfirmed.then(
+        function(action) {
+          if(action.overwrite) {
+            var scriptSaved = ScheduleService.saveScript(activeFile,contents);
+            scriptSaved.then(
+              function() {
+                self.submitScript(activeFile);
+              },
+              function() {
+                AlertService.addAlert({
+                  type: 'danger',
+                  message: 'Failed to save script ' + filepath
+                });
+              }
+            );
+          } else {
+            saveAs();
+          }
+        }
+      );
+
+    } else {
+      saveAs();
+    }
+  };
+
   self.getEstimate = function() {
     var estimateModalInstance = $uibModal.open({
       templateUrl: '/static/slurm/templates/modals/estimate.modal.html',
@@ -161,6 +211,7 @@ angular.module('sandstone.slurm')
           // Push to interface
           $rootScope.$emit('sa:set-form-contents', matchedProfile, dirs);
           self.script = renderScript;
+          ScheduleService.setActiveFile(filepath);
         };
 
         var deferredLoadScript = ScheduleService.loadScript(filepath);
@@ -171,129 +222,5 @@ angular.module('sandstone.slurm')
           });
         });
       });
-  };
-}])
-.controller('SubmitStatusCtrl', ['$scope','$uibModalInstance','data',function($scope,$uibModalInstance,data) {
-  $scope.output = data.output;
-  $scope.dismiss = function () {
-    $uibModalInstance.dismiss('dismiss');
-  };
-}])
-.controller('EstimateCtrl', ['$scope','$uibModalInstance','sbatch',function($scope,$uibModalInstance,sbatch) {
-  $scope.sbatch = sbatch;
-  // nodes * time (min) * 12 (no node sharing)
-  $scope.estimate = {
-    su: NaN,
-    reason: 'No node count specified.'
-  };
-
-  $scope.dismiss = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-
-  if (sbatch.hasOwnProperty('nodes')) {
-    if (sbatch.hasOwnProperty('time')) {
-      var cmps = sbatch.time.split(/\:|\-/).reverse();
-      var mins = 0;
-      mins += parseInt(cmps[1],10);
-      mins += 3600 * parseInt(cmps[2],10);
-      if (cmps.length === 4) {
-        mins += (24 * 3600) * parseInt(cmps[3],10);
-      }
-      $scope.estimate.su = sbatch.nodes * mins * 12;
-      $scope.estimate.reason = undefined;
-    } else {
-      $scope.estimate.reason = 'No wall time specified.';
-    }
-  }
-}])
-.controller('SaveScriptCtrl', ['$scope','$uibModalInstance','file','action', 'FilesystemService',function($scope,$uibModalInstance,file,action,FilesystemService) {
-  var self = this;
-
-  if (action === 'save') {
-    self.title = "Save Script As";
-  } else if (action === 'submit') {
-    self.title = "Save & Schedule Script";
-  }
-
-  self.treeData = {
-    contents: [],
-    selected: [],
-    expanded: []
-  };
-
-  self.filetreeOnSelect = function(node,selected) {
-    if (selected) {
-      if ( (node.type === 'directory') || (node.type === 'volume') ) {
-        self.newFile.dirpath = node.filepath;
-      } else {
-        self.newFile.dirpath = node.dirpath;
-        self.newFile.name = node.name;
-      }
-    }
-  };
-
-  self.newFile = {
-    name: file.name,
-    dirpath: file.dirpath
-  };
-
-  self.validFilepath = function() {
-    var valid = (self.newFile.name.length && self.newFile.dirpath.length);
-    valid = valid && (FilesystemService.isAbsolute(self.newFile.dirpath));
-    return valid;
-  };
-
-  self.saveAs = function () {
-    var filepath;
-    var dirpath = FilesystemService.normalize(self.newFile.dirpath);
-    filepath = FilesystemService.join(dirpath,self.newFile.name);
-
-    if (filepath.substr(filepath.length-3) !== '.sh') {
-      filepath += '.sh';
-    }
-
-    $uibModalInstance.close(filepath);
-  };
-
-  self.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-}])
-.controller('LoadScriptCtrl', ['$scope','$uibModalInstance','FilesystemService',function($scope,$uibModalInstance,FilesystemService) {
-  var self = this;
-
-  self.treeData = {
-    contents: [],
-    selected: [],
-    expanded: []
-  };
-
-  var valid = false;
-
-  self.filetreeOnSelect = function(node,selected) {
-    if (selected) {
-      if (node.type === 'file') {
-        self.loadFile.filepath = node.filepath;
-        valid = true;
-      }
-    }
-  };
-
-  self.loadFile = {
-    filepath: ''
-  };
-
-  self.validFilepath = function() {
-    return valid;
-  };
-
-  self.loadScript = function () {
-    var filepath;
-    var filepath = FilesystemService.normalize(self.loadFile.filepath);
-    $uibModalInstance.close(filepath);
-  };
-  self.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
   };
 }]);
